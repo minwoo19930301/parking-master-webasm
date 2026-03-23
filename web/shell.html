@@ -603,8 +603,20 @@
       window.addEventListener("blur", releaseAllHolds);
       window.addEventListener("contextmenu", (event) => event.preventDefault());
 
+      const buildVersion = "__BUILD_VERSION__";
+
       var Module = {
         canvas,
+        locateFile(path, prefix) {
+          if (path.endsWith(".wasm")) {
+            return `${prefix}${path}?v=${buildVersion}`;
+          }
+          return `${prefix}${path}`;
+        },
+        onAbort(reason) {
+          loading.style.opacity = "1";
+          loading.innerHTML = `<strong>Runtime error</strong> ${reason || "failed to start"}`;
+        },
         setStatus(text) {
           if (!text) {
             loading.textContent = "Tap the screen and drive.";
@@ -623,6 +635,12 @@
           }
         }
       };
+
+      window.addEventListener("error", (event) => {
+        if (!event.message) return;
+        loading.style.opacity = "1";
+        loading.innerHTML = `<strong>Script error</strong> ${event.message}`;
+      });
     </script>
     {{{ SCRIPT }}}
   </body>

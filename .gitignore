@@ -4,4 +4,5 @@ build-web/
 compile_commands.json
 parking-preview.png
 parking-fix-preview.png
+remote-preview.png
 .vercel

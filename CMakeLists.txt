@@ -13,6 +13,8 @@ if(EMSCRIPTEN)
   set(PLATFORM Web CACHE STRING "" FORCE)
 endif()
 
+set(WEB_SHELL_FILE "${CMAKE_SOURCE_DIR}/web/shell.html" CACHE STRING "Shell template for Emscripten builds")
+
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(BUILD_GAMES OFF CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
@@ -44,7 +46,7 @@ if(EMSCRIPTEN)
     "-sALLOW_MEMORY_GROWTH=1"
     "-sMAX_WEBGL_VERSION=2"
     "-sASSERTIONS=1"
-    "--shell-file" "${CMAKE_SOURCE_DIR}/web/shell.html"
+    "--shell-file" "${WEB_SHELL_FILE}"
   )
 else()
   message(STATUS "Native build supported for local debugging. Use emcmake for the web build.")
