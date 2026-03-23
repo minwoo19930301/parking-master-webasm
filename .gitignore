@@ -1,0 +1,5 @@
+build-web/
+.DS_Store
+.cache/
+compile_commands.json
+parking-preview.png
