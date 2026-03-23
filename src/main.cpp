@@ -1052,6 +1052,7 @@ class ParkingMasterGame {
 #if defined(PLATFORM_WEB)
         (void)input;
 #endif
+        BeginDrawing();
         ClearBackground({18, 24, 42, 255});
         DrawBackdrop();
 
@@ -1072,6 +1073,7 @@ class ParkingMasterGame {
         if (collisionFlash_ > 0.0f) {
             DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade({255, 88, 88, 255}, collisionFlash_ * 0.22f));
         }
+        EndDrawing();
     }
 
     Camera3D camera_{};
