@@ -10,16 +10,24 @@
     <style>
       :root {
         color-scheme: dark;
-        --bg: #0c1220;
-        --panel: rgba(10, 14, 28, 0.78);
-        --line: rgba(255, 255, 255, 0.08);
-        --accent: #56f0a4;
-        --text: #f6f8ff;
-        --muted: rgba(246, 248, 255, 0.7);
+        --night: #081018;
+        --night-2: #121a28;
+        --panel: rgba(7, 12, 20, 0.72);
+        --panel-strong: rgba(10, 16, 26, 0.88);
+        --line: rgba(255, 255, 255, 0.12);
+        --mint: #6ff3c1;
+        --cobalt: #5c85ff;
+        --amber: #ffb564;
+        --danger: #ff7f7f;
+        --cream: #f7f2e9;
+        --text: #f5f7ff;
+        --muted: #a2afc3;
+        --shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
       }
 
       * {
         box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
       }
 
       html,
@@ -29,9 +37,10 @@
         margin: 0;
         overflow: hidden;
         background:
-          radial-gradient(circle at top, rgba(76, 132, 255, 0.25), transparent 44%),
-          linear-gradient(180deg, #101931 0%, #090d18 100%);
-        font-family: "SF Pro Display", "Segoe UI", sans-serif;
+          radial-gradient(circle at top, rgba(255, 183, 112, 0.24), transparent 34%),
+          radial-gradient(circle at 20% 18%, rgba(95, 133, 255, 0.18), transparent 24%),
+          linear-gradient(180deg, #1d2232 0%, #081018 100%);
+        font-family: "Avenir Next Condensed", "DIN Alternate", "Arial Narrow", sans-serif;
         color: var(--text);
       }
 
@@ -44,6 +53,7 @@
         position: relative;
         width: 100vw;
         height: 100vh;
+        overflow: hidden;
       }
 
       #canvas {
@@ -54,41 +64,544 @@
         touch-action: none;
       }
 
+      #overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding:
+          max(14px, env(safe-area-inset-top))
+          14px
+          max(16px, env(safe-area-inset-bottom))
+          14px;
+        pointer-events: none;
+      }
+
+      .top-strip {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) auto;
+        gap: 12px;
+        align-items: start;
+      }
+
+      .brand-card,
+      .status-card,
+      .center-badge,
+      #loading {
+        border: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(22, 29, 43, 0.82), rgba(8, 12, 20, 0.84));
+        backdrop-filter: blur(16px);
+        box-shadow: var(--shadow);
+      }
+
+      .brand-card {
+        max-width: min(720px, 72vw);
+        border-radius: 26px;
+        padding: 16px 18px 18px;
+      }
+
+      .eyebrow,
+      .chip-label,
+      .speed-unit,
+      .status-kicker,
+      .control-caption,
+      .control-button .sub {
+        font-family: "IBM Plex Mono", "SF Mono", "Menlo", monospace;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        font-size: 12px;
+        color: var(--amber);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 2.5vw, 2.9rem);
+        line-height: 0.96;
+        color: var(--cream);
+      }
+
+      #stage-hint {
+        margin: 10px 0 0;
+        max-width: 42rem;
+        font-size: clamp(0.92rem, 1.3vw, 1.1rem);
+        color: var(--muted);
+      }
+
+      .stat-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 34px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: var(--text);
+      }
+
+      .chip strong {
+        font-size: 1rem;
+        color: var(--cream);
+      }
+
+      .chip-target strong {
+        color: var(--mint);
+      }
+
+      .chip-label {
+        font-size: 10px;
+        color: var(--muted);
+      }
+
+      .right-stack {
+        display: grid;
+        gap: 10px;
+        justify-items: end;
+      }
+
+      .quick-actions {
+        display: flex;
+        gap: 10px;
+        pointer-events: auto;
+      }
+
+      .quick-action {
+        min-width: 108px;
+        padding: 12px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 16px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.05));
+        color: var(--text);
+        font: inherit;
+        font-size: 1rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        pointer-events: auto;
+        touch-action: none;
+      }
+
+      .quick-action[data-tap="retry"] {
+        box-shadow: inset 0 0 0 1px rgba(255, 127, 127, 0.22);
+      }
+
+      .quick-action[data-tap="camera"] {
+        box-shadow: inset 0 0 0 1px rgba(95, 133, 255, 0.22);
+      }
+
+      .status-card {
+        width: min(280px, 86vw);
+        border-radius: 24px;
+        padding: 16px;
+      }
+
+      .status-kicker {
+        margin: 0 0 8px;
+        font-size: 11px;
+        color: var(--mint);
+      }
+
+      .speed-line {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        line-height: 1;
+      }
+
+      #stat-speed {
+        font-size: clamp(2rem, 3vw, 3rem);
+        color: var(--cream);
+      }
+
+      .speed-unit {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .progress-track {
+        height: 10px;
+        margin: 12px 0 10px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      #park-progress {
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #5dd9ff 0%, var(--mint) 100%);
+        transform: scaleX(0);
+        transform-origin: left center;
+      }
+
+      #status-line {
+        margin: 0;
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+
+      .control-dock {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 12px;
+        align-items: end;
+      }
+
+      .control-stack {
+        display: grid;
+        gap: 10px;
+      }
+
+      .control-caption {
+        font-size: 11px;
+        color: var(--muted);
+        padding-left: 4px;
+      }
+
+      .control-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(112px, 134px));
+        gap: 10px;
+      }
+
+      .control-button {
+        position: relative;
+        display: grid;
+        gap: 8px;
+        align-content: center;
+        min-height: 108px;
+        padding: 14px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+        color: var(--text);
+        font: inherit;
+        pointer-events: auto;
+        touch-action: none;
+        transition: transform 120ms ease, border-color 120ms ease, filter 120ms ease;
+      }
+
+      .control-button .icon {
+        font-size: 1.7rem;
+        line-height: 1;
+      }
+
+      .control-button .label {
+        font-size: 1.12rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      .control-button .sub {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.72);
+      }
+
+      .control-button[data-hold="left"],
+      .control-button[data-hold="right"] {
+        background: linear-gradient(180deg, rgba(95, 133, 255, 0.34), rgba(40, 55, 102, 0.72));
+      }
+
+      .control-button[data-hold="throttle"] {
+        background: linear-gradient(180deg, rgba(91, 242, 197, 0.32), rgba(22, 86, 74, 0.76));
+      }
+
+      .control-button[data-hold="reverse"] {
+        background: linear-gradient(180deg, rgba(255, 181, 100, 0.34), rgba(108, 69, 25, 0.78));
+      }
+
+      .control-button.active,
+      .quick-action.active {
+        transform: translateY(2px) scale(0.985);
+        border-color: rgba(255, 255, 255, 0.36);
+        filter: brightness(1.08);
+      }
+
+      .center-badge {
+        align-self: end;
+        justify-self: center;
+        min-width: 196px;
+        padding: 12px 18px;
+        border-radius: 22px;
+        text-align: center;
+      }
+
+      .center-badge .eyebrow {
+        margin-bottom: 4px;
+      }
+
+      #view-badge {
+        font-size: 1.16rem;
+        text-transform: uppercase;
+        color: var(--cream);
+      }
+
       #loading {
         position: absolute;
-        inset: auto 16px max(16px, env(safe-area-inset-bottom)) 16px;
-        padding: 12px 14px;
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        background: var(--panel);
-        backdrop-filter: blur(12px);
+        left: 50%;
+        bottom: max(182px, calc(env(safe-area-inset-bottom) + 166px));
+        transform: translateX(-50%);
+        width: min(480px, calc(100vw - 32px));
+        padding: 12px 16px;
+        border-radius: 18px;
         font-size: 14px;
         letter-spacing: 0.02em;
         color: var(--muted);
         pointer-events: none;
+        transition: opacity 220ms ease;
       }
 
       #loading strong {
-        color: var(--accent);
+        color: var(--mint);
+      }
+
+      @media (max-width: 960px), (orientation: portrait) {
+        #overlay {
+          padding:
+            max(12px, env(safe-area-inset-top))
+            12px
+            max(16px, env(safe-area-inset-bottom))
+            12px;
+        }
+
+        .top-strip {
+          grid-template-columns: 1fr;
+        }
+
+        .brand-card {
+          max-width: none;
+        }
+
+        .right-stack {
+          justify-items: start;
+        }
+
+        .quick-actions {
+          justify-content: flex-start;
+        }
+
+        .control-dock {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-template-areas:
+            "badge badge"
+            "steer drive";
+        }
+
+        .steer-stack {
+          grid-area: steer;
+        }
+
+        .drive-stack {
+          grid-area: drive;
+        }
+
+        .center-badge {
+          grid-area: badge;
+          width: 100%;
+          min-width: 0;
+          margin-bottom: 2px;
+        }
+
+        .control-row {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .control-button {
+          min-height: 96px;
+          border-radius: 22px;
+        }
+
+        #loading {
+          bottom: max(198px, calc(env(safe-area-inset-bottom) + 182px));
+        }
+      }
+
+      @media (max-width: 560px) {
+        .brand-card,
+        .status-card,
+        .center-badge {
+          border-radius: 22px;
+        }
+
+        .quick-action {
+          min-width: 96px;
+        }
+
+        #stage-hint {
+          max-width: 100%;
+        }
       }
     </style>
   </head>
   <body>
     <div id="app">
       <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+      <div id="overlay">
+        <div class="top-strip">
+          <section class="brand-card">
+            <p class="eyebrow">Parking Master / Mobile Web</p>
+            <h1 id="stage-title">Stage 1 / Open Bay</h1>
+            <p id="stage-hint">Slide into the east-side bay with a clean entry.</p>
+            <div class="stat-row">
+              <span class="chip chip-target">Slot <strong id="slot-label">E6</strong></span>
+              <span class="chip"><span class="chip-label">Stage</span><strong id="stage-index">1/3</strong></span>
+              <span class="chip"><span class="chip-label">Time</span><strong id="stat-time">0.0s</strong></span>
+              <span class="chip"><span class="chip-label">Hits</span><strong id="stat-hits">0</strong></span>
+              <span class="chip"><span class="chip-label">View</span><strong id="stat-view">3RD</strong></span>
+            </div>
+          </section>
+
+          <div class="right-stack">
+            <div class="quick-actions">
+              <button class="quick-action" data-tap="retry">Retry</button>
+              <button class="quick-action" data-tap="camera">Camera</button>
+            </div>
+
+            <aside class="status-card">
+              <p class="status-kicker">Live Telemetry</p>
+              <div class="speed-line">
+                <strong id="stat-speed">0</strong>
+                <span class="speed-unit">km/h</span>
+              </div>
+              <div class="progress-track">
+                <div id="park-progress"></div>
+              </div>
+              <p id="status-line">Brake cleanly inside the glowing slot.</p>
+            </aside>
+          </div>
+        </div>
+
+        <div class="control-dock">
+          <section class="control-stack steer-stack">
+            <div class="control-caption">Steer</div>
+            <div class="control-row">
+              <button class="control-button" data-hold="left">
+                <span class="icon">◀</span>
+                <span class="label">Left</span>
+                <span class="sub">Hold to turn</span>
+              </button>
+              <button class="control-button" data-hold="right">
+                <span class="icon">▶</span>
+                <span class="label">Right</span>
+                <span class="sub">Hold to turn</span>
+              </button>
+            </div>
+          </section>
+
+          <div class="center-badge">
+            <p class="eyebrow">Camera Mode</p>
+            <div id="view-badge">3RD PERSON</div>
+          </div>
+
+          <section class="control-stack drive-stack">
+            <div class="control-caption">Drive</div>
+            <div class="control-row">
+              <button class="control-button" data-hold="reverse">
+                <span class="icon">↓</span>
+                <span class="label">Reverse</span>
+                <span class="sub">Back into tight spaces</span>
+              </button>
+              <button class="control-button" data-hold="throttle">
+                <span class="icon">↑</span>
+                <span class="label">Gas</span>
+                <span class="sub">Feather the pedal</span>
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
       <div id="loading"><strong>Loading</strong> web assembly bundle...</div>
     </div>
     <script>
       const loading = document.getElementById("loading");
       const canvas = document.getElementById("canvas");
+      const inputState = (window.__parkingInput = {
+        left: false,
+        right: false,
+        throttle: false,
+        reverse: false,
+        cameraPressed: false,
+        retryPressed: false
+      });
+
+      window.__parkingUi = {
+        stageTitle: document.getElementById("stage-title"),
+        stageHint: document.getElementById("stage-hint"),
+        slotLabel: document.getElementById("slot-label"),
+        stageIndex: document.getElementById("stage-index"),
+        time: document.getElementById("stat-time"),
+        hits: document.getElementById("stat-hits"),
+        view: document.getElementById("stat-view"),
+        speed: document.getElementById("stat-speed"),
+        progress: document.getElementById("park-progress"),
+        status: document.getElementById("status-line"),
+        viewBadge: document.getElementById("view-badge")
+      };
 
       function resizeCanvas() {
         canvas.style.width = `${window.innerWidth}px`;
         canvas.style.height = `${window.innerHeight}px`;
       }
 
+      function bindHoldButton(button) {
+        const key = button.dataset.hold;
+
+        const press = (event) => {
+          event.preventDefault();
+          inputState[key] = true;
+          button.classList.add("active");
+          button.setPointerCapture?.(event.pointerId);
+        };
+
+        const release = () => {
+          inputState[key] = false;
+          button.classList.remove("active");
+        };
+
+        button.addEventListener("pointerdown", press);
+        button.addEventListener("pointerup", release);
+        button.addEventListener("pointercancel", release);
+        button.addEventListener("pointerleave", release);
+        button.addEventListener("lostpointercapture", release);
+      }
+
+      function bindTapButton(button) {
+        const key = `${button.dataset.tap}Pressed`;
+
+        button.addEventListener("pointerdown", (event) => {
+          event.preventDefault();
+          inputState[key] = true;
+          button.classList.add("active");
+          window.setTimeout(() => button.classList.remove("active"), 120);
+        });
+      }
+
+      function releaseAllHolds() {
+        inputState.left = false;
+        inputState.right = false;
+        inputState.throttle = false;
+        inputState.reverse = false;
+        document.querySelectorAll(".control-button.active").forEach((button) => button.classList.remove("active"));
+      }
+
+      document.querySelectorAll("[data-hold]").forEach(bindHoldButton);
+      document.querySelectorAll("[data-tap]").forEach(bindTapButton);
       resizeCanvas();
       window.addEventListener("resize", resizeCanvas);
+      window.addEventListener("blur", releaseAllHolds);
+      window.addEventListener("contextmenu", (event) => event.preventDefault());
 
       var Module = {
         canvas,

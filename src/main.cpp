@@ -5,6 +5,76 @@
 #if defined(PLATFORM_WEB)
 #include <emscripten/emscripten.h>
 #include <emscripten/html5.h>
+
+EM_JS(float, WebSteerInput, (), {
+    const input = window.__parkingInput || {};
+    return (input.left ? -1 : 0) + (input.right ? 1 : 0);
+});
+
+EM_JS(float, WebThrottleInput, (), {
+    const input = window.__parkingInput || {};
+    return input.throttle ? 1 : 0;
+});
+
+EM_JS(float, WebReverseInput, (), {
+    const input = window.__parkingInput || {};
+    return input.reverse ? 1 : 0;
+});
+
+EM_JS(int, WebConsumeCameraPressed, (), {
+    const input = window.__parkingInput || {};
+    const pressed = input.cameraPressed ? 1 : 0;
+    input.cameraPressed = false;
+    return pressed;
+});
+
+EM_JS(int, WebConsumeRetryPressed, (), {
+    const input = window.__parkingInput || {};
+    const pressed = input.retryPressed ? 1 : 0;
+    input.retryPressed = false;
+    return pressed;
+});
+
+EM_JS(void, WebUpdateOverlay,
+      (const char* stageTitle,
+       const char* stageHint,
+       const char* slotLabel,
+       int stageNumber,
+       int stageTotal,
+       float timeSec,
+       int collisions,
+       int viewMode,
+       float speedKph,
+       float parkProgress,
+       int stageClearing,
+       int gameWon),
+      {
+          const ui = window.__parkingUi;
+          if (!ui) return;
+
+          ui.stageTitle.textContent = UTF8ToString(stageTitle);
+          ui.stageHint.textContent = UTF8ToString(stageHint);
+          ui.slotLabel.textContent = UTF8ToString(slotLabel);
+          ui.stageIndex.textContent = `${stageNumber}/${stageTotal}`;
+          ui.time.textContent = `${timeSec.toFixed(1)}s`;
+          ui.hits.textContent = `${collisions}`;
+          ui.view.textContent = viewMode === 0 ? "3RD" : "1ST";
+          ui.speed.textContent = `${Math.round(speedKph)}`;
+          ui.viewBadge.textContent = viewMode === 0 ? "3RD PERSON" : "1ST PERSON";
+          ui.progress.style.transform = `scaleX(${Math.max(0, Math.min(1, parkProgress))})`;
+
+          let statusText = "Brake cleanly inside the glowing slot.";
+          if (stageClearing) statusText = "Locked in. Loading the next parking test.";
+          if (gameWon) statusText = "All bays cleared. Tap Retry to run again.";
+          ui.status.textContent = statusText;
+      });
+#else
+inline float WebSteerInput() { return 0.0f; }
+inline float WebThrottleInput() { return 0.0f; }
+inline float WebReverseInput() { return 0.0f; }
+inline int WebConsumeCameraPressed() { return 0; }
+inline int WebConsumeRetryPressed() { return 0; }
+inline void WebUpdateOverlay(const char*, const char*, const char*, int, int, float, int, int, float, float, int, int) {}
 #endif
 
 #include <algorithm>
@@ -258,6 +328,7 @@ class ParkingMasterGame {
         const InputFrame input = GatherInput();
         Update(dt, input);
         UpdateCamera(dt);
+        PushWebOverlayState();
         Draw(input);
     }
 
@@ -301,7 +372,7 @@ class ParkingMasterGame {
         AddCone({2.0f, 11.4f}, coneColor);
 
         stages_.push_back({
-            {0.0f, 16.0f},
+            {0.0f, 14.6f},
             -kPi * 0.5f,
             {{{15.6f, 13.0f}, {3.2f, 1.8f}, 0.0f}, "E6"},
             "Stage 1 / Open Bay",
@@ -363,8 +434,8 @@ class ParkingMasterGame {
         double cssWidth = 0.0;
         double cssHeight = 0.0;
         if (emscripten_get_element_css_size("#canvas", &cssWidth, &cssHeight) == EMSCRIPTEN_RESULT_SUCCESS) {
-            const int width = std::max(640, static_cast<int>(std::round(cssWidth)));
-            const int height = std::max(360, static_cast<int>(std::round(cssHeight)));
+            const int width = std::max(1, static_cast<int>(std::round(cssWidth)));
+            const int height = std::max(1, static_cast<int>(std::round(cssHeight)));
             if (width != GetScreenWidth() || height != GetScreenHeight()) {
                 emscripten_set_canvas_element_size("#canvas", width, height);
                 SetWindowSize(width, height);
@@ -427,6 +498,13 @@ class ParkingMasterGame {
         if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) input.throttle = 1.0f;
         if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)) input.reverse = 1.0f;
 
+#if defined(PLATFORM_WEB)
+        input.steer += WebSteerInput();
+        input.throttle = std::max(input.throttle, WebThrottleInput());
+        input.reverse = std::max(input.reverse, WebReverseInput());
+        input.cameraPressed = IsKeyPressed(KEY_C) || WebConsumeCameraPressed();
+        input.retryPressed = IsKeyPressed(KEY_R) || WebConsumeRetryPressed();
+#else
         if (PointerDownInRect(buttons_.left)) input.steer -= 1.0f;
         if (PointerDownInRect(buttons_.right)) input.steer += 1.0f;
         if (PointerDownInRect(buttons_.accel)) input.throttle = 1.0f;
@@ -440,6 +518,7 @@ class ParkingMasterGame {
 
         buttonLatch_.camera = cameraHeld;
         buttonLatch_.retry = retryHeld;
+#endif
         input.steer = std::clamp(input.steer, -1.0f, 1.0f);
         return input;
     }
@@ -485,6 +564,14 @@ class ParkingMasterGame {
         if (totalCollisions_ == 0 && runTimer_ < 75.0f) return 3;
         if (totalCollisions_ <= 2 && runTimer_ < 120.0f) return 2;
         return 1;
+    }
+
+    float DisplaySpeedKph() const {
+        return std::fabs(car_.speed) * 8.8f;
+    }
+
+    float ParkingProgress() const {
+        return Clamp01(parkHoldTimer_ / 0.9f);
     }
 
     void Update(float dt, const InputFrame& input) {
@@ -602,6 +689,22 @@ class ParkingMasterGame {
         camera_.target = LerpVector3(camera_.target, desiredTarget, blend);
     }
 
+    void PushWebOverlayState() const {
+        const Stage& stage = stages_[currentStageIndex_];
+        WebUpdateOverlay(stage.title.c_str(),
+                         stage.hint.c_str(),
+                         stage.target.label.c_str(),
+                         currentStageIndex_ + 1,
+                         static_cast<int>(stages_.size()),
+                         runTimer_,
+                         totalCollisions_,
+                         viewMode_ == ViewMode::ThirdPerson ? 0 : 1,
+                         DisplaySpeedKph(),
+                         ParkingProgress(),
+                         stageClearTimer_ > 0.0f ? 1 : 0,
+                         gameWon_ ? 1 : 0);
+    }
+
     void DrawGroundBox(Vector2 center, Vector2 size, float angle, float thickness, Color color) const {
         DrawOrientedCube(center, thickness * 0.5f, {size.x, thickness, size.y}, angle, color);
     }
@@ -622,23 +725,84 @@ class ParkingMasterGame {
         DrawLineBox(corners[3], corners[0], 0.12f, color);
     }
 
-    void DrawCourse() const {
-        DrawPlane({0.0f, 0.0f, 0.0f}, {50.0f, 40.0f}, {36, 41, 53, 255});
+    void DrawArrowMarker(Vector2 center, float angle, Color color) const {
+        DrawGroundBox(center, {0.34f, 1.6f}, angle + kPi * 0.5f, 0.02f, color);
+        DrawGroundBox(VAdd(center, RotateVector({0.0f, 0.72f}, angle)), {0.28f, 0.9f}, angle + 0.68f, 0.02f, color);
+        DrawGroundBox(VAdd(center, RotateVector({0.0f, 0.72f}, angle)), {0.28f, 0.9f}, angle - 0.68f, 0.02f, color);
+    }
 
-        const Color laneColor = {51, 58, 71, 255};
+    void DrawBackdrop() const {
+        const int width = GetScreenWidth();
+        const int height = GetScreenHeight();
+
+        DrawRectangleGradientV(0, 0, width, height, {247, 157, 85, 255}, {18, 24, 42, 255});
+        DrawCircleGradient(static_cast<int>(width * 0.78f), static_cast<int>(height * 0.2f), height * 0.16f, {255, 236, 188, 210}, BLANK);
+        DrawCircleGradient(static_cast<int>(width * 0.5f), static_cast<int>(height * 0.43f), height * 0.26f, Fade({255, 165, 91, 255}, 0.22f), BLANK);
+
+        const int skylineBase = static_cast<int>(height * 0.56f);
+        for (int i = 0; i < 10; ++i) {
+            const int buildingWidth = 80 + (i % 3) * 28;
+            const int buildingHeight = 80 + (i % 5) * 34;
+            const int x = i * (width / 9) - 14;
+            DrawRectangle(x, skylineBase - buildingHeight, buildingWidth, buildingHeight, Fade({24, 28, 42, 255}, 0.75f));
+        }
+
+        DrawRectangle(0, skylineBase, width, height - skylineBase, Fade({10, 13, 22, 255}, 0.3f));
+    }
+
+    void DrawEnvironmentDetails() const {
+        for (int i = 0; i < 7; ++i) {
+            const float z = -15.0f + i * 5.0f;
+            DrawCylinder({-10.7f, 2.4f, z}, 0.12f, 0.12f, 4.8f, 8, {57, 67, 88, 255});
+            DrawCylinder({10.7f, 2.4f, z}, 0.12f, 0.12f, 4.8f, 8, {57, 67, 88, 255});
+            DrawSphere({-10.7f, 5.1f, z}, 0.3f, Fade({255, 229, 162, 255}, 0.82f));
+            DrawSphere({10.7f, 5.1f, z}, 0.3f, Fade({255, 229, 162, 255}, 0.82f));
+        }
+
+        for (int i = 0; i < 6; ++i) {
+            const float x = i < 3 ? -19.5f : 19.5f;
+            const float z = -14.0f + (i % 3) * 13.0f;
+            const float height = 5.5f + (i % 3) * 2.0f;
+            const Color tower = i % 2 == 0 ? Color{45, 54, 76, 255} : Color{30, 38, 57, 255};
+            DrawCube({x, height * 0.5f, z}, 4.8f, height, 5.0f, tower);
+            DrawCubeWires({x, height * 0.5f, z}, 4.8f, height, 5.0f, Fade({154, 173, 207, 255}, 0.12f));
+        }
+
+        const std::array<Vector2, 4> planters = {{{-8.7f, -16.0f}, {8.7f, -16.0f}, {-8.7f, 16.0f}, {8.7f, 16.0f}}};
+        for (const Vector2& planter : planters) {
+            DrawOrientedCube(planter, 0.45f, {1.8f, 0.9f, 1.8f}, 0.0f, {108, 89, 72, 255});
+            DrawSphere(WorldPoint(planter, 1.3f), 0.82f, {79, 154, 112, 255});
+        }
+    }
+
+    void DrawCourse() const {
+        DrawPlane({0.0f, 0.0f, 0.0f}, {50.0f, 40.0f}, {31, 35, 47, 255});
+        DrawPlane({0.0f, -0.02f, 0.0f}, {56.0f, 46.0f}, {21, 25, 37, 255});
+
+        const Color laneColor = {52, 57, 70, 255};
         DrawGroundBox({0.0f, 0.0f}, {11.0f, 31.5f}, 0.0f, 0.01f, laneColor);
         DrawGroundBox({0.0f, -15.3f}, {14.0f, 3.7f}, 0.0f, 0.01f, laneColor);
+        DrawGroundBox({0.0f, 0.0f}, {11.9f, 32.4f}, 0.0f, 0.005f, Fade({245, 206, 111, 255}, 0.06f));
+
+        for (float y = -13.8f; y <= 14.0f; y += 3.8f) {
+            DrawGroundBox({0.0f, y}, {0.36f, 1.8f}, 0.0f, 0.02f, {237, 219, 158, 255});
+        }
+        DrawGroundBox({-5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, Fade({255, 255, 255, 255}, 0.6f));
+        DrawGroundBox({5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, Fade({255, 255, 255, 255}, 0.6f));
+        DrawArrowMarker({0.0f, 10.6f}, 0.0f, {237, 219, 158, 255});
+        DrawArrowMarker({0.0f, -5.0f}, kPi, {237, 219, 158, 255});
 
         for (const OrientedRect& slot : paintedSlots_) {
-            DrawParkingOutline(slot, {223, 228, 237, 255});
+            DrawParkingOutline(slot, {233, 239, 248, 255});
         }
 
         const ParkingZone& target = stages_[currentStageIndex_].target;
-        DrawGroundBox(target.footprint.center, {target.footprint.half.x * 2.0f, target.footprint.half.y * 2.0f}, target.footprint.angle, 0.03f, Fade({86, 240, 164, 255}, 0.18f));
-        DrawParkingOutline(target.footprint, {86, 240, 164, 255});
+        DrawGroundBox(target.footprint.center, {target.footprint.half.x * 2.0f, target.footprint.half.y * 2.0f}, target.footprint.angle, 0.03f, Fade({91, 242, 197, 255}, 0.22f));
+        DrawParkingOutline(target.footprint, {91, 242, 197, 255});
 
         const float pulse = 0.85f + std::sin(elapsedSceneTime_ * 3.2f) * 0.12f;
-        DrawSphere(WorldPoint(target.footprint.center, 1.9f + std::sin(elapsedSceneTime_ * 2.5f) * 0.18f), 0.3f * pulse, {86, 240, 164, 220});
+        DrawSphere(WorldPoint(target.footprint.center, 1.9f + std::sin(elapsedSceneTime_ * 2.5f) * 0.18f), 0.3f * pulse, {91, 242, 197, 220});
+        DrawCylinder(WorldPoint(target.footprint.center, 0.8f), 0.32f, 0.32f, 1.8f, 16, Fade({91, 242, 197, 255}, 0.14f));
 
         for (const Obstacle& obstacle : obstacles_) {
             switch (obstacle.type) {
@@ -673,10 +837,13 @@ class ParkingMasterGame {
                     break;
             }
         }
+
+        DrawEnvironmentDetails();
     }
 
     void DrawPlayerCar() const {
         const Color body = collisionFlash_ > 0.0f ? Color{255, 107, 107, 255} : Color{255, 215, 85, 255};
+        DrawGroundBox(car_.position, {4.9f, 2.45f}, car_.heading, 0.02f, Fade({6, 9, 15, 255}, 0.35f));
 
         DrawOrientedCube(car_.position, 0.68f, {kCarLength, 1.1f, kCarWidth}, car_.heading, body);
 
@@ -687,6 +854,9 @@ class ParkingMasterGame {
             car_.heading,
             {37, 53, 88, 255}
         );
+        DrawOrientedCube(car_.position, 1.04f, {3.2f, 0.05f, 0.08f}, car_.heading, {240, 108, 66, 255});
+        DrawOrientedCube(VAdd(car_.position, RotateVector({0.0f, 0.64f}, car_.heading)), 0.82f, {0.12f, 0.08f, 0.38f}, car_.heading, {255, 246, 204, 255});
+        DrawOrientedCube(VAdd(car_.position, RotateVector({0.0f, -0.64f}, car_.heading)), 0.82f, {0.12f, 0.08f, 0.38f}, car_.heading, {255, 246, 204, 255});
 
         const Vector2 forward = ForwardFromAngle(car_.heading);
         const Vector2 side = {-forward.y, forward.x};
@@ -700,6 +870,14 @@ class ParkingMasterGame {
         for (const Vector2& wheel : wheelCenters) {
             DrawOrientedCube(wheel, 0.28f, {0.6f, 0.45f, 0.22f}, car_.heading, {18, 20, 24, 255});
         }
+
+        const auto drawLight = [&](Vector2 local, float height, Vector3 size, Color color) {
+            DrawOrientedCube(VAdd(car_.position, RotateVector(local, car_.heading)), height, size, car_.heading, color);
+        };
+        drawLight({1.95f, 0.62f}, 0.78f, {0.14f, 0.16f, 0.3f}, {255, 244, 196, 255});
+        drawLight({1.95f, -0.62f}, 0.78f, {0.14f, 0.16f, 0.3f}, {255, 244, 196, 255});
+        drawLight({-1.95f, 0.64f}, 0.78f, {0.14f, 0.16f, 0.28f}, {255, 99, 89, 255});
+        drawLight({-1.95f, -0.64f}, 0.78f, {0.14f, 0.16f, 0.28f}, {255, 99, 89, 255});
     }
 
     Vector2 ToMiniMap(Vector2 worldPoint, Rectangle area) const {
@@ -725,10 +903,11 @@ class ParkingMasterGame {
     }
 
     void DrawMiniMap() const {
-        const float size = std::min(GetScreenWidth(), GetScreenHeight()) * 0.24f;
+        const bool portrait = GetScreenHeight() > GetScreenWidth();
+        const float size = std::min(GetScreenWidth(), GetScreenHeight()) * (portrait ? 0.19f : 0.22f);
         Rectangle area{
             static_cast<float>(GetScreenWidth()) - size - 20.0f,
-            100.0f,
+            portrait ? 162.0f : 116.0f,
             size,
             size,
         };
@@ -815,6 +994,30 @@ class ParkingMasterGame {
         DrawButton(buttons_.retry, "RETRY", false, {229, 86, 113, 255});
     }
 
+    void DrawCockpitOverlay() const {
+        if (viewMode_ != ViewMode::FirstPerson) return;
+
+        const float width = static_cast<float>(GetScreenWidth());
+        const float height = static_cast<float>(GetScreenHeight());
+        const Vector2 gaugeCenter{width * 0.5f, height * 0.97f};
+
+        DrawTriangle({0.0f, height}, {0.0f, height * 0.34f}, {width * 0.16f, height}, Fade({11, 14, 20, 255}, 0.94f));
+        DrawTriangle({width, height}, {width, height * 0.34f}, {width * 0.84f, height}, Fade({11, 14, 20, 255}, 0.94f));
+        DrawRectangleGradientV(0, static_cast<int>(height * 0.72f), static_cast<int>(width), static_cast<int>(height * 0.28f), Fade({11, 14, 20, 255}, 0), Fade({11, 14, 20, 255}, 0.94f));
+
+        const Rectangle panel{width * 0.21f, height * 0.77f, width * 0.58f, height * 0.12f};
+        DrawPanel(panel, Fade({11, 15, 24, 255}, 0.88f), Fade({255, 255, 255, 255}, 0.12f));
+        DrawText("COCKPIT VIEW", static_cast<int>(panel.x) + 18, static_cast<int>(panel.y) + 14, 18, {222, 231, 246, 255});
+
+        char speedLine[32];
+        std::snprintf(speedLine, sizeof(speedLine), "%02d km/h", static_cast<int>(std::round(DisplaySpeedKph())));
+        DrawText(speedLine, static_cast<int>(panel.x) + 18, static_cast<int>(panel.y) + 42, 26, {91, 242, 197, 255});
+
+        const float speedRatio = Clamp01(DisplaySpeedKph() / 90.0f);
+        DrawRing(gaugeCenter, height * 0.13f, height * 0.19f, 204.0f, 336.0f, 48, Fade({31, 38, 56, 255}, 0.96f));
+        DrawRing(gaugeCenter, height * 0.13f, height * 0.19f, 204.0f, 204.0f + speedRatio * 132.0f, 48, {91, 242, 197, 255});
+    }
+
     void DrawCenterBanner() const {
         if (stageClearTimer_ > 0.0f) {
             const Rectangle panel{
@@ -846,17 +1049,25 @@ class ParkingMasterGame {
     }
 
     void Draw(const InputFrame& input) const {
-        ClearBackground({205, 224, 245, 255});
+#if defined(PLATFORM_WEB)
+        (void)input;
+#endif
+        ClearBackground({18, 24, 42, 255});
+        DrawBackdrop();
 
         BeginMode3D(camera_);
         DrawCourse();
         DrawPlayerCar();
         EndMode3D();
 
-        DrawHud();
+        DrawCockpitOverlay();
         DrawMiniMap();
-        DrawControls(input);
         DrawCenterBanner();
+
+#if !defined(PLATFORM_WEB)
+        DrawHud();
+        DrawControls(input);
+#endif
 
         if (collisionFlash_ > 0.0f) {
             DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade({255, 88, 88, 255}, collisionFlash_ * 0.22f));
