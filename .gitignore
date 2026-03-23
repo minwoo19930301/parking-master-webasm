@@ -3,3 +3,4 @@ build-web/
 .cache/
 compile_commands.json
 parking-preview.png
+.vercel
