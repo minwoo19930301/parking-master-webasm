@@ -2,6 +2,11 @@
 
 `주차의 달인` 감성에서 출발한 3D 모바일 웹 주차 게임입니다. 코어 로직은 `C++`로 작성했고, `raylib + Emscripten`으로 `WebAssembly` 번들을 만들어 브라우저에서 실행합니다.
 
+## Links
+
+- Live site: [Parking Master WebASM](https://parking-master-webasm.vercel.app)
+- GitHub: [minwoo19930301/parking-master-webasm](https://github.com/minwoo19930301/parking-master-webasm)
+
 ## Features
 
 - 1인칭 / 3인칭 카메라 전환
@@ -40,6 +45,8 @@ npm run preview
 ## Vercel
 
 이 저장소는 루트에 `index.html`이 생성되도록 구성했습니다. 그래서 별도 서버 없이도 Vercel에서 정적 사이트로 바로 배포할 수 있습니다.
+
+- Production URL: [https://parking-master-webasm.vercel.app](https://parking-master-webasm.vercel.app)
 
 1. GitHub public repo로 push
 2. Vercel에서 해당 repo import
