@@ -398,8 +398,8 @@ class ParkingMasterGame {
         AddCone({2.0f, 11.4f}, coneColor);
 
         stages_.push_back({
-            {4.6f, 15.1f},
-            -0.18f,
+            {4.0f, 9.5f},
+            0.12f,
             {{{15.6f, 13.0f}, {3.2f, 1.8f}, 0.0f}, "E6"},
             "Stage 1 / Open Bay",
             "Keep the green bay in view, stop fully inside it, then hold Brake until Parking Lock reaches 100%."
@@ -435,13 +435,36 @@ class ParkingMasterGame {
 
     void ResetCurrentStage() {
         const Stage& stage = stages_[currentStageIndex_];
-        car_.position = stage.spawn;
         car_.heading = stage.spawnAngle;
+        car_.position = stage.spawn;
         car_.speed = 0.0f;
         car_.steering = 0.0f;
         car_.collisionLatch = false;
         parkHoldTimer_ = 0.0f;
         gear_ = TransmissionGear::Drive;
+
+        const std::array<Vector2, 11> spawnOffsets = {{
+            {0.0f, 0.0f},
+            {0.0f, -1.2f},
+            {0.0f, 1.2f},
+            {-1.0f, 0.0f},
+            {1.0f, 0.0f},
+            {-1.2f, -0.8f},
+            {1.2f, -0.8f},
+            {-1.2f, 0.8f},
+            {1.2f, 0.8f},
+            {0.0f, -2.1f},
+            {0.0f, 2.1f},
+        }};
+
+        for (const Vector2& localOffset : spawnOffsets) {
+            car_.position = VAdd(stage.spawn, RotateVector(localOffset, stage.spawnAngle));
+            if (!CheckCourseCollision()) {
+                return;
+            }
+        }
+
+        car_.position = stage.spawn;
     }
 
     void AddParkedCar(Vector2 center, float angle, Color color) {
