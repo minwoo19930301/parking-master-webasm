@@ -1150,29 +1150,29 @@ class ParkingMasterGame {
 
         Camera3D left = camera_;
         left.position = {
-            car_.position.x + forward.x * 0.15f - side.x * 0.88f,
+            car_.position.x + forward.x * 0.05f - side.x * 0.92f,
             1.18f,
-            car_.position.y + forward.y * 0.15f - side.y * 0.88f,
+            car_.position.y + forward.y * 0.05f - side.y * 0.92f,
         };
         left.target = {
-            left.position.x - side.x * 12.0f + forward.x * 2.4f,
-            1.02f,
-            left.position.z - side.y * 12.0f + forward.y * 2.4f,
+            left.position.x - forward.x * 16.0f - side.x * 4.2f,
+            1.04f,
+            left.position.z - forward.y * 16.0f - side.y * 4.2f,
         };
-        left.fovy = 58.0f;
+        left.fovy = 46.0f;
 
         Camera3D right = camera_;
         right.position = {
-            car_.position.x + forward.x * 0.15f + side.x * 0.88f,
+            car_.position.x + forward.x * 0.05f + side.x * 0.92f,
             1.18f,
-            car_.position.y + forward.y * 0.15f + side.y * 0.88f,
+            car_.position.y + forward.y * 0.05f + side.y * 0.92f,
         };
         right.target = {
-            right.position.x + side.x * 12.0f + forward.x * 2.4f,
-            1.02f,
-            right.position.z + side.y * 12.0f + forward.y * 2.4f,
+            right.position.x - forward.x * 16.0f + side.x * 4.2f,
+            1.04f,
+            right.position.z - forward.y * 16.0f + side.y * 4.2f,
         };
-        right.fovy = 58.0f;
+        right.fovy = 46.0f;
 
         RenderMirrorView(mirrorRear_, rear);
         RenderMirrorView(mirrorLeft_, left);
