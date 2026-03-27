@@ -8,6 +8,7 @@
 
 EM_JS(float, WebSteerInput, (), {
     const input = window.__parkingInput || {};
+    if (typeof input.steerValue === "number") return input.steerValue;
     return (input.left ? -1 : 0) + (input.right ? 1 : 0);
 });
 
@@ -686,7 +687,7 @@ class ParkingMasterGame {
         if (stageClearTimer_ > 0.0f) return "Parking Lock complete. Loading the next stage.";
 
         if (currentStageIndex_ == 2 && gear_ != TransmissionGear::Reverse) {
-            return "Stage 3 needs reverse parking. Shift to R, then back into the glowing box.";
+            return "Stage 3 needs reverse parking. Hold Brake, shift to R, then back into the glowing box.";
         }
 
         if (ParkingProgress() > 0.0f) {
@@ -697,10 +698,10 @@ class ParkingMasterGame {
     }
 
     void Update(float dt, const InputFrame& input) {
-        if (input.gearDrivePressed && std::fabs(car_.speed) < 1.8f) {
+        if (input.gearDrivePressed && input.brake > 0.0f && std::fabs(car_.speed) < 1.8f) {
             gear_ = TransmissionGear::Drive;
         }
-        if (input.gearReversePressed && std::fabs(car_.speed) < 1.8f) {
+        if (input.gearReversePressed && input.brake > 0.0f && std::fabs(car_.speed) < 1.8f) {
             gear_ = TransmissionGear::Reverse;
         }
 
@@ -739,10 +740,8 @@ class ParkingMasterGame {
 
         float desiredSpeed = car_.speed;
         const float gearDirection = gear_ == TransmissionGear::Drive ? 1.0f : -1.0f;
-        if (input.throttle > 0.0f) {
-            const float accelStrength = gear_ == TransmissionGear::Drive ? 14.0f : 11.0f;
-            desiredSpeed += gearDirection * accelStrength * dt;
-        }
+        const float creepSpeed = gear_ == TransmissionGear::Drive ? 2.2f : -1.7f;
+
         if (input.brake > 0.0f) {
             const float brakeStrength = 24.0f * dt;
             if (desiredSpeed > brakeStrength) {
@@ -752,8 +751,13 @@ class ParkingMasterGame {
             } else {
                 desiredSpeed = 0.0f;
             }
-        } else if (input.throttle == 0.0f) {
-            desiredSpeed = LerpFloat(desiredSpeed, 0.0f, dt * 1.65f);
+        } else {
+            desiredSpeed = LerpFloat(desiredSpeed, creepSpeed, dt * 1.6f);
+        }
+
+        if (input.throttle > 0.0f) {
+            const float accelStrength = gear_ == TransmissionGear::Drive ? 14.0f : 11.0f;
+            desiredSpeed += gearDirection * accelStrength * dt;
         }
 
         car_.speed = std::clamp(desiredSpeed, -5.8f, 10.5f);

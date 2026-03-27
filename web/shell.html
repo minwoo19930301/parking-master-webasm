@@ -276,6 +276,75 @@
         gap: 10px;
       }
 
+      .wheel-cluster {
+        min-width: 142px;
+      }
+
+      .wheel-pad {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 142px;
+        height: 142px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.12), rgba(12, 15, 20, 0.92));
+        box-shadow: var(--shadow);
+        pointer-events: auto;
+        touch-action: none;
+      }
+
+      .wheel-pad.active {
+        border-color: rgba(240, 188, 120, 0.32);
+      }
+
+      .wheel-shell {
+        position: relative;
+        width: 108px;
+        height: 108px;
+        border-radius: 999px;
+        border: 10px solid rgba(12, 15, 20, 0.96);
+        box-shadow: inset 0 0 0 2px rgba(240, 188, 120, 0.25);
+        transition: transform 80ms linear;
+      }
+
+      .wheel-hub {
+        position: absolute;
+        inset: 50%;
+        width: 28px;
+        height: 28px;
+        margin-left: -14px;
+        margin-top: -14px;
+        border-radius: 999px;
+        background: rgba(12, 15, 20, 0.98);
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.12);
+      }
+
+      .wheel-spoke {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 10px;
+        height: 42px;
+        margin-left: -5px;
+        margin-top: -10px;
+        border-radius: 8px;
+        background: rgba(18, 22, 29, 0.98);
+        transform-origin: center 10px;
+      }
+
+      .wheel-spoke.left {
+        transform: rotate(-48deg);
+      }
+
+      .wheel-spoke.right {
+        transform: rotate(48deg);
+      }
+
+      .steer-copy {
+        margin-top: 4px;
+      }
+
       .section-label {
         padding-left: 2px;
         font-size: 10px;
@@ -403,6 +472,16 @@
           padding: 7px 10px;
         }
 
+        .wheel-pad {
+          width: 118px;
+          height: 118px;
+        }
+
+        .wheel-shell {
+          width: 92px;
+          height: 92px;
+        }
+
         .tap-button {
           min-width: 88px;
           padding: 9px 10px;
@@ -443,6 +522,17 @@
         .shift-button {
           min-height: 74px;
           border-radius: 20px;
+        }
+
+        .wheel-pad {
+          width: 104px;
+          height: 104px;
+        }
+
+        .wheel-shell {
+          width: 80px;
+          height: 80px;
+          border-width: 8px;
         }
       }
     </style>
@@ -501,20 +591,17 @@
         </header>
 
         <footer class="control-strip">
-          <section class="control-cluster steer-cluster">
+          <section class="control-cluster wheel-cluster steer-cluster">
             <div class="section-label">Steer</div>
-            <div class="control-row">
-              <button class="control-button" data-hold="left">
-                <span class="icon">◀</span>
-                <span class="button-label">Left</span>
-                <span class="button-sub">Hold</span>
-              </button>
-              <button class="control-button" data-hold="right">
-                <span class="icon">▶</span>
-                <span class="button-label">Right</span>
-                <span class="button-sub">Hold</span>
-              </button>
+            <div class="wheel-pad" id="steer-pad">
+              <div class="wheel-shell" id="steer-wheel">
+                <span class="wheel-spoke left"></span>
+                <span class="wheel-spoke right"></span>
+                <span class="wheel-spoke"></span>
+                <span class="wheel-hub"></span>
+              </div>
             </div>
+            <div class="button-sub steer-copy">Drag the wheel</div>
           </section>
 
           <section class="transmission-panel">
@@ -555,9 +642,10 @@
     <script>
       const loading = document.getElementById("loading");
       const canvas = document.getElementById("canvas");
+      const steeringPad = document.getElementById("steer-pad");
+      const steeringWheel = document.getElementById("steer-wheel");
       const inputState = (window.__parkingInput = {
-        left: false,
-        right: false,
+        steerValue: 0,
         throttle: false,
         brake: false,
         gearDrivePressed: false,
@@ -585,6 +673,48 @@
       function resizeCanvas() {
         canvas.style.width = `${window.innerWidth}px`;
         canvas.style.height = `${window.innerHeight}px`;
+      }
+
+      function setSteerValue(value) {
+        const clamped = Math.max(-1, Math.min(1, value));
+        inputState.steerValue = clamped;
+        steeringWheel.style.transform = `rotate(${clamped * 110}deg)`;
+      }
+
+      function bindSteeringWheel() {
+        let activePointerId = null;
+
+        const updateWheel = (event) => {
+          const rect = steeringPad.getBoundingClientRect();
+          const centerX = rect.left + rect.width * 0.5;
+          const radius = rect.width * 0.34;
+          setSteerValue((event.clientX - centerX) / radius);
+        };
+
+        const releaseWheel = (event) => {
+          if (activePointerId === null) return;
+          if (event && event.pointerId !== activePointerId) return;
+          activePointerId = null;
+          steeringPad.classList.remove("active");
+          setSteerValue(0);
+        };
+
+        steeringPad.addEventListener("pointerdown", (event) => {
+          event.preventDefault();
+          activePointerId = event.pointerId;
+          steeringPad.classList.add("active");
+          steeringPad.setPointerCapture?.(event.pointerId);
+          updateWheel(event);
+        });
+
+        steeringPad.addEventListener("pointermove", (event) => {
+          if (event.pointerId !== activePointerId) return;
+          updateWheel(event);
+        });
+
+        steeringPad.addEventListener("pointerup", releaseWheel);
+        steeringPad.addEventListener("pointercancel", releaseWheel);
+        steeringPad.addEventListener("lostpointercapture", releaseWheel);
       }
 
       function bindHoldButton(button) {
@@ -621,13 +751,14 @@
       }
 
       function releaseAllHolds() {
-        inputState.left = false;
-        inputState.right = false;
         inputState.throttle = false;
         inputState.brake = false;
+        setSteerValue(0);
+        steeringPad.classList.remove("active");
         document.querySelectorAll(".control-button.active").forEach((button) => button.classList.remove("active"));
       }
 
+      bindSteeringWheel();
       document.querySelectorAll("[data-hold]").forEach(bindHoldButton);
       document.querySelectorAll("[data-tap]").forEach(bindTapButton);
       resizeCanvas();
