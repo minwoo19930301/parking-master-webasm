@@ -6,3 +6,6 @@ parking-preview.png
 parking-fix-preview.png
 remote-preview.png
 .vercel
+node_modules/
+headed-check*.png
+parking-firstperson-check*.png

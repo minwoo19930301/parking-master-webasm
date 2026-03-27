@@ -16,15 +16,22 @@ EM_JS(float, WebThrottleInput, (), {
     return input.throttle ? 1 : 0;
 });
 
-EM_JS(float, WebReverseInput, (), {
+EM_JS(float, WebBrakeInput, (), {
     const input = window.__parkingInput || {};
-    return input.reverse ? 1 : 0;
+    return input.brake ? 1 : 0;
 });
 
-EM_JS(int, WebConsumeCameraPressed, (), {
+EM_JS(int, WebConsumeGearDrivePressed, (), {
     const input = window.__parkingInput || {};
-    const pressed = input.cameraPressed ? 1 : 0;
-    input.cameraPressed = false;
+    const pressed = input.gearDrivePressed ? 1 : 0;
+    input.gearDrivePressed = false;
+    return pressed;
+});
+
+EM_JS(int, WebConsumeGearReversePressed, (), {
+    const input = window.__parkingInput || {};
+    const pressed = input.gearReversePressed ? 1 : 0;
+    input.gearReversePressed = false;
     return pressed;
 });
 
@@ -43,7 +50,8 @@ EM_JS(void, WebUpdateOverlay,
        int stageTotal,
        float timeSec,
        int collisions,
-       int viewMode,
+       const char* gearLabel,
+       const char* guideLabel,
        float speedKph,
        float parkProgress,
        int stageClearing,
@@ -58,12 +66,20 @@ EM_JS(void, WebUpdateOverlay,
           ui.stageIndex.textContent = `${stageNumber}/${stageTotal}`;
           ui.time.textContent = `${timeSec.toFixed(1)}s`;
           ui.hits.textContent = `${collisions}`;
-          ui.view.textContent = viewMode === 0 ? "3RD" : "1ST";
+          ui.gear.textContent = UTF8ToString(gearLabel);
+          ui.guide.textContent = UTF8ToString(guideLabel);
           ui.speed.textContent = `${Math.round(speedKph)}`;
-          ui.viewBadge.textContent = viewMode === 0 ? "3RD PERSON" : "1ST PERSON";
           ui.progress.style.transform = `scaleX(${Math.max(0, Math.min(1, parkProgress))})`;
+          if (ui.progressValue) {
+              ui.progressValue.textContent = `${Math.round(Math.max(0, Math.min(1, parkProgress)) * 100)}%`;
+          }
+          if (ui.driveButton && ui.reverseButton) {
+              const inDrive = UTF8ToString(gearLabel) === "D";
+              ui.driveButton.classList.toggle("selected", inDrive);
+              ui.reverseButton.classList.toggle("selected", !inDrive);
+          }
 
-          let statusText = "Brake cleanly inside the glowing slot.";
+          let statusText = "Stop fully inside the glowing slot and hold Brake until Parking Lock reaches 100%.";
           if (stageClearing) statusText = "Locked in. Loading the next parking test.";
           if (gameWon) statusText = "All bays cleared. Tap Retry to run again.";
           ui.status.textContent = statusText;
@@ -71,10 +87,11 @@ EM_JS(void, WebUpdateOverlay,
 #else
 inline float WebSteerInput() { return 0.0f; }
 inline float WebThrottleInput() { return 0.0f; }
-inline float WebReverseInput() { return 0.0f; }
-inline int WebConsumeCameraPressed() { return 0; }
+inline float WebBrakeInput() { return 0.0f; }
+inline int WebConsumeGearDrivePressed() { return 0; }
+inline int WebConsumeGearReversePressed() { return 0; }
 inline int WebConsumeRetryPressed() { return 0; }
-inline void WebUpdateOverlay(const char*, const char*, const char*, int, int, float, int, int, float, float, int, int) {}
+inline void WebUpdateOverlay(const char*, const char*, const char*, int, int, float, int, const char*, const char*, float, float, int, int) {}
 #endif
 
 #include <algorithm>
@@ -92,15 +109,15 @@ constexpr float kWorldHalfHeight = 19.0f;
 constexpr float kCarLength = 4.2f;
 constexpr float kCarWidth = 2.0f;
 
-enum class ViewMode {
-    ThirdPerson,
-    FirstPerson,
-};
-
 enum class ObstacleType {
     ParkedCar,
     Curb,
     Cone,
+};
+
+enum class TransmissionGear {
+    Drive,
+    Reverse,
 };
 
 struct OrientedRect {
@@ -140,22 +157,25 @@ struct CarState {
 struct Buttons {
     Rectangle left{};
     Rectangle right{};
-    Rectangle accel{};
-    Rectangle reverse{};
-    Rectangle camera{};
+    Rectangle throttle{};
+    Rectangle brake{};
+    Rectangle gearDrive{};
+    Rectangle gearReverse{};
     Rectangle retry{};
 };
 
 struct ButtonLatch {
-    bool camera = false;
+    bool gearDrive = false;
+    bool gearReverse = false;
     bool retry = false;
 };
 
 struct InputFrame {
     float steer = 0.0f;
     float throttle = 0.0f;
-    float reverse = 0.0f;
-    bool cameraPressed = false;
+    float brake = 0.0f;
+    bool gearDrivePressed = false;
+    bool gearReversePressed = false;
     bool retryPressed = false;
 };
 
@@ -299,7 +319,11 @@ Rectangle MakeCenteredRect(float centerX, float centerY, float width, float heig
 class ParkingMasterGame {
   public:
     ParkingMasterGame() {
+#if defined(PLATFORM_WEB)
+        SetConfigFlags(FLAG_VSYNC_HINT);
+#else
         SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
+#endif
         InitWindow(1280, 720, "Parking Master WebASM");
         SetTargetFPS(60);
         SetExitKey(KEY_NULL);
@@ -312,9 +336,11 @@ class ParkingMasterGame {
 
         BuildCourse();
         RestartRun();
+        InitCockpitRenderTextures();
     }
 
     ~ParkingMasterGame() {
+        UnloadCockpitRenderTextures();
         CloseWindow();
     }
 
@@ -372,27 +398,27 @@ class ParkingMasterGame {
         AddCone({2.0f, 11.4f}, coneColor);
 
         stages_.push_back({
-            {0.0f, 14.6f},
-            -kPi * 0.5f,
+            {4.6f, 15.1f},
+            -0.18f,
             {{{15.6f, 13.0f}, {3.2f, 1.8f}, 0.0f}, "E6"},
             "Stage 1 / Open Bay",
-            "Slide into the east-side bay with a clean entry."
+            "Keep the green bay in view, stop fully inside it, then hold Brake until Parking Lock reaches 100%."
         });
 
         stages_.push_back({
-            {0.0f, 9.5f},
-            -kPi * 0.5f,
+            {-4.0f, 6.5f},
+            -2.55f,
             {{{-15.6f, -2.0f}, {3.2f, 1.8f}, 0.0f}, "W3"},
             "Stage 2 / Tight Fit",
-            "Thread the left lane and square up between the parked cars."
+            "Aim left into the west bay, straighten the wheel, then hold Brake to lock the stage."
         });
 
         stages_.push_back({
-            {10.0f, -8.0f},
+            {7.4f, -11.7f},
             kPi,
             {{{0.0f, -15.3f}, {3.4f, 1.7f}, 0.0f}, "P1"},
             "Stage 3 / Parallel Spot",
-            "Line up, reverse gently, and settle between the sedans."
+            "Pass the slot, shift to R, back in between the sedans, and stop inside the box."
         });
     }
 
@@ -403,7 +429,7 @@ class ParkingMasterGame {
         stageClearTimer_ = 0.0f;
         parkHoldTimer_ = 0.0f;
         gameWon_ = false;
-        viewMode_ = ViewMode::ThirdPerson;
+        gear_ = TransmissionGear::Drive;
         ResetCurrentStage();
     }
 
@@ -415,6 +441,7 @@ class ParkingMasterGame {
         car_.steering = 0.0f;
         car_.collisionLatch = false;
         parkHoldTimer_ = 0.0f;
+        gear_ = TransmissionGear::Drive;
     }
 
     void AddParkedCar(Vector2 center, float angle, Color color) {
@@ -427,6 +454,27 @@ class ParkingMasterGame {
 
     void AddCone(Vector2 center, Color color) {
         obstacles_.push_back({{center, {0.35f, 0.35f}, 0.0f}, 0.8f, color, ObstacleType::Cone});
+    }
+
+    void InitCockpitRenderTextures() {
+        mirrorRear_ = LoadRenderTexture(256, 80);
+        mirrorLeft_ = LoadRenderTexture(112, 112);
+        mirrorRight_ = LoadRenderTexture(112, 112);
+        mirrorsReady_ = mirrorRear_.id != 0 && mirrorLeft_.id != 0 && mirrorRight_.id != 0;
+
+        if (mirrorsReady_) {
+            SetTextureFilter(mirrorRear_.texture, TEXTURE_FILTER_BILINEAR);
+            SetTextureFilter(mirrorLeft_.texture, TEXTURE_FILTER_BILINEAR);
+            SetTextureFilter(mirrorRight_.texture, TEXTURE_FILTER_BILINEAR);
+        }
+    }
+
+    void UnloadCockpitRenderTextures() {
+        if (!mirrorsReady_) return;
+        UnloadRenderTexture(mirrorRear_);
+        UnloadRenderTexture(mirrorLeft_);
+        UnloadRenderTexture(mirrorRight_);
+        mirrorsReady_ = false;
     }
 
     void SyncCanvasSize() {
@@ -458,17 +506,19 @@ class ParkingMasterGame {
         if (portrait) {
             buttons.left = MakeCenteredRect(pad + button * 0.5f, height - pad - button * 0.5f, button, button);
             buttons.right = MakeCenteredRect(pad + button * 1.62f, height - pad - button * 0.5f, button, button);
-            buttons.reverse = MakeCenteredRect(width - pad - button * 1.62f, height - pad - button * 0.5f, button, button);
-            buttons.accel = MakeCenteredRect(width - pad - button * 0.5f, height - pad - button * 0.5f, button, button);
-            buttons.camera = MakeCenteredRect(width - pad - medium * 0.5f, pad + medium * 0.5f, medium, medium * 0.78f);
-            buttons.retry = MakeCenteredRect(width - pad - medium * 1.7f, pad + medium * 0.5f, medium, medium * 0.78f);
+            buttons.brake = MakeCenteredRect(width - pad - button * 1.62f, height - pad - button * 0.5f, button, button);
+            buttons.throttle = MakeCenteredRect(width - pad - button * 0.5f, height - pad - button * 0.5f, button, button);
+            buttons.gearDrive = MakeCenteredRect(width * 0.5f - medium * 0.58f, height - pad - button * 0.66f, medium, medium * 0.78f);
+            buttons.gearReverse = MakeCenteredRect(width * 0.5f + medium * 0.58f, height - pad - button * 0.66f, medium, medium * 0.78f);
+            buttons.retry = MakeCenteredRect(width - pad - medium * 0.5f, pad + medium * 0.5f, medium, medium * 0.78f);
         } else {
             buttons.left = MakeCenteredRect(pad + button * 0.5f, height - pad - button * 0.5f, button, button);
             buttons.right = MakeCenteredRect(pad + button * 1.62f, height - pad - button * 0.5f, button, button);
-            buttons.reverse = MakeCenteredRect(width - pad - button * 1.62f, height - pad - button * 0.5f, button, button);
-            buttons.accel = MakeCenteredRect(width - pad - button * 0.5f, height - pad - button * 0.5f, button, button);
-            buttons.camera = MakeCenteredRect(width - pad - medium * 0.5f, pad + medium * 0.5f, medium, medium * 0.78f);
-            buttons.retry = MakeCenteredRect(width - pad - medium * 1.7f, pad + medium * 0.5f, medium, medium * 0.78f);
+            buttons.brake = MakeCenteredRect(width - pad - button * 1.62f, height - pad - button * 0.5f, button, button);
+            buttons.throttle = MakeCenteredRect(width - pad - button * 0.5f, height - pad - button * 0.5f, button, button);
+            buttons.gearDrive = MakeCenteredRect(width * 0.5f - medium * 0.58f, height - pad - button * 0.66f, medium, medium * 0.78f);
+            buttons.gearReverse = MakeCenteredRect(width * 0.5f + medium * 0.58f, height - pad - button * 0.66f, medium, medium * 0.78f);
+            buttons.retry = MakeCenteredRect(width - pad - medium * 0.5f, pad + medium * 0.5f, medium, medium * 0.78f);
         }
 
         return buttons;
@@ -496,27 +546,33 @@ class ParkingMasterGame {
         if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) input.steer -= 1.0f;
         if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) input.steer += 1.0f;
         if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) input.throttle = 1.0f;
-        if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)) input.reverse = 1.0f;
+        if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_SPACE)) input.brake = 1.0f;
+        input.gearDrivePressed = IsKeyPressed(KEY_E);
+        input.gearReversePressed = IsKeyPressed(KEY_Q);
 
 #if defined(PLATFORM_WEB)
         input.steer += WebSteerInput();
         input.throttle = std::max(input.throttle, WebThrottleInput());
-        input.reverse = std::max(input.reverse, WebReverseInput());
-        input.cameraPressed = IsKeyPressed(KEY_C) || WebConsumeCameraPressed();
+        input.brake = std::max(input.brake, WebBrakeInput());
+        input.gearDrivePressed = input.gearDrivePressed || WebConsumeGearDrivePressed();
+        input.gearReversePressed = input.gearReversePressed || WebConsumeGearReversePressed();
         input.retryPressed = IsKeyPressed(KEY_R) || WebConsumeRetryPressed();
 #else
         if (PointerDownInRect(buttons_.left)) input.steer -= 1.0f;
         if (PointerDownInRect(buttons_.right)) input.steer += 1.0f;
-        if (PointerDownInRect(buttons_.accel)) input.throttle = 1.0f;
-        if (PointerDownInRect(buttons_.reverse)) input.reverse = 1.0f;
+        if (PointerDownInRect(buttons_.throttle)) input.throttle = 1.0f;
+        if (PointerDownInRect(buttons_.brake)) input.brake = 1.0f;
 
-        const bool cameraHeld = PointerDownInRect(buttons_.camera);
+        const bool driveHeld = PointerDownInRect(buttons_.gearDrive);
+        const bool reverseHeld = PointerDownInRect(buttons_.gearReverse);
         const bool retryHeld = PointerDownInRect(buttons_.retry);
 
-        input.cameraPressed = IsKeyPressed(KEY_C) || (cameraHeld && !buttonLatch_.camera);
+        input.gearDrivePressed = input.gearDrivePressed || (driveHeld && !buttonLatch_.gearDrive);
+        input.gearReversePressed = input.gearReversePressed || (reverseHeld && !buttonLatch_.gearReverse);
         input.retryPressed = IsKeyPressed(KEY_R) || (retryHeld && !buttonLatch_.retry);
 
-        buttonLatch_.camera = cameraHeld;
+        buttonLatch_.gearDrive = driveHeld;
+        buttonLatch_.gearReverse = reverseHeld;
         buttonLatch_.retry = retryHeld;
 #endif
         input.steer = std::clamp(input.steer, -1.0f, 1.0f);
@@ -574,9 +630,55 @@ class ParkingMasterGame {
         return Clamp01(parkHoldTimer_ / 0.9f);
     }
 
+    const char* GearLabel() const {
+        return gear_ == TransmissionGear::Drive ? "D" : "R";
+    }
+
+    std::string DirectionPromptToTarget() const {
+        const ParkingZone& target = stages_[currentStageIndex_].target;
+        const Vector2 toTarget = VSub(target.footprint.center, car_.position);
+        const float distance = Vector2Length(toTarget);
+        if (distance < 0.01f) {
+            return "Target centered. Straighten the wheel and brake.";
+        }
+
+        const Vector2 forward = ForwardFromAngle(car_.heading);
+        const Vector2 side = {-forward.y, forward.x};
+        const Vector2 direction = VScale(toTarget, 1.0f / distance);
+        const float forwardDot = Vector2DotProduct(direction, forward);
+        const float sideDot = Vector2DotProduct(direction, side);
+
+        std::string turnText = "keep the bay centered";
+        if (sideDot > 0.28f) turnText = "turn right toward the glowing bay";
+        if (sideDot < -0.28f) turnText = "turn left toward the glowing bay";
+
+        if (forwardDot < -0.2f) {
+            return "The bay is behind you. Reposition, then " + turnText + ".";
+        }
+        return "Guide: " + turnText + ", stop fully inside, then hold Brake to 100%.";
+    }
+
+    std::string GuidanceText() const {
+        if (gameWon_) return "All stages clear. Tap Retry to start another run.";
+        if (stageClearTimer_ > 0.0f) return "Parking Lock complete. Loading the next stage.";
+
+        if (currentStageIndex_ == 2 && gear_ != TransmissionGear::Reverse) {
+            return "Stage 3 needs reverse parking. Shift to R, then back into the glowing box.";
+        }
+
+        if (ParkingProgress() > 0.0f) {
+            return "Stay still and keep Brake held until Parking Lock reaches 100%.";
+        }
+
+        return DirectionPromptToTarget();
+    }
+
     void Update(float dt, const InputFrame& input) {
-        if (input.cameraPressed) {
-            viewMode_ = viewMode_ == ViewMode::ThirdPerson ? ViewMode::FirstPerson : ViewMode::ThirdPerson;
+        if (input.gearDrivePressed && std::fabs(car_.speed) < 1.8f) {
+            gear_ = TransmissionGear::Drive;
+        }
+        if (input.gearReversePressed && std::fabs(car_.speed) < 1.8f) {
+            gear_ = TransmissionGear::Reverse;
         }
 
         if (input.retryPressed) {
@@ -613,17 +715,25 @@ class ParkingMasterGame {
         car_.steering = LerpFloat(car_.steering, targetSteering, dt * 8.0f);
 
         float desiredSpeed = car_.speed;
+        const float gearDirection = gear_ == TransmissionGear::Drive ? 1.0f : -1.0f;
         if (input.throttle > 0.0f) {
-            desiredSpeed += 15.0f * dt;
+            const float accelStrength = gear_ == TransmissionGear::Drive ? 14.0f : 11.0f;
+            desiredSpeed += gearDirection * accelStrength * dt;
         }
-        if (input.reverse > 0.0f) {
-            desiredSpeed -= 13.0f * dt;
-        }
-        if (input.throttle == 0.0f && input.reverse == 0.0f) {
-            desiredSpeed = LerpFloat(desiredSpeed, 0.0f, dt * 3.3f);
+        if (input.brake > 0.0f) {
+            const float brakeStrength = 24.0f * dt;
+            if (desiredSpeed > brakeStrength) {
+                desiredSpeed -= brakeStrength;
+            } else if (desiredSpeed < -brakeStrength) {
+                desiredSpeed += brakeStrength;
+            } else {
+                desiredSpeed = 0.0f;
+            }
+        } else if (input.throttle == 0.0f) {
+            desiredSpeed = LerpFloat(desiredSpeed, 0.0f, dt * 1.65f);
         }
 
-        car_.speed = std::clamp(desiredSpeed, -6.5f, 11.5f);
+        car_.speed = std::clamp(desiredSpeed, -5.8f, 10.5f);
 
         const float turnRate = std::tan(car_.steering) * car_.speed / 2.85f;
         car_.heading = NormalizeAngle(car_.heading + turnRate * dt);
@@ -654,35 +764,21 @@ class ParkingMasterGame {
     void UpdateCamera(float dt) {
         const Vector2 forward2 = ForwardFromAngle(car_.heading);
         const Vector2 side2 = {-forward2.y, forward2.x};
+        const float speedRatio = Clamp01(std::fabs(car_.speed) / 11.5f);
+        const float headBob = std::sin(elapsedSceneTime_ * (4.0f + speedRatio * 7.0f)) * 0.012f * speedRatio;
+        const float lookSide = car_.steering * 1.6f;
 
-        Vector3 desiredPosition{};
-        Vector3 desiredTarget{};
-
-        if (viewMode_ == ViewMode::ThirdPerson) {
-            desiredPosition = {
-                car_.position.x - forward2.x * 6.0f + side2.x * 0.2f,
-                5.2f,
-                car_.position.y - forward2.y * 6.0f + side2.y * 0.2f,
-            };
-            desiredTarget = {
-                car_.position.x + forward2.x * 2.4f,
-                0.9f,
-                car_.position.y + forward2.y * 2.4f,
-            };
-            camera_.fovy = 60.0f;
-        } else {
-            desiredPosition = {
-                car_.position.x + forward2.x * 0.7f + side2.x * 0.18f,
-                1.28f,
-                car_.position.y + forward2.y * 0.7f + side2.y * 0.18f,
-            };
-            desiredTarget = {
-                car_.position.x + forward2.x * 13.0f,
-                1.25f,
-                car_.position.y + forward2.y * 13.0f,
-            };
-            camera_.fovy = 82.0f;
-        }
+        const Vector3 desiredPosition = {
+            car_.position.x + forward2.x * 0.42f + side2.x * 0.28f,
+            1.28f + headBob,
+            car_.position.y + forward2.y * 0.42f + side2.y * 0.28f,
+        };
+        const Vector3 desiredTarget = {
+            car_.position.x + forward2.x * 12.5f + side2.x * lookSide,
+            0.72f + headBob * 0.2f,
+            car_.position.y + forward2.y * 12.5f + side2.y * lookSide,
+        };
+        camera_.fovy = 78.0f;
 
         const float blend = 1.0f - std::exp(-dt * 7.0f);
         camera_.position = LerpVector3(camera_.position, desiredPosition, blend);
@@ -691,6 +787,7 @@ class ParkingMasterGame {
 
     void PushWebOverlayState() const {
         const Stage& stage = stages_[currentStageIndex_];
+        const std::string guide = GuidanceText();
         WebUpdateOverlay(stage.title.c_str(),
                          stage.hint.c_str(),
                          stage.target.label.c_str(),
@@ -698,7 +795,8 @@ class ParkingMasterGame {
                          static_cast<int>(stages_.size()),
                          runTimer_,
                          totalCollisions_,
-                         viewMode_ == ViewMode::ThirdPerson ? 0 : 1,
+                         GearLabel(),
+                         guide.c_str(),
                          DisplaySpeedKph(),
                          ParkingProgress(),
                          stageClearTimer_ > 0.0f ? 1 : 0,
@@ -735,19 +833,20 @@ class ParkingMasterGame {
         const int width = GetScreenWidth();
         const int height = GetScreenHeight();
 
-        DrawRectangleGradientV(0, 0, width, height, {247, 157, 85, 255}, {18, 24, 42, 255});
-        DrawCircleGradient(static_cast<int>(width * 0.78f), static_cast<int>(height * 0.2f), height * 0.16f, {255, 236, 188, 210}, BLANK);
-        DrawCircleGradient(static_cast<int>(width * 0.5f), static_cast<int>(height * 0.43f), height * 0.26f, Fade({255, 165, 91, 255}, 0.22f), BLANK);
+        DrawRectangleGradientV(0, 0, width, height, {64, 72, 92, 255}, {7, 10, 15, 255});
+        DrawRectangleGradientV(0, height / 2, width, height / 2, {18, 23, 31, 0}, {4, 6, 10, 220});
+        DrawCircleGradient(static_cast<int>(width * 0.72f), static_cast<int>(height * 0.18f), height * 0.12f, {255, 218, 164, 44}, BLANK);
+        DrawCircleGradient(static_cast<int>(width * 0.22f), static_cast<int>(height * 0.24f), height * 0.22f, {88, 117, 168, 34}, BLANK);
 
         const int skylineBase = static_cast<int>(height * 0.56f);
         for (int i = 0; i < 10; ++i) {
             const int buildingWidth = 80 + (i % 3) * 28;
             const int buildingHeight = 80 + (i % 5) * 34;
             const int x = i * (width / 9) - 14;
-            DrawRectangle(x, skylineBase - buildingHeight, buildingWidth, buildingHeight, Fade({24, 28, 42, 255}, 0.75f));
+            DrawRectangle(x, skylineBase - buildingHeight, buildingWidth, buildingHeight, Fade({17, 22, 33, 255}, 0.88f));
         }
 
-        DrawRectangle(0, skylineBase, width, height - skylineBase, Fade({10, 13, 22, 255}, 0.3f));
+        DrawRectangle(0, skylineBase, width, height - skylineBase, Fade({8, 11, 18, 255}, 0.34f));
     }
 
     void DrawEnvironmentDetails() const {
@@ -776,21 +875,21 @@ class ParkingMasterGame {
     }
 
     void DrawCourse() const {
-        DrawPlane({0.0f, 0.0f, 0.0f}, {50.0f, 40.0f}, {31, 35, 47, 255});
-        DrawPlane({0.0f, -0.02f, 0.0f}, {56.0f, 46.0f}, {21, 25, 37, 255});
+        DrawPlane({0.0f, 0.0f, 0.0f}, {50.0f, 40.0f}, {44, 48, 57, 255});
+        DrawPlane({0.0f, -0.02f, 0.0f}, {56.0f, 46.0f}, {21, 24, 30, 255});
 
-        const Color laneColor = {52, 57, 70, 255};
+        const Color laneColor = {56, 60, 70, 255};
         DrawGroundBox({0.0f, 0.0f}, {11.0f, 31.5f}, 0.0f, 0.01f, laneColor);
         DrawGroundBox({0.0f, -15.3f}, {14.0f, 3.7f}, 0.0f, 0.01f, laneColor);
-        DrawGroundBox({0.0f, 0.0f}, {11.9f, 32.4f}, 0.0f, 0.005f, Fade({245, 206, 111, 255}, 0.06f));
+        DrawGroundBox({0.0f, 0.0f}, {11.9f, 32.4f}, 0.0f, 0.005f, Fade({255, 215, 149, 255}, 0.04f));
 
         for (float y = -13.8f; y <= 14.0f; y += 3.8f) {
-            DrawGroundBox({0.0f, y}, {0.36f, 1.8f}, 0.0f, 0.02f, {237, 219, 158, 255});
+            DrawGroundBox({0.0f, y}, {0.36f, 1.8f}, 0.0f, 0.02f, {223, 212, 182, 255});
         }
-        DrawGroundBox({-5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, Fade({255, 255, 255, 255}, 0.6f));
-        DrawGroundBox({5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, Fade({255, 255, 255, 255}, 0.6f));
-        DrawArrowMarker({0.0f, 10.6f}, 0.0f, {237, 219, 158, 255});
-        DrawArrowMarker({0.0f, -5.0f}, kPi, {237, 219, 158, 255});
+        DrawGroundBox({-5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, Fade({255, 255, 255, 255}, 0.48f));
+        DrawGroundBox({5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, Fade({255, 255, 255, 255}, 0.48f));
+        DrawArrowMarker({0.0f, 10.6f}, 0.0f, {227, 211, 168, 255});
+        DrawArrowMarker({0.0f, -5.0f}, kPi, {227, 211, 168, 255});
 
         for (const OrientedRect& slot : paintedSlots_) {
             DrawParkingOutline(slot, {233, 239, 248, 255});
@@ -951,11 +1050,10 @@ class ParkingMasterGame {
         DrawText(stage.hint.c_str(), static_cast<int>(hudPanel.x) + 18, static_cast<int>(hudPanel.y) + 50, portrait ? 16 : 18, {196, 205, 220, 255});
 
         char statsLine[128];
-        std::snprintf(statsLine, sizeof(statsLine), "Slot %s  |  Time %.1fs  |  Hits %d  |  View %s",
+        std::snprintf(statsLine, sizeof(statsLine), "Slot %s  |  Time %.1fs  |  Hits %d  |  1st Person",
                       stage.target.label.c_str(),
                       runTimer_,
-                      totalCollisions_,
-                      viewMode_ == ViewMode::ThirdPerson ? "3RD" : "1ST");
+                      totalCollisions_);
         DrawText(statsLine, static_cast<int>(hudPanel.x) + 18, static_cast<int>(hudPanel.y) + (portrait ? 86 : 92), portrait ? 16 : 18, {86, 240, 164, 255});
 
         if (portrait) {
@@ -988,34 +1086,154 @@ class ParkingMasterGame {
     void DrawControls(const InputFrame& input) const {
         DrawButton(buttons_.left, "LEFT", input.steer < -0.2f, {47, 102, 212, 255});
         DrawButton(buttons_.right, "RIGHT", input.steer > 0.2f, {47, 102, 212, 255});
-        DrawButton(buttons_.accel, "GAS", input.throttle > 0.0f, {33, 183, 109, 255});
-        DrawButton(buttons_.reverse, "REV", input.reverse > 0.0f, {241, 145, 58, 255});
-        DrawButton(buttons_.camera, "CAM", false, {145, 103, 255, 255});
+        DrawButton(buttons_.throttle, "GAS", input.throttle > 0.0f, {33, 183, 109, 255});
+        DrawButton(buttons_.brake, "BRK", input.brake > 0.0f, {241, 145, 58, 255});
+        DrawButton(buttons_.gearDrive, "D", gear_ == TransmissionGear::Drive, {70, 188, 156, 255});
+        DrawButton(buttons_.gearReverse, "R", gear_ == TransmissionGear::Reverse, {212, 120, 84, 255});
         DrawButton(buttons_.retry, "RETRY", false, {229, 86, 113, 255});
     }
 
-    void DrawCockpitOverlay() const {
-        if (viewMode_ != ViewMode::FirstPerson) return;
+    void RenderMirrorView(RenderTexture2D& target, const Camera3D& mirrorCamera) {
+        BeginTextureMode(target);
+        ClearBackground({58, 64, 78, 255});
+        BeginMode3D(mirrorCamera);
+        DrawCourse();
+        EndMode3D();
+        EndTextureMode();
+    }
 
+    void UpdateMirrorTextures() {
+        if (!mirrorsReady_) return;
+
+        const Vector2 forward = ForwardFromAngle(car_.heading);
+        const Vector2 side = {-forward.y, forward.x};
+
+        Camera3D rear = camera_;
+        rear.position = {
+            car_.position.x - forward.x * 0.6f,
+            1.35f,
+            car_.position.y - forward.y * 0.6f,
+        };
+        rear.target = {
+            rear.position.x - forward.x * 14.0f,
+            1.0f,
+            rear.position.z - forward.y * 14.0f,
+        };
+        rear.fovy = 48.0f;
+
+        Camera3D left = camera_;
+        left.position = {
+            car_.position.x + forward.x * 0.15f - side.x * 0.88f,
+            1.18f,
+            car_.position.y + forward.y * 0.15f - side.y * 0.88f,
+        };
+        left.target = {
+            left.position.x - side.x * 12.0f + forward.x * 2.4f,
+            1.02f,
+            left.position.z - side.y * 12.0f + forward.y * 2.4f,
+        };
+        left.fovy = 58.0f;
+
+        Camera3D right = camera_;
+        right.position = {
+            car_.position.x + forward.x * 0.15f + side.x * 0.88f,
+            1.18f,
+            car_.position.y + forward.y * 0.15f + side.y * 0.88f,
+        };
+        right.target = {
+            right.position.x + side.x * 12.0f + forward.x * 2.4f,
+            1.02f,
+            right.position.z + side.y * 12.0f + forward.y * 2.4f,
+        };
+        right.fovy = 58.0f;
+
+        RenderMirrorView(mirrorRear_, rear);
+        RenderMirrorView(mirrorLeft_, left);
+        RenderMirrorView(mirrorRight_, right);
+    }
+
+    void DrawMirrorSurface(Rectangle rect, const RenderTexture2D& texture, float tiltDegrees) const {
+        DrawRectangleRounded(rect, 0.24f, 10, Fade({8, 10, 14, 255}, 0.96f));
+        DrawRectangleRoundedLinesEx(rect, 0.24f, 10, 2.0f, Fade({244, 231, 208, 255}, 0.12f));
+
+        Rectangle inner{
+            rect.x + 6.0f,
+            rect.y + 6.0f,
+            rect.width - 12.0f,
+            rect.height - 12.0f,
+        };
+        Rectangle source{
+            0.0f,
+            0.0f,
+            static_cast<float>(texture.texture.width),
+            -static_cast<float>(texture.texture.height),
+        };
+        DrawTexturePro(texture.texture, source, inner, {0.0f, 0.0f}, tiltDegrees, Fade(WHITE, 0.9f));
+        DrawRectangleRounded(inner, 0.18f, 8, Fade({124, 152, 178, 255}, 0.08f));
+    }
+
+    void DrawCockpitOverlay() const {
         const float width = static_cast<float>(GetScreenWidth());
         const float height = static_cast<float>(GetScreenHeight());
-        const Vector2 gaugeCenter{width * 0.5f, height * 0.97f};
+        const float dashTop = height * 0.82f;
+        const float hoodTop = height * 0.79f;
+        const float hoodWidth = width * 0.36f;
+        const float hoodLift = 26.0f + Clamp01(std::fabs(car_.speed) / 11.5f) * 12.0f;
+        const float speedRatio = Clamp01(DisplaySpeedKph() / 80.0f);
+        const Rectangle rearMirror{width * 0.34f, height * 0.19f, width * 0.32f, height * 0.06f};
+        const Rectangle leftMirror{width * 0.018f, height * 0.44f, width * 0.16f, height * 0.09f};
+        const Rectangle rightMirror{width * 0.822f, height * 0.44f, width * 0.16f, height * 0.09f};
+        const Rectangle cluster{width * 0.3f, height * 0.73f, width * 0.4f, height * 0.08f};
 
-        DrawTriangle({0.0f, height}, {0.0f, height * 0.34f}, {width * 0.16f, height}, Fade({11, 14, 20, 255}, 0.94f));
-        DrawTriangle({width, height}, {width, height * 0.34f}, {width * 0.84f, height}, Fade({11, 14, 20, 255}, 0.94f));
-        DrawRectangleGradientV(0, static_cast<int>(height * 0.72f), static_cast<int>(width), static_cast<int>(height * 0.28f), Fade({11, 14, 20, 255}, 0), Fade({11, 14, 20, 255}, 0.94f));
+        DrawRectangleGradientV(0, static_cast<int>(height * 0.74f), static_cast<int>(width), static_cast<int>(height * 0.26f), Fade({5, 8, 12, 255}, 0), Fade({5, 8, 12, 255}, 0.98f));
+        DrawTriangle({0.0f, 0.0f}, {width * 0.09f, 0.0f}, {0.0f, height * 0.48f}, Fade({4, 6, 10, 255}, 0.92f));
+        DrawTriangle({width, 0.0f}, {width * 0.91f, 0.0f}, {width, height * 0.48f}, Fade({4, 6, 10, 255}, 0.92f));
+        DrawRectangleGradientV(static_cast<int>(width * 0.2f), static_cast<int>(dashTop), static_cast<int>(width * 0.6f), static_cast<int>(height - dashTop), Fade({14, 17, 23, 255}, 0.06f), Fade({9, 11, 15, 255}, 0.98f));
+        DrawLineEx({width * 0.2f, dashTop}, {width * 0.8f, dashTop}, 2.0f, Fade({255, 255, 255, 255}, 0.08f));
 
-        const Rectangle panel{width * 0.21f, height * 0.77f, width * 0.58f, height * 0.12f};
-        DrawPanel(panel, Fade({11, 15, 24, 255}, 0.88f), Fade({255, 255, 255, 255}, 0.12f));
-        DrawText("COCKPIT VIEW", static_cast<int>(panel.x) + 18, static_cast<int>(panel.y) + 14, 18, {222, 231, 246, 255});
+        DrawTriangle({width * 0.5f - hoodWidth * 0.5f, height}, {width * 0.5f, hoodTop + hoodLift}, {width * 0.5f + hoodWidth * 0.5f, height}, Fade({176, 145, 92, 255}, 0.92f));
+        DrawTriangle({width * 0.5f - hoodWidth * 0.37f, height}, {width * 0.5f, hoodTop + hoodLift + 12.0f}, {width * 0.5f + hoodWidth * 0.37f, height}, Fade({216, 186, 116, 255}, 0.22f));
 
-        char speedLine[32];
-        std::snprintf(speedLine, sizeof(speedLine), "%02d km/h", static_cast<int>(std::round(DisplaySpeedKph())));
-        DrawText(speedLine, static_cast<int>(panel.x) + 18, static_cast<int>(panel.y) + 42, 26, {91, 242, 197, 255});
+        if (mirrorsReady_) {
+            DrawMirrorSurface(rearMirror, mirrorRear_, 0.0f);
+            DrawMirrorSurface(leftMirror, mirrorLeft_, -2.0f);
+            DrawMirrorSurface(rightMirror, mirrorRight_, 2.0f);
+        }
 
-        const float speedRatio = Clamp01(DisplaySpeedKph() / 90.0f);
-        DrawRing(gaugeCenter, height * 0.13f, height * 0.19f, 204.0f, 336.0f, 48, Fade({31, 38, 56, 255}, 0.96f));
-        DrawRing(gaugeCenter, height * 0.13f, height * 0.19f, 204.0f, 204.0f + speedRatio * 132.0f, 48, {91, 242, 197, 255});
+        DrawPanel(cluster, Fade({8, 10, 14, 255}, 0.92f), Fade({244, 231, 208, 255}, 0.08f));
+        char speedText[24];
+        std::snprintf(speedText, sizeof(speedText), "%02d", static_cast<int>(std::round(DisplaySpeedKph())));
+        DrawText(speedText, static_cast<int>(cluster.x) + 22, static_cast<int>(cluster.y) + 14, 34, {243, 239, 231, 255});
+        DrawText("KM/H", static_cast<int>(cluster.x) + 26, static_cast<int>(cluster.y) + 50, 14, {157, 166, 181, 255});
+        DrawText(GearLabel(), static_cast<int>(cluster.x + cluster.width) - 50, static_cast<int>(cluster.y) + 16, 30, gear_ == TransmissionGear::Drive ? Color{118, 215, 186, 255} : Color{240, 188, 120, 255});
+        DrawText("GEAR", static_cast<int>(cluster.x + cluster.width) - 68, static_cast<int>(cluster.y) + 50, 14, {157, 166, 181, 255});
+        DrawRectangleRounded({cluster.x + 96.0f, cluster.y + cluster.height - 18.0f, cluster.width - 120.0f, 6.0f}, 0.9f, 10, Fade(WHITE, 0.08f));
+        DrawRectangleRounded({cluster.x + 96.0f, cluster.y + cluster.height - 18.0f, (cluster.width - 120.0f) * ParkingProgress(), 6.0f}, 0.9f, 10, {118, 215, 186, 255});
+
+        const Vector2 wheelCenter{width * 0.5f, height * 0.85f};
+        const float wheelOuter = std::min(width, height) * 0.16f;
+        const float wheelInner = wheelOuter * 0.72f;
+        const float wheelRotation = -car_.steering * 52.0f;
+        DrawRing(wheelCenter, wheelInner, wheelOuter, 198.0f, 342.0f, 52, Fade({22, 24, 30, 255}, 0.98f));
+        DrawRing(wheelCenter, wheelInner + 6.0f, wheelOuter - 10.0f, 198.0f, 342.0f, 52, Fade({189, 154, 96, 255}, 0.78f));
+
+        const auto drawSpoke = [&](float angleDeg, float start, float end, float thickness) {
+            const float angle = (angleDeg + wheelRotation) * DEG2RAD;
+            const Vector2 dir{std::cos(angle), std::sin(angle)};
+            DrawLineEx(
+                VAdd(wheelCenter, VScale(dir, start)),
+                VAdd(wheelCenter, VScale(dir, end)),
+                thickness,
+                Fade({28, 30, 37, 255}, 0.96f)
+            );
+        };
+        drawSpoke(270.0f, 18.0f, wheelInner + 18.0f, 18.0f);
+        drawSpoke(215.0f, 18.0f, wheelInner - 2.0f, 14.0f);
+        drawSpoke(325.0f, 18.0f, wheelInner - 2.0f, 14.0f);
+        DrawCircleV(wheelCenter, 28.0f, Fade({20, 22, 28, 255}, 0.98f));
+        DrawCircleLines(static_cast<int>(wheelCenter.x), static_cast<int>(wheelCenter.y), 28.0f, Fade({255, 255, 255, 255}, 0.1f));
+        DrawRectangleRounded({width * 0.28f, height * 0.87f, width * 0.44f, height * 0.024f}, 0.7f, 8, Fade({11, 14, 18, 255}, 0.96f));
+        DrawRectangleRounded({width * 0.28f, height * 0.87f, width * 0.44f * speedRatio, height * 0.024f}, 0.7f, 8, Fade({240, 188, 120, 255}, 0.72f));
     }
 
     void DrawCenterBanner() const {
@@ -1043,26 +1261,24 @@ class ParkingMasterGame {
             char summary[128];
             std::snprintf(summary, sizeof(summary), "Final time %.1fs  |  collisions %d  |  stars %d/3", runTimer_, totalCollisions_, FinalStars());
             DrawText(summary, static_cast<int>(overlay.x) + 28, static_cast<int>(overlay.y) + 88, 22, {86, 240, 164, 255});
-            DrawText("Tap RETRY or press R to restart the full run.", static_cast<int>(overlay.x) + 28, static_cast<int>(overlay.y) + 138, 20, {196, 205, 220, 255});
-            DrawText("Use CAM or press C to swap viewpoints anytime.", static_cast<int>(overlay.x) + 28, static_cast<int>(overlay.y) + 170, 20, {196, 205, 220, 255});
+            DrawText("Tap RETRY or press R to restart the full run.", static_cast<int>(overlay.x) + 28, static_cast<int>(overlay.y) + 146, 20, {196, 205, 220, 255});
         }
     }
 
-    void Draw(const InputFrame& input) const {
+    void Draw(const InputFrame& input) {
 #if defined(PLATFORM_WEB)
         (void)input;
 #endif
+        UpdateMirrorTextures();
         BeginDrawing();
         ClearBackground({18, 24, 42, 255});
         DrawBackdrop();
 
         BeginMode3D(camera_);
         DrawCourse();
-        DrawPlayerCar();
         EndMode3D();
 
         DrawCockpitOverlay();
-        DrawMiniMap();
         DrawCenterBanner();
 
 #if !defined(PLATFORM_WEB)
@@ -1077,10 +1293,13 @@ class ParkingMasterGame {
     }
 
     Camera3D camera_{};
-    ViewMode viewMode_ = ViewMode::ThirdPerson;
     CarState car_{};
+    TransmissionGear gear_ = TransmissionGear::Drive;
     Buttons buttons_{};
     ButtonLatch buttonLatch_{};
+    RenderTexture2D mirrorRear_{};
+    RenderTexture2D mirrorLeft_{};
+    RenderTexture2D mirrorRight_{};
     std::vector<Obstacle> obstacles_{};
     std::vector<OrientedRect> paintedSlots_{};
     std::vector<Stage> stages_{};
@@ -1091,6 +1310,7 @@ class ParkingMasterGame {
     float stageClearTimer_ = 0.0f;
     float collisionFlash_ = 0.0f;
     float elapsedSceneTime_ = 0.0f;
+    bool mirrorsReady_ = false;
     bool gameWon_ = false;
 };
 

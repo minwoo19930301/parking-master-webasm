@@ -1,6 +1,6 @@
 # Parking Master WebASM
 
-`주차의 달인` 감성에서 출발한 3D 모바일 웹 주차 게임입니다. 코어 로직은 `C++`로 작성했고, `raylib + Emscripten`으로 `WebAssembly` 번들을 만들어 브라우저에서 실행합니다.
+`주차의 달인` 감성에서 출발한 3D 모바일 웹 주차 게임입니다. 코어 로직은 `C++`로 작성했고, `raylib + Emscripten`으로 `WebAssembly` 번들을 만들어 브라우저에서 실행합니다. 현재 버전은 `1인칭 전용` 시점과 절제된 모바일 HUD를 기준으로 설계했습니다.
 
 ## Links
 
@@ -9,18 +9,24 @@
 
 ## Features
 
-- 1인칭 / 3인칭 카메라 전환
+- 1인칭 고정 운전 시점
+- `D/R` 기어와 `브레이크` 분리 조작
 - 모바일 터치 버튼과 키보드 입력 동시 지원
 - 좁은 베이 주차 + 평행 주차 챌린지
+- 가벼운 모바일 HUD와 retry 중심 인터페이스
+- 사이드 미러 / 룸 미러 / 계기판 / 운전대가 보이는 콕핏 오버레이
 - C++ 단일 코드베이스에서 web build 생성
 - 정적 파일만으로 배포 가능해서 Vercel에 바로 연결 가능
 
 ## Controls
 
-- `WASD` or arrow keys: steer / accelerate / reverse
-- `C`: toggle first-person / third-person
+- `A/D` or arrow keys: steer
+- `W` or up arrow: gas
+- `S`, down arrow, or `Space`: brake
+- `E`: shift to Drive
+- `Q`: shift to Reverse
 - `R`: retry current stage
-- Mobile: on-screen steering, gas, reverse, camera, retry buttons
+- Mobile: on-screen steering, gas, brake, Drive/Reverse shift, retry buttons
 
 ## Local Build
 

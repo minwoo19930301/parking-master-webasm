@@ -44,7 +44,8 @@ if(EMSCRIPTEN)
   target_link_options(parking_master_webasm PRIVATE
     "-sUSE_GLFW=3"
     "-sALLOW_MEMORY_GROWTH=1"
-    "-sMAX_WEBGL_VERSION=2"
+    "-sMIN_WEBGL_VERSION=1"
+    "-sMAX_WEBGL_VERSION=1"
     "-sASSERTIONS=1"
     "--shell-file" "${WEB_SHELL_FILE}"
   )
