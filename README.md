@@ -1,5 +1,8 @@
 # Parking Master WebASM
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel%20WebAssembly-black?style=for-the-badge&logo=vercel)](https://parking-master-webasm.vercel.app)
+
+
 `주차의 달인` 감성에서 출발한 3D 모바일 웹 주차 게임입니다. 코어 로직은 `C++`로 작성했고, `raylib + Emscripten`으로 `WebAssembly` 번들을 만들어 브라우저에서 실행합니다. 현재 버전은 `1인칭 전용` 시점과 절제된 모바일 HUD를 기준으로 설계했습니다.
 
 ## Links
