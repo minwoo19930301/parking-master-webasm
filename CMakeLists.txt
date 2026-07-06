@@ -47,6 +47,8 @@ if(EMSCRIPTEN)
     "-sMIN_WEBGL_VERSION=1"
     "-sMAX_WEBGL_VERSION=1"
     "-sASSERTIONS=1"
+    "-sGL_PREINITIALIZED_CONTEXT=1"
+    "-sINCOMING_MODULE_JS_API=canvas,preinitializedWebGLContext,locateFile,onAbort,setStatus,monitorRunDependencies"
     "--shell-file" "${WEB_SHELL_FILE}"
   )
 else()

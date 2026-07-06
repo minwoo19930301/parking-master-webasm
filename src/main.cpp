@@ -313,6 +313,111 @@ void DrawOrientedCubeWires(Vector2 center, float centerY, Vector3 size, float an
     rlPopMatrix();
 }
 
+constexpr Vector3 kSunDir = {-0.4409586f, -0.7843265f, -0.4409586f};
+
+static Color ShadeColor(Color c, float brightness) {
+    return {
+        static_cast<unsigned char>(std::clamp(static_cast<int>(c.r * brightness), 0, 255)),
+        static_cast<unsigned char>(std::clamp(static_cast<int>(c.g * brightness), 0, 255)),
+        static_cast<unsigned char>(std::clamp(static_cast<int>(c.b * brightness), 0, 255)),
+        c.a,
+    };
+}
+
+static float FaceBrightness(Vector3 normal) {
+    const float facing = std::max(0.0f, Vector3DotProduct(normal, {-kSunDir.x, -kSunDir.y, -kSunDir.z}));
+    return 0.62f + 0.38f * facing;
+}
+
+static void DrawShadedCubeFace(Vector3 normal, Vector3 a, Vector3 b, Vector3 c, Vector3 d, Color color, float brightnessOverride = -1.0f) {
+    const float brightness = brightnessOverride >= 0.0f ? brightnessOverride : FaceBrightness(normal);
+    const Color shaded = ShadeColor(color, brightness);
+    rlColor4ub(shaded.r, shaded.g, shaded.b, shaded.a);
+    rlVertex3f(a.x, a.y, a.z);
+    rlVertex3f(b.x, b.y, b.z);
+    rlVertex3f(c.x, c.y, c.z);
+    rlVertex3f(d.x, d.y, d.z);
+}
+
+static void DrawShadedCubeLocal(Vector3 size, Color color, float headingRadians) {
+    const float hx = size.x * 0.5f;
+    const float hy = size.y * 0.5f;
+    const float hz = size.z * 0.5f;
+
+    const Vector2 rotatedX = RotateVector({1.0f, 0.0f}, headingRadians);
+    const Vector2 rotatedZ = RotateVector({0.0f, 1.0f}, headingRadians);
+    const Vector3 worldRight = {rotatedX.x, 0.0f, rotatedX.y};
+    const Vector3 worldForward = {rotatedZ.x, 0.0f, rotatedZ.y};
+    const Vector3 worldLeft = {-worldRight.x, -worldRight.y, -worldRight.z};
+    const Vector3 worldBack = {-worldForward.x, -worldForward.y, -worldForward.z};
+
+    rlBegin(RL_QUADS);
+
+    DrawShadedCubeFace({0.0f, 1.0f, 0.0f},
+        {-hx, hy, -hz}, {-hx, hy, hz}, {hx, hy, hz}, {hx, hy, -hz}, color, 1.0f);
+    DrawShadedCubeFace({0.0f, -1.0f, 0.0f},
+        {-hx, -hy, hz}, {-hx, -hy, -hz}, {hx, -hy, -hz}, {hx, -hy, hz}, color, 0.55f);
+    DrawShadedCubeFace(worldForward,
+        {-hx, -hy, hz}, {hx, -hy, hz}, {hx, hy, hz}, {-hx, hy, hz}, color);
+    DrawShadedCubeFace(worldBack,
+        {hx, -hy, -hz}, {-hx, -hy, -hz}, {-hx, hy, -hz}, {hx, hy, -hz}, color);
+    DrawShadedCubeFace(worldRight,
+        {hx, -hy, hz}, {hx, -hy, -hz}, {hx, hy, -hz}, {hx, hy, hz}, color);
+    DrawShadedCubeFace(worldLeft,
+        {-hx, -hy, -hz}, {-hx, -hy, hz}, {-hx, hy, hz}, {-hx, hy, -hz}, color);
+
+    rlEnd();
+}
+
+void DrawShadedCube(Vector3 position, Vector3 size, Color color) {
+    rlPushMatrix();
+    rlTranslatef(position.x, position.y, position.z);
+    DrawShadedCubeLocal(size, color, 0.0f);
+    rlPopMatrix();
+}
+
+void DrawShadedOrientedCube(Vector2 center, float centerY, Vector3 size, float angle, Color color) {
+    rlPushMatrix();
+    rlTranslatef(center.x, centerY, center.y);
+    rlRotatef(angle * RAD2DEG, 0.0f, 1.0f, 0.0f);
+    DrawShadedCubeLocal(size, color, angle);
+    rlPopMatrix();
+}
+
+void DrawCarWheel(Vector2 center, float axleHeadingRadians) {
+    const Vector2 axle2 = RotateVector({0.0f, 1.0f}, axleHeadingRadians);
+    const Vector3 axleDir = Vector3Normalize({axle2.x, 0.0f, axle2.y});
+    const Vector3 hub = {center.x, 0.28f, center.y};
+    const Vector3 tireStart = Vector3Subtract(hub, Vector3Scale(axleDir, 0.12f));
+    const Vector3 rimStart = Vector3Subtract(hub, Vector3Scale(axleDir, 0.13f));
+    DrawCylinderEx(tireStart, Vector3Add(tireStart, Vector3Scale(axleDir, 0.24f)), 0.34f, 0.34f, 14, {24, 26, 30, 255});
+    DrawCylinderEx(rimStart, Vector3Add(rimStart, Vector3Scale(axleDir, 0.26f)), 0.17f, 0.17f, 10, {150, 155, 165, 255});
+}
+
+void DrawSimpleCar(Vector2 position, float heading, Color bodyColor) {
+    const Color cabinColor = ShadeColor(bodyColor, 0.55f);
+    DrawShadedOrientedCube(position, 0.5f, {2.0f, 1.0f, 1.85f}, heading, bodyColor);
+    DrawShadedOrientedCube(
+        VAdd(position, RotateVector({-0.3f, 0.0f}, heading)),
+        1.02f,
+        {1.29f, 0.6f, 1.55f},
+        heading,
+        cabinColor
+    );
+
+    const Vector2 forward = ForwardFromAngle(heading);
+    const Vector2 side = {-forward.y, forward.x};
+    const std::array<Vector2, 4> wheelCenters = {
+        VAdd(VAdd(position, VScale(forward, 1.05f)), VScale(side, 0.85f)),
+        VAdd(VAdd(position, VScale(forward, 1.05f)), VScale(side, -0.85f)),
+        VAdd(VAdd(position, VScale(forward, -1.05f)), VScale(side, 0.85f)),
+        VAdd(VAdd(position, VScale(forward, -1.05f)), VScale(side, -0.85f)),
+    };
+    for (const Vector2& wheel : wheelCenters) {
+        DrawCarWheel(wheel, heading);
+    }
+}
+
 Rectangle MakeCenteredRect(float centerX, float centerY, float width, float height) {
     return {centerX - width * 0.5f, centerY - height * 0.5f, width, height};
 }
@@ -338,10 +443,12 @@ class ParkingMasterGame {
         BuildCourse();
         RestartRun();
         InitCockpitRenderTextures();
+        InitGroundTexture();
     }
 
     ~ParkingMasterGame() {
         UnloadCockpitRenderTextures();
+        UnloadGroundTexture();
         CloseWindow();
     }
 
@@ -499,6 +606,58 @@ class ParkingMasterGame {
         UnloadRenderTexture(mirrorLeft_);
         UnloadRenderTexture(mirrorRight_);
         mirrorsReady_ = false;
+    }
+
+    void InitGroundTexture() {
+        constexpr int kSize = 256;
+        Image image = GenImageColor(kSize, kSize, {46, 50, 58, 255});
+        Color* pixels = static_cast<Color*>(image.data);
+
+        for (int y = 0; y < kSize; ++y) {
+            for (int x = 0; x < kSize; ++x) {
+                unsigned int hash = static_cast<unsigned int>(x) * 374761393u + static_cast<unsigned int>(y) * 668265263u;
+                hash = (hash ^ (hash >> 13)) * 1274126177u;
+                hash = hash ^ (hash >> 16);
+                const int jitter = static_cast<int>(hash % 13u) - 6;
+
+                Color& pixel = pixels[y * kSize + x];
+                pixel.r = static_cast<unsigned char>(std::clamp(46 + jitter, 0, 255));
+                pixel.g = static_cast<unsigned char>(std::clamp(50 + jitter, 0, 255));
+                pixel.b = static_cast<unsigned char>(std::clamp(58 + jitter, 0, 255));
+                pixel.a = 255;
+
+                if (hash % 340u == 0u) {
+                    pixel.r = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.r) + 46, 0, 255));
+                    pixel.g = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.g) + 46, 0, 255));
+                    pixel.b = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.b) + 46, 0, 255));
+                } else if (hash % 97u == 0u) {
+                    pixel.r = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.r) - 22, 0, 255));
+                    pixel.g = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.g) - 22, 0, 255));
+                    pixel.b = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.b) - 22, 0, 255));
+                }
+            }
+        }
+
+        groundTexture_ = LoadTextureFromImage(image);
+        UnloadImage(image);
+        SetTextureFilter(groundTexture_, TEXTURE_FILTER_BILINEAR);
+        SetTextureWrap(groundTexture_, TEXTURE_WRAP_REPEAT);
+
+        groundMesh_ = GenMeshPlane(50.0f, 40.0f, 1, 1);
+        for (int i = 0; i < groundMesh_.vertexCount * 2; ++i) {
+            groundMesh_.texcoords[i] *= 8.0f;
+        }
+
+        groundModel_ = LoadModelFromMesh(groundMesh_);
+        groundModel_.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = groundTexture_;
+        groundReady_ = true;
+    }
+
+    void UnloadGroundTexture() {
+        if (!groundReady_) return;
+        UnloadModel(groundModel_);
+        UnloadTexture(groundTexture_);
+        groundReady_ = false;
     }
 
     void SyncCanvasSize() {
@@ -862,15 +1021,36 @@ class ParkingMasterGame {
 
         DrawRectangleGradientV(0, 0, width, height, {64, 72, 92, 255}, {7, 10, 15, 255});
         DrawRectangleGradientV(0, height / 2, width, height / 2, {18, 23, 31, 0}, {4, 6, 10, 220});
-        DrawCircleGradient(static_cast<int>(width * 0.72f), static_cast<int>(height * 0.18f), height * 0.12f, {255, 218, 164, 44}, BLANK);
-        DrawCircleGradient(static_cast<int>(width * 0.22f), static_cast<int>(height * 0.24f), height * 0.22f, {88, 117, 168, 34}, BLANK);
+
+        float parallax = std::fmod(car_.heading / (2.0f * kPi) * static_cast<float>(width), static_cast<float>(width));
+        if (parallax < 0.0f) parallax += static_cast<float>(width);
+
+        DrawCircleGradient(static_cast<int>(std::fmod(width * 0.72f + parallax, static_cast<float>(width))), static_cast<int>(height * 0.18f), height * 0.12f, {255, 218, 164, 44}, BLANK);
+        DrawCircleGradient(static_cast<int>(std::fmod(width * 0.22f + parallax, static_cast<float>(width))), static_cast<int>(height * 0.24f), height * 0.22f, {88, 117, 168, 34}, BLANK);
 
         const int skylineBase = static_cast<int>(height * 0.56f);
-        for (int i = 0; i < 10; ++i) {
-            const int buildingWidth = 80 + (i % 3) * 28;
-            const int buildingHeight = 80 + (i % 5) * 34;
-            const int x = i * (width / 9) - 14;
-            DrawRectangle(x, skylineBase - buildingHeight, buildingWidth, buildingHeight, Fade({17, 22, 33, 255}, 0.88f));
+        for (int pass = 0; pass < 2; ++pass) {
+            const float xOffset = parallax - static_cast<float>(pass) * static_cast<float>(width);
+            for (int i = 0; i < 10; ++i) {
+                const int buildingWidth = 80 + (i % 3) * 28;
+                const int buildingHeight = 80 + (i % 5) * 34;
+                const int x = static_cast<int>(i * (width / 9) - 14 + xOffset);
+                DrawRectangle(x, skylineBase - buildingHeight, buildingWidth, buildingHeight, Fade({17, 22, 33, 255}, 0.88f));
+            }
+        }
+
+        const float cloudDrift = elapsedSceneTime_ * 6.0f;
+        const std::array<Vector2, 4> clouds = {{
+            {0.12f, 0.14f}, {0.42f, 0.09f}, {0.68f, 0.2f}, {0.88f, 0.12f},
+        }};
+        for (size_t i = 0; i < clouds.size(); ++i) {
+            const float baseX = clouds[i].x * static_cast<float>(width) + cloudDrift * (1.0f + static_cast<float>(i) * 0.3f) + parallax * 0.4f;
+            float x = std::fmod(baseX, static_cast<float>(width));
+            if (x < 0.0f) x += static_cast<float>(width);
+            const float y = clouds[i].y * static_cast<float>(height);
+            DrawCircle(static_cast<int>(x), static_cast<int>(y), 26.0f, Fade(WHITE, 0.1f));
+            DrawCircle(static_cast<int>(x + 22.0f), static_cast<int>(y + 6.0f), 20.0f, Fade(WHITE, 0.08f));
+            DrawCircle(static_cast<int>(x - 20.0f), static_cast<int>(y + 8.0f), 18.0f, Fade(WHITE, 0.07f));
         }
 
         DrawRectangle(0, skylineBase, width, height - skylineBase, Fade({8, 11, 18, 255}, 0.34f));
@@ -883,6 +1063,8 @@ class ParkingMasterGame {
             DrawCylinder({10.7f, 2.4f, z}, 0.12f, 0.12f, 4.8f, 8, {57, 67, 88, 255});
             DrawSphere({-10.7f, 5.1f, z}, 0.3f, Fade({255, 229, 162, 255}, 0.82f));
             DrawSphere({10.7f, 5.1f, z}, 0.3f, Fade({255, 229, 162, 255}, 0.82f));
+            DrawCylinder({-10.7f, 0.02f, z}, 0.1f, 1.9f, 4.9f, 14, Fade({255, 229, 162, 255}, 0.1f));
+            DrawCylinder({10.7f, 0.02f, z}, 0.1f, 1.9f, 4.9f, 14, Fade({255, 229, 162, 255}, 0.1f));
         }
 
         for (int i = 0; i < 6; ++i) {
@@ -890,19 +1072,73 @@ class ParkingMasterGame {
             const float z = -14.0f + (i % 3) * 13.0f;
             const float height = 5.5f + (i % 3) * 2.0f;
             const Color tower = i % 2 == 0 ? Color{45, 54, 76, 255} : Color{30, 38, 57, 255};
-            DrawCube({x, height * 0.5f, z}, 4.8f, height, 5.0f, tower);
-            DrawCubeWires({x, height * 0.5f, z}, 4.8f, height, 5.0f, Fade({154, 173, 207, 255}, 0.12f));
+
+            const float baseHeight = height * 0.55f;
+            const float midHeight = height * 0.3f;
+            const float topHeight = height * 0.15f;
+            const float baseY = baseHeight * 0.5f;
+            const float midY = baseHeight + midHeight * 0.5f;
+            const float topY = baseHeight + midHeight + topHeight * 0.5f;
+
+            DrawShadedCube({x, baseY, z}, {4.8f, baseHeight, 5.0f}, tower);
+            DrawShadedCube({x, midY, z}, {3.9f, midHeight, 4.1f}, tower);
+            DrawShadedCube({x, topY, z}, {3.0f, topHeight, 3.2f}, tower);
+            DrawCubeWires({x, baseY, z}, 4.8f, baseHeight, 5.0f, Fade({154, 173, 207, 255}, 0.12f));
+            DrawCubeWires({x, midY, z}, 3.9f, midHeight, 4.1f, Fade({154, 173, 207, 255}, 0.12f));
+            DrawCubeWires({x, topY, z}, 3.0f, topHeight, 3.2f, Fade({154, 173, 207, 255}, 0.12f));
+
+            const float faceX = x + (x < 0.0f ? 2.42f : -2.42f);
+            const Color windowColor = Fade({255, 226, 168, 255}, 0.35f);
+            for (int w = 0; w < 3; ++w) {
+                const float wy = baseHeight * (0.25f + w * 0.28f);
+                DrawCube({faceX, wy, z}, 0.06f, baseHeight * 0.16f, 2.6f, windowColor);
+            }
         }
 
         const std::array<Vector2, 4> planters = {{{-8.7f, -16.0f}, {8.7f, -16.0f}, {-8.7f, 16.0f}, {8.7f, 16.0f}}};
         for (const Vector2& planter : planters) {
-            DrawOrientedCube(planter, 0.45f, {1.8f, 0.9f, 1.8f}, 0.0f, {108, 89, 72, 255});
+            DrawShadedOrientedCube(planter, 0.45f, {1.8f, 0.9f, 1.8f}, 0.0f, {108, 89, 72, 255});
             DrawSphere(WorldPoint(planter, 1.3f), 0.82f, {79, 154, 112, 255});
         }
     }
 
+    void DrawShadowBlob(Vector2 center, Vector2 size, float angle) const {
+        DrawGroundBox(center, size, angle, 0.008f, Fade({4, 6, 10, 255}, 0.3f));
+    }
+
+    void DrawSceneShadows() const {
+        for (const Obstacle& obstacle : obstacles_) {
+            const Vector2 footSize = {
+                obstacle.footprint.half.x * 2.0f + 0.28f,
+                obstacle.footprint.half.y * 2.0f + 0.28f,
+            };
+            DrawShadowBlob(VAdd(obstacle.footprint.center, {0.08f, 0.1f}), footSize, obstacle.footprint.angle);
+        }
+
+        const std::array<Vector2, 4> planters = {{{-8.7f, -16.0f}, {8.7f, -16.0f}, {-8.7f, 16.0f}, {8.7f, 16.0f}}};
+        for (const Vector2& planter : planters) {
+            DrawShadowBlob(VAdd(planter, {0.1f, 0.12f}), {2.2f, 2.2f}, 0.0f);
+        }
+
+        for (int i = 0; i < 6; ++i) {
+            const float x = i < 3 ? -19.5f : 19.5f;
+            const float z = -14.0f + (i % 3) * 13.0f;
+            DrawShadowBlob(VAdd(Vector2{x, z}, {0.15f, 0.18f}), {5.4f, 5.6f}, 0.0f);
+        }
+
+        for (int i = 0; i < 7; ++i) {
+            const float z = -15.0f + i * 5.0f;
+            DrawShadowBlob(VAdd(Vector2{-10.7f, z}, {0.06f, 0.08f}), {0.4f, 0.4f}, 0.0f);
+            DrawShadowBlob(VAdd(Vector2{10.7f, z}, {0.06f, 0.08f}), {0.4f, 0.4f}, 0.0f);
+        }
+    }
+
     void DrawCourse() const {
-        DrawPlane({0.0f, 0.0f, 0.0f}, {50.0f, 40.0f}, {44, 48, 57, 255});
+        if (groundReady_) {
+            DrawModel(groundModel_, {0.0f, 0.0f, 0.0f}, 1.0f, WHITE);
+        } else {
+            DrawPlane({0.0f, 0.0f, 0.0f}, {50.0f, 40.0f}, {44, 48, 57, 255});
+        }
         DrawPlane({0.0f, -0.02f, 0.0f}, {56.0f, 46.0f}, {21, 24, 30, 255});
 
         const Color laneColor = {56, 60, 70, 255};
@@ -922,24 +1158,27 @@ class ParkingMasterGame {
             DrawParkingOutline(slot, {233, 239, 248, 255});
         }
 
+        DrawSceneShadows();
+
         const ParkingZone& target = stages_[currentStageIndex_].target;
         DrawGroundBox(target.footprint.center, {target.footprint.half.x * 2.0f, target.footprint.half.y * 2.0f}, target.footprint.angle, 0.03f, Fade({91, 242, 197, 255}, 0.22f));
         DrawParkingOutline(target.footprint, {91, 242, 197, 255});
 
-        const float pulse = 0.85f + std::sin(elapsedSceneTime_ * 3.2f) * 0.12f;
+        const float pulse = 0.85f + std::sin(elapsedSceneTime_ * 3.2f) * 0.18f;
         DrawSphere(WorldPoint(target.footprint.center, 1.9f + std::sin(elapsedSceneTime_ * 2.5f) * 0.18f), 0.3f * pulse, {91, 242, 197, 220});
         DrawCylinder(WorldPoint(target.footprint.center, 0.8f), 0.32f, 0.32f, 1.8f, 16, Fade({91, 242, 197, 255}, 0.14f));
+
+        const std::array<Vector2, 4> zoneCornerSigns = {{{1.0f, 1.0f}, {1.0f, -1.0f}, {-1.0f, 1.0f}, {-1.0f, -1.0f}}};
+        for (const Vector2& sign : zoneCornerSigns) {
+            const Vector2 local = {sign.x * (target.footprint.half.x - 0.12f), sign.y * (target.footprint.half.y - 0.12f)};
+            const Vector2 corner = VAdd(target.footprint.center, RotateVector(local, target.footprint.angle));
+            DrawShadedOrientedCube(corner, 0.14f, {0.2f, 0.28f, 0.2f}, target.footprint.angle, {91, 242, 197, 255});
+        }
 
         for (const Obstacle& obstacle : obstacles_) {
             switch (obstacle.type) {
                 case ObstacleType::ParkedCar:
-                    DrawOrientedCube(
-                        obstacle.footprint.center,
-                        obstacle.height * 0.5f,
-                        {obstacle.footprint.half.x * 2.0f, obstacle.height, obstacle.footprint.half.y * 2.0f},
-                        obstacle.footprint.angle,
-                        obstacle.color
-                    );
+                    DrawSimpleCar(obstacle.footprint.center, obstacle.footprint.angle, obstacle.color);
                     DrawOrientedCubeWires(
                         obstacle.footprint.center,
                         obstacle.height * 0.5f,
@@ -949,7 +1188,7 @@ class ParkingMasterGame {
                     );
                     break;
                 case ObstacleType::Curb:
-                    DrawOrientedCube(
+                    DrawShadedOrientedCube(
                         obstacle.footprint.center,
                         obstacle.height * 0.5f,
                         {obstacle.footprint.half.x * 2.0f, obstacle.height, obstacle.footprint.half.y * 2.0f},
@@ -957,10 +1196,23 @@ class ParkingMasterGame {
                         obstacle.color
                     );
                     break;
-                case ObstacleType::Cone:
+                case ObstacleType::Cone: {
                     DrawCylinder(WorldPoint(obstacle.footprint.center, obstacle.height * 0.5f), 0.28f, 0.08f, obstacle.height, 10, obstacle.color);
                     DrawCylinderWires(WorldPoint(obstacle.footprint.center, obstacle.height * 0.5f), 0.28f, 0.08f, obstacle.height, 10, {255, 245, 220, 180});
+                    const float bandBottomT = 0.42f;
+                    const float bandTopT = 0.58f;
+                    const float bandBottomRadius = LerpFloat(0.28f, 0.08f, bandBottomT);
+                    const float bandTopRadius = LerpFloat(0.28f, 0.08f, bandTopT);
+                    DrawCylinder(
+                        WorldPoint(obstacle.footprint.center, obstacle.height * bandBottomT),
+                        bandBottomRadius,
+                        bandTopRadius,
+                        obstacle.height * (bandTopT - bandBottomT),
+                        10,
+                        {245, 246, 250, 255}
+                    );
                     break;
+                }
             }
         }
 
@@ -971,9 +1223,9 @@ class ParkingMasterGame {
         const Color body = collisionFlash_ > 0.0f ? Color{255, 107, 107, 255} : Color{255, 215, 85, 255};
         DrawGroundBox(car_.position, {4.9f, 2.45f}, car_.heading, 0.02f, Fade({6, 9, 15, 255}, 0.35f));
 
-        DrawOrientedCube(car_.position, 0.68f, {kCarLength, 1.1f, kCarWidth}, car_.heading, body);
+        DrawShadedOrientedCube(car_.position, 0.68f, {kCarLength, 1.1f, kCarWidth}, car_.heading, body);
 
-        DrawOrientedCube(
+        DrawShadedOrientedCube(
             VAdd(car_.position, VScale(ForwardFromAngle(car_.heading), 0.12f)),
             1.25f,
             {2.1f, 0.6f, 1.55f},
@@ -981,8 +1233,23 @@ class ParkingMasterGame {
             {37, 53, 88, 255}
         );
         DrawOrientedCube(car_.position, 1.04f, {3.2f, 0.05f, 0.08f}, car_.heading, {240, 108, 66, 255});
-        DrawOrientedCube(VAdd(car_.position, RotateVector({0.0f, 0.64f}, car_.heading)), 0.82f, {0.12f, 0.08f, 0.38f}, car_.heading, {255, 246, 204, 255});
-        DrawOrientedCube(VAdd(car_.position, RotateVector({0.0f, -0.64f}, car_.heading)), 0.82f, {0.12f, 0.08f, 0.38f}, car_.heading, {255, 246, 204, 255});
+
+        DrawShadedOrientedCube(
+            VAdd(car_.position, RotateVector({0.72f, 0.0f}, car_.heading)),
+            1.32f,
+            {0.1f, 0.4f, 1.35f},
+            car_.heading,
+            Fade({22, 32, 58, 255}, 0.85f)
+        );
+        DrawShadedOrientedCube(
+            VAdd(car_.position, RotateVector({-0.72f, 0.0f}, car_.heading)),
+            1.32f,
+            {0.1f, 0.4f, 1.35f},
+            car_.heading,
+            Fade({22, 32, 58, 255}, 0.85f)
+        );
+        DrawShadedOrientedCube(VAdd(car_.position, RotateVector({0.0f, 0.64f}, car_.heading)), 0.82f, {0.12f, 0.08f, 0.38f}, car_.heading, {255, 246, 204, 255});
+        DrawShadedOrientedCube(VAdd(car_.position, RotateVector({0.0f, -0.64f}, car_.heading)), 0.82f, {0.12f, 0.08f, 0.38f}, car_.heading, {255, 246, 204, 255});
 
         const Vector2 forward = ForwardFromAngle(car_.heading);
         const Vector2 side = {-forward.y, forward.x};
@@ -993,9 +1260,12 @@ class ParkingMasterGame {
             VAdd(VAdd(car_.position, VScale(forward, -1.25f)), VScale(side, -0.9f)),
         };
 
-        for (const Vector2& wheel : wheelCenters) {
-            DrawOrientedCube(wheel, 0.28f, {0.6f, 0.45f, 0.22f}, car_.heading, {18, 20, 24, 255});
-        }
+        constexpr float kMaxSteerVisualAngle = 28.0f * DEG2RAD;
+        const float frontWheelAngle = car_.heading + car_.steering * kMaxSteerVisualAngle;
+        DrawCarWheel(wheelCenters[0], frontWheelAngle);
+        DrawCarWheel(wheelCenters[1], frontWheelAngle);
+        DrawCarWheel(wheelCenters[2], car_.heading);
+        DrawCarWheel(wheelCenters[3], car_.heading);
 
         const auto drawLight = [&](Vector2 local, float height, Vector3 size, Color color) {
             DrawOrientedCube(VAdd(car_.position, RotateVector(local, car_.heading)), height, size, car_.heading, color);
@@ -1327,6 +1597,10 @@ class ParkingMasterGame {
     RenderTexture2D mirrorRear_{};
     RenderTexture2D mirrorLeft_{};
     RenderTexture2D mirrorRight_{};
+    Texture2D groundTexture_{};
+    Mesh groundMesh_{};
+    Model groundModel_{};
+    bool groundReady_ = false;
     std::vector<Obstacle> obstacles_{};
     std::vector<OrientedRect> paintedSlots_{};
     std::vector<Stage> stages_{};
