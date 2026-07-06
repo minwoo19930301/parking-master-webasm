@@ -105,6 +105,16 @@ inline void WebUpdateOverlay(const char*, const char*, const char*, int, int, fl
 namespace {
 
 constexpr float kPi = 3.14159265358979323846f;
+
+// Synthwave Night palette
+constexpr Color kNightBg = {11, 7, 22, 255};
+constexpr Color kNightAsphalt = {20, 18, 31, 255};
+constexpr Color kNeonCyan = {53, 224, 255, 255};
+constexpr Color kHotMagenta = {255, 79, 163, 255};
+constexpr Color kRetroOrange = {255, 138, 61, 255};
+constexpr Color kAmber = {255, 209, 102, 255};
+constexpr Color kIndigo = {85, 97, 217, 255};
+constexpr Color kTeal = {46, 196, 182, 255};
 constexpr float kWorldHalfWidth = 24.0f;
 constexpr float kWorldHalfHeight = 19.0f;
 constexpr float kCarLength = 4.2f;
@@ -324,9 +334,19 @@ static Color ShadeColor(Color c, float brightness) {
     };
 }
 
+static Color LerpColor(Color a, Color b, float t) {
+    t = std::clamp(t, 0.0f, 1.0f);
+    return {
+        static_cast<unsigned char>(a.r + (b.r - a.r) * t),
+        static_cast<unsigned char>(a.g + (b.g - a.g) * t),
+        static_cast<unsigned char>(a.b + (b.b - a.b) * t),
+        static_cast<unsigned char>(a.a + (b.a - a.a) * t),
+    };
+}
+
 static float FaceBrightness(Vector3 normal) {
     const float facing = std::max(0.0f, Vector3DotProduct(normal, {-kSunDir.x, -kSunDir.y, -kSunDir.z}));
-    return 0.62f + 0.38f * facing;
+    return 0.45f + 0.55f * facing;
 }
 
 static void DrawShadedCubeFace(Vector3 normal, Vector3 a, Vector3 b, Vector3 c, Vector3 d, Color color, float brightnessOverride = -1.0f) {
@@ -356,7 +376,7 @@ static void DrawShadedCubeLocal(Vector3 size, Color color, float headingRadians)
     DrawShadedCubeFace({0.0f, 1.0f, 0.0f},
         {-hx, hy, -hz}, {-hx, hy, hz}, {hx, hy, hz}, {hx, hy, -hz}, color, 1.0f);
     DrawShadedCubeFace({0.0f, -1.0f, 0.0f},
-        {-hx, -hy, hz}, {-hx, -hy, -hz}, {hx, -hy, -hz}, {hx, -hy, hz}, color, 0.55f);
+        {-hx, -hy, hz}, {-hx, -hy, -hz}, {hx, -hy, -hz}, {hx, -hy, hz}, color, 0.4f);
     DrawShadedCubeFace(worldForward,
         {-hx, -hy, hz}, {hx, -hy, hz}, {hx, hy, hz}, {-hx, hy, hz}, color);
     DrawShadedCubeFace(worldBack,
@@ -404,6 +424,14 @@ void DrawSimpleCar(Vector2 position, float heading, Color bodyColor) {
         heading,
         cabinColor
     );
+
+    // Fake neon rim light: thin bright strips along the body top edge perimeter.
+    const Color rim = {0xaa, 0xb8, 0xff, 255};
+    const float rimY = 1.0f + 0.02f;
+    DrawOrientedCube(VAdd(position, RotateVector({0.0f, 0.925f}, heading)), rimY, {2.0f, 0.02f, 0.05f}, heading, rim);
+    DrawOrientedCube(VAdd(position, RotateVector({0.0f, -0.925f}, heading)), rimY, {2.0f, 0.02f, 0.05f}, heading, rim);
+    DrawOrientedCube(VAdd(position, RotateVector({0.98f, 0.0f}, heading)), rimY, {0.05f, 0.02f, 1.85f}, heading, rim);
+    DrawOrientedCube(VAdd(position, RotateVector({-0.98f, 0.0f}, heading)), rimY, {0.05f, 0.02f, 1.85f}, heading, rim);
 
     const Vector2 forward = ForwardFromAngle(heading);
     const Vector2 side = {-forward.y, forward.x};
@@ -472,11 +500,11 @@ class ParkingMasterGame {
         paintedSlots_.clear();
         stages_.clear();
 
-        const Color curbColor = {186, 193, 204, 255};
-        const Color parkedBlue = {67, 108, 255, 255};
-        const Color parkedCoral = {255, 121, 92, 255};
-        const Color parkedSteel = {96, 121, 146, 255};
-        const Color coneColor = {255, 164, 71, 255};
+        const Color curbColor = {46, 37, 71, 255};
+        const Color parkedBlue = kIndigo;
+        const Color parkedCoral = kHotMagenta;
+        const Color parkedSteel = kTeal;
+        const Color coneColor = kRetroOrange;
 
         AddCurb({0.0f, -18.4f}, {24.0f, 0.6f}, 0.0f, curbColor);
         AddCurb({0.0f, 18.4f}, {24.0f, 0.6f}, 0.0f, curbColor);
@@ -610,7 +638,7 @@ class ParkingMasterGame {
 
     void InitGroundTexture() {
         constexpr int kSize = 256;
-        Image image = GenImageColor(kSize, kSize, {46, 50, 58, 255});
+        Image image = GenImageColor(kSize, kSize, kNightAsphalt);
         Color* pixels = static_cast<Color*>(image.data);
 
         for (int y = 0; y < kSize; ++y) {
@@ -618,22 +646,19 @@ class ParkingMasterGame {
                 unsigned int hash = static_cast<unsigned int>(x) * 374761393u + static_cast<unsigned int>(y) * 668265263u;
                 hash = (hash ^ (hash >> 13)) * 1274126177u;
                 hash = hash ^ (hash >> 16);
-                const int jitter = static_cast<int>(hash % 13u) - 6;
+                const int jitter = static_cast<int>(hash % 11u) - 5;
 
                 Color& pixel = pixels[y * kSize + x];
-                pixel.r = static_cast<unsigned char>(std::clamp(46 + jitter, 0, 255));
-                pixel.g = static_cast<unsigned char>(std::clamp(50 + jitter, 0, 255));
-                pixel.b = static_cast<unsigned char>(std::clamp(58 + jitter, 0, 255));
+                pixel.r = static_cast<unsigned char>(std::clamp(static_cast<int>(kNightAsphalt.r) + jitter, 0, 255));
+                pixel.g = static_cast<unsigned char>(std::clamp(static_cast<int>(kNightAsphalt.g) + jitter, 0, 255));
+                pixel.b = static_cast<unsigned char>(std::clamp(static_cast<int>(kNightAsphalt.b) + jitter, 0, 255));
                 pixel.a = 255;
 
-                if (hash % 340u == 0u) {
-                    pixel.r = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.r) + 46, 0, 255));
-                    pixel.g = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.g) + 46, 0, 255));
-                    pixel.b = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.b) + 46, 0, 255));
-                } else if (hash % 97u == 0u) {
-                    pixel.r = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.r) - 22, 0, 255));
-                    pixel.g = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.g) - 22, 0, 255));
-                    pixel.b = static_cast<unsigned char>(std::clamp(static_cast<int>(pixel.b) - 22, 0, 255));
+                // Sparse neon speckle flecks (~2%): alternate cyan / magenta.
+                if (hash % 50u == 0u) {
+                    pixel.r = kNeonCyan.r; pixel.g = kNeonCyan.g; pixel.b = kNeonCyan.b;
+                } else if (hash % 53u == 0u) {
+                    pixel.r = kHotMagenta.r; pixel.g = kHotMagenta.g; pixel.b = kHotMagenta.b;
                 }
             }
         }
@@ -1019,26 +1044,89 @@ class ParkingMasterGame {
         const int width = GetScreenWidth();
         const int height = GetScreenHeight();
 
-        DrawRectangleGradientV(0, 0, width, height, {64, 72, 92, 255}, {7, 10, 15, 255});
-        DrawRectangleGradientV(0, height / 2, width, height / 2, {18, 23, 31, 0}, {4, 6, 10, 220});
+        // Sky gradient: deep bg -> purple -> horizon glow band.
+        const int horizonY = static_cast<int>(height * 0.58f);
+        DrawRectangleGradientV(0, 0, width, horizonY / 2, kNightBg, {43, 17, 64, 255});
+        DrawRectangleGradientV(0, horizonY / 2, width, horizonY - horizonY / 2, {43, 17, 64, 255}, {120, 40, 90, 255});
+        DrawRectangleGradientV(0, horizonY, width, height - horizonY, {120, 40, 90, 120}, Fade(kNightBg, 0.0f));
 
         float parallax = std::fmod(car_.heading / (2.0f * kPi) * static_cast<float>(width), static_cast<float>(width));
         if (parallax < 0.0f) parallax += static_cast<float>(width);
 
-        DrawCircleGradient(static_cast<int>(std::fmod(width * 0.72f + parallax, static_cast<float>(width))), static_cast<int>(height * 0.18f), height * 0.12f, {255, 218, 164, 44}, BLANK);
-        DrawCircleGradient(static_cast<int>(std::fmod(width * 0.22f + parallax, static_cast<float>(width))), static_cast<int>(height * 0.24f), height * 0.22f, {88, 117, 168, 34}, BLANK);
+        // Static stars: ~40 small dots, two sizes.
+        for (int i = 0; i < 40; ++i) {
+            unsigned int hash = static_cast<unsigned int>(i) * 2654435761u;
+            hash = (hash ^ (hash >> 13)) * 1274126177u;
+            const float sx = static_cast<float>(hash % 10007u) / 10007.0f;
+            const float sy = static_cast<float>((hash / 7u) % 10007u) / 10007.0f * 0.55f;
+            const int x = static_cast<int>(sx * width);
+            const int y = static_cast<int>(sy * height);
+            const float radius = (hash % 3u == 0u) ? 1.6f : 1.0f;
+            DrawCircle(x, y, radius, Fade(WHITE, 0.8f));
+        }
 
-        const int skylineBase = static_cast<int>(height * 0.56f);
+        // Giant retro sun semicircle at horizon with scanline gaps.
+        const float sunCenterX = width * 0.5f;
+        const float sunCenterY = static_cast<float>(horizonY);
+        const float sunRadius = height * 0.32f;
+        {
+            rlPushMatrix();
+            const int segments = 40;
+            rlBegin(RL_TRIANGLES);
+            for (int i = 0; i < segments; ++i) {
+                const float a0 = kPi + (static_cast<float>(i) / segments) * kPi;
+                const float a1 = kPi + (static_cast<float>(i + 1) / segments) * kPi;
+                const float t0 = static_cast<float>(i) / segments;
+                const float t1 = static_cast<float>(i + 1) / segments;
+                const Color c0 = LerpColor({255, 79, 126, 255}, {255, 138, 61, 255}, t0);
+                const Color c1 = LerpColor({255, 79, 126, 255}, {255, 138, 61, 255}, t1);
+                const Vector2 p0 = {sunCenterX + std::cos(a0) * sunRadius, sunCenterY + std::sin(a0) * sunRadius};
+                const Vector2 p1 = {sunCenterX + std::cos(a1) * sunRadius, sunCenterY + std::sin(a1) * sunRadius};
+                rlColor4ub(c0.r, c0.g, c0.b, 255);
+                rlVertex2f(sunCenterX, sunCenterY);
+                rlColor4ub(c0.r, c0.g, c0.b, 255);
+                rlVertex2f(p0.x, p0.y);
+                rlColor4ub(c1.r, c1.g, c1.b, 255);
+                rlVertex2f(p1.x, p1.y);
+            }
+            rlEnd();
+            rlPopMatrix();
+
+            // Scanline gaps cut across the sun disc.
+            const int gapCount = 4;
+            for (int g = 0; g < gapCount; ++g) {
+                const float t = 0.32f + g * 0.16f;
+                const float gapY = sunCenterY - sunRadius * (1.0f - t);
+                if (gapY < sunCenterY - sunRadius || gapY > sunCenterY) continue;
+                const float halfChord = std::sqrt(std::max(0.0f, sunRadius * sunRadius - (sunCenterY - gapY) * (sunCenterY - gapY)));
+                DrawRectangle(static_cast<int>(sunCenterX - halfChord), static_cast<int>(gapY), static_cast<int>(halfChord * 2.0f), 5, kNightBg);
+            }
+        }
+
+        // Skyline silhouettes with a few lit windows.
+        const int skylineBase = horizonY + static_cast<int>(height * 0.03f);
         for (int pass = 0; pass < 2; ++pass) {
             const float xOffset = parallax - static_cast<float>(pass) * static_cast<float>(width);
             for (int i = 0; i < 10; ++i) {
                 const int buildingWidth = 80 + (i % 3) * 28;
-                const int buildingHeight = 80 + (i % 5) * 34;
+                const int buildingHeight = 70 + (i % 5) * 30;
                 const int x = static_cast<int>(i * (width / 9) - 14 + xOffset);
-                DrawRectangle(x, skylineBase - buildingHeight, buildingWidth, buildingHeight, Fade({17, 22, 33, 255}, 0.88f));
+                const int by = skylineBase - buildingHeight;
+                DrawRectangle(x, by, buildingWidth, buildingHeight, Fade({20, 12, 34, 255}, 0.92f));
+
+                unsigned int wh = static_cast<unsigned int>(i * 97 + pass * 13) * 2246822519u;
+                for (int w = 0; w < 4; ++w) {
+                    wh = (wh ^ (wh >> 13)) * 3266489917u;
+                    if (wh % 3u != 0u) continue;
+                    const int wx = x + 10 + static_cast<int>((wh >> 4) % static_cast<unsigned int>(std::max(1, buildingWidth - 20)));
+                    const int wy = by + 8 + static_cast<int>((wh >> 8) % static_cast<unsigned int>(std::max(1, buildingHeight - 16)));
+                    const Color winColor = (wh % 2u == 0u) ? kAmber : Color{125, 232, 255, 255};
+                    DrawRectangle(wx, wy, 3, 5, Fade(winColor, 0.85f));
+                }
             }
         }
 
+        // Streak clouds: thin dark purple horizontal streaks.
         const float cloudDrift = elapsedSceneTime_ * 6.0f;
         const std::array<Vector2, 4> clouds = {{
             {0.12f, 0.14f}, {0.42f, 0.09f}, {0.68f, 0.2f}, {0.88f, 0.12f},
@@ -1048,30 +1136,37 @@ class ParkingMasterGame {
             float x = std::fmod(baseX, static_cast<float>(width));
             if (x < 0.0f) x += static_cast<float>(width);
             const float y = clouds[i].y * static_cast<float>(height);
-            DrawCircle(static_cast<int>(x), static_cast<int>(y), 26.0f, Fade(WHITE, 0.1f));
-            DrawCircle(static_cast<int>(x + 22.0f), static_cast<int>(y + 6.0f), 20.0f, Fade(WHITE, 0.08f));
-            DrawCircle(static_cast<int>(x - 20.0f), static_cast<int>(y + 8.0f), 18.0f, Fade(WHITE, 0.07f));
+            DrawRectangle(static_cast<int>(x - 30.0f), static_cast<int>(y), 60, 3, Fade({58, 30, 82, 255}, 0.5f));
+            DrawRectangle(static_cast<int>(x - 16.0f), static_cast<int>(y) + 6, 40, 2, Fade({58, 30, 82, 255}, 0.4f));
         }
 
-        DrawRectangle(0, skylineBase, width, height - skylineBase, Fade({8, 11, 18, 255}, 0.34f));
+        DrawRectangle(0, skylineBase, width, height - skylineBase, Fade(kNightBg, 0.34f));
     }
 
     void DrawEnvironmentDetails() const {
         for (int i = 0; i < 7; ++i) {
             const float z = -15.0f + i * 5.0f;
-            DrawCylinder({-10.7f, 2.4f, z}, 0.12f, 0.12f, 4.8f, 8, {57, 67, 88, 255});
-            DrawCylinder({10.7f, 2.4f, z}, 0.12f, 0.12f, 4.8f, 8, {57, 67, 88, 255});
-            DrawSphere({-10.7f, 5.1f, z}, 0.3f, Fade({255, 229, 162, 255}, 0.82f));
-            DrawSphere({10.7f, 5.1f, z}, 0.3f, Fade({255, 229, 162, 255}, 0.82f));
-            DrawCylinder({-10.7f, 0.02f, z}, 0.1f, 1.9f, 4.9f, 14, Fade({255, 229, 162, 255}, 0.1f));
-            DrawCylinder({10.7f, 0.02f, z}, 0.1f, 1.9f, 4.9f, 14, Fade({255, 229, 162, 255}, 0.1f));
+            const bool cyanSide = (i % 2 == 0);
+            const Color leftBulb = cyanSide ? kNeonCyan : kHotMagenta;
+            const Color rightBulb = cyanSide ? kHotMagenta : kNeonCyan;
+
+            DrawCylinder({-10.7f, 2.4f, z}, 0.12f, 0.12f, 4.8f, 8, {40, 34, 58, 255});
+            DrawCylinder({10.7f, 2.4f, z}, 0.12f, 0.12f, 4.8f, 8, {40, 34, 58, 255});
+            // Thin bright vertical line on each pole.
+            DrawCylinder({-10.7f, 2.4f, z}, 0.02f, 0.02f, 4.8f, 6, leftBulb);
+            DrawCylinder({10.7f, 2.4f, z}, 0.02f, 0.02f, 4.8f, 6, rightBulb);
+
+            DrawSphere({-10.7f, 5.1f, z}, 0.3f, Fade(leftBulb, 0.9f));
+            DrawSphere({10.7f, 5.1f, z}, 0.3f, Fade(rightBulb, 0.9f));
+            DrawCylinder({-10.7f, 0.02f, z}, 0.1f, 2.4f, 4.9f, 14, Fade(leftBulb, 0.16f));
+            DrawCylinder({10.7f, 0.02f, z}, 0.1f, 2.4f, 4.9f, 14, Fade(rightBulb, 0.16f));
         }
 
         for (int i = 0; i < 6; ++i) {
             const float x = i < 3 ? -19.5f : 19.5f;
             const float z = -14.0f + (i % 3) * 13.0f;
             const float height = 5.5f + (i % 3) * 2.0f;
-            const Color tower = i % 2 == 0 ? Color{45, 54, 76, 255} : Color{30, 38, 57, 255};
+            const Color tower = {36, 29, 56, 255};
 
             const float baseHeight = height * 0.55f;
             const float midHeight = height * 0.3f;
@@ -1083,15 +1178,27 @@ class ParkingMasterGame {
             DrawShadedCube({x, baseY, z}, {4.8f, baseHeight, 5.0f}, tower);
             DrawShadedCube({x, midY, z}, {3.9f, midHeight, 4.1f}, tower);
             DrawShadedCube({x, topY, z}, {3.0f, topHeight, 3.2f}, tower);
-            DrawCubeWires({x, baseY, z}, 4.8f, baseHeight, 5.0f, Fade({154, 173, 207, 255}, 0.12f));
-            DrawCubeWires({x, midY, z}, 3.9f, midHeight, 4.1f, Fade({154, 173, 207, 255}, 0.12f));
-            DrawCubeWires({x, topY, z}, 3.0f, topHeight, 3.2f, Fade({154, 173, 207, 255}, 0.12f));
+            DrawCubeWires({x, baseY, z}, 4.8f, baseHeight, 5.0f, Fade(kNeonCyan, 0.1f));
+            DrawCubeWires({x, midY, z}, 3.9f, midHeight, 4.1f, Fade(kNeonCyan, 0.1f));
+            DrawCubeWires({x, topY, z}, 3.0f, topHeight, 3.2f, Fade(kNeonCyan, 0.1f));
 
             const float faceX = x + (x < 0.0f ? 2.42f : -2.42f);
-            const Color windowColor = Fade({255, 226, 168, 255}, 0.35f);
-            for (int w = 0; w < 3; ++w) {
-                const float wy = baseHeight * (0.25f + w * 0.28f);
-                DrawCube({faceX, wy, z}, 0.06f, baseHeight * 0.16f, 2.6f, windowColor);
+            for (int w = 0; w < 8; ++w) {
+                unsigned int wh = static_cast<unsigned int>(i * 31 + w * 17) * 2246822519u;
+                wh = (wh ^ (wh >> 13)) * 3266489917u;
+                if (wh % 5u == 0u) continue;
+                const float wy = baseHeight * (0.08f + (w % 4) * 0.24f) + (w >= 4 ? midHeight * 0.4f : 0.0f);
+                const float wz = z - 2.2f + (w % 4) * 1.3f;
+                const Color windowColor = (wh % 2u == 0u) ? kAmber : Color{125, 232, 255, 255};
+                DrawCube({faceX, wy, wz}, 0.06f, baseHeight * 0.14f, 0.5f, Fade(windowColor, 0.85f));
+            }
+
+            // One antenna with tiny red blink.
+            if (i == 2) {
+                const float antennaTopY = baseHeight + midHeight + topHeight + 1.2f;
+                DrawCylinder({x, baseHeight + midHeight + topHeight, z}, 0.03f, 0.015f, 1.2f, 6, {60, 50, 80, 255});
+                const float blink = 0.5f + 0.5f * std::sin(elapsedSceneTime_ * 3.0f);
+                DrawSphere({x, antennaTopY, z}, 0.08f, Fade(RED, 0.4f + blink * 0.6f));
             }
         }
 
@@ -1137,42 +1244,44 @@ class ParkingMasterGame {
         if (groundReady_) {
             DrawModel(groundModel_, {0.0f, 0.0f, 0.0f}, 1.0f, WHITE);
         } else {
-            DrawPlane({0.0f, 0.0f, 0.0f}, {50.0f, 40.0f}, {44, 48, 57, 255});
+            DrawPlane({0.0f, 0.0f, 0.0f}, {50.0f, 40.0f}, kNightAsphalt);
         }
-        DrawPlane({0.0f, -0.02f, 0.0f}, {56.0f, 46.0f}, {21, 24, 30, 255});
+        DrawPlane({0.0f, -0.02f, 0.0f}, {56.0f, 46.0f}, {8, 6, 14, 255});
 
-        const Color laneColor = {56, 60, 70, 255};
+        const Color laneColor = {24, 20, 38, 255};
         DrawGroundBox({0.0f, 0.0f}, {11.0f, 31.5f}, 0.0f, 0.01f, laneColor);
         DrawGroundBox({0.0f, -15.3f}, {14.0f, 3.7f}, 0.0f, 0.01f, laneColor);
-        DrawGroundBox({0.0f, 0.0f}, {11.9f, 32.4f}, 0.0f, 0.005f, Fade({255, 215, 149, 255}, 0.04f));
+        DrawGroundBox({0.0f, 0.0f}, {11.9f, 32.4f}, 0.0f, 0.005f, Fade(kIndigo, 0.05f));
 
         for (float y = -13.8f; y <= 14.0f; y += 3.8f) {
-            DrawGroundBox({0.0f, y}, {0.36f, 1.8f}, 0.0f, 0.02f, {223, 212, 182, 255});
+            DrawGroundBox({0.0f, y}, {0.36f, 1.8f}, 0.0f, 0.02f, kNeonCyan);
         }
-        DrawGroundBox({-5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, Fade({255, 255, 255, 255}, 0.48f));
-        DrawGroundBox({5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, Fade({255, 255, 255, 255}, 0.48f));
-        DrawArrowMarker({0.0f, 10.6f}, 0.0f, {227, 211, 168, 255});
-        DrawArrowMarker({0.0f, -5.0f}, kPi, {227, 211, 168, 255});
+        DrawGroundBox({-5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, kNeonCyan);
+        DrawGroundBox({5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, kNeonCyan);
+        DrawArrowMarker({0.0f, 10.6f}, 0.0f, kHotMagenta);
+        DrawArrowMarker({0.0f, -5.0f}, kPi, kHotMagenta);
 
         for (const OrientedRect& slot : paintedSlots_) {
-            DrawParkingOutline(slot, {233, 239, 248, 255});
+            DrawParkingOutline(slot, Fade({159, 180, 216, 255}, 0.6f));
         }
 
         DrawSceneShadows();
 
         const ParkingZone& target = stages_[currentStageIndex_].target;
-        DrawGroundBox(target.footprint.center, {target.footprint.half.x * 2.0f, target.footprint.half.y * 2.0f}, target.footprint.angle, 0.03f, Fade({91, 242, 197, 255}, 0.22f));
-        DrawParkingOutline(target.footprint, {91, 242, 197, 255});
+        const float pulseT = 0.5f + 0.5f * std::sin(elapsedSceneTime_ * 1.6f);
+        const Color pulseColor = LerpColor(kNeonCyan, kHotMagenta, pulseT);
+        DrawGroundBox(target.footprint.center, {target.footprint.half.x * 2.0f, target.footprint.half.y * 2.0f}, target.footprint.angle, 0.03f, Fade(pulseColor, 0.24f));
+        DrawParkingOutline(target.footprint, kNeonCyan);
 
         const float pulse = 0.85f + std::sin(elapsedSceneTime_ * 3.2f) * 0.18f;
-        DrawSphere(WorldPoint(target.footprint.center, 1.9f + std::sin(elapsedSceneTime_ * 2.5f) * 0.18f), 0.3f * pulse, {91, 242, 197, 220});
-        DrawCylinder(WorldPoint(target.footprint.center, 0.8f), 0.32f, 0.32f, 1.8f, 16, Fade({91, 242, 197, 255}, 0.14f));
+        DrawSphere(WorldPoint(target.footprint.center, 1.9f + std::sin(elapsedSceneTime_ * 2.5f) * 0.18f), 0.3f * pulse, Fade(kHotMagenta, 0.86f));
+        DrawCylinder(WorldPoint(target.footprint.center, 0.8f), 0.32f, 0.32f, 1.8f, 16, Fade(kNeonCyan, 0.14f));
 
         const std::array<Vector2, 4> zoneCornerSigns = {{{1.0f, 1.0f}, {1.0f, -1.0f}, {-1.0f, 1.0f}, {-1.0f, -1.0f}}};
         for (const Vector2& sign : zoneCornerSigns) {
             const Vector2 local = {sign.x * (target.footprint.half.x - 0.12f), sign.y * (target.footprint.half.y - 0.12f)};
             const Vector2 corner = VAdd(target.footprint.center, RotateVector(local, target.footprint.angle));
-            DrawShadedOrientedCube(corner, 0.14f, {0.2f, 0.28f, 0.2f}, target.footprint.angle, {91, 242, 197, 255});
+            DrawShadedOrientedCube(corner, 0.14f, {0.2f, 0.28f, 0.2f}, target.footprint.angle, kNeonCyan);
         }
 
         for (const Obstacle& obstacle : obstacles_) {
@@ -1195,8 +1304,16 @@ class ParkingMasterGame {
                         obstacle.footprint.angle,
                         obstacle.color
                     );
+                    DrawShadedOrientedCube(
+                        obstacle.footprint.center,
+                        obstacle.height + 0.01f,
+                        {obstacle.footprint.half.x * 2.0f, 0.02f, obstacle.footprint.half.y * 2.0f},
+                        obstacle.footprint.angle,
+                        kNeonCyan
+                    );
                     break;
                 case ObstacleType::Cone: {
+                    DrawGroundBox(obstacle.footprint.center, {0.7f, 0.7f}, 0.0f, 0.01f, Fade(kRetroOrange, 0.28f));
                     DrawCylinder(WorldPoint(obstacle.footprint.center, obstacle.height * 0.5f), 0.28f, 0.08f, obstacle.height, 10, obstacle.color);
                     DrawCylinderWires(WorldPoint(obstacle.footprint.center, obstacle.height * 0.5f), 0.28f, 0.08f, obstacle.height, 10, {255, 245, 220, 180});
                     const float bandBottomT = 0.42f;
@@ -1220,10 +1337,33 @@ class ParkingMasterGame {
     }
 
     void DrawPlayerCar() const {
-        const Color body = collisionFlash_ > 0.0f ? Color{255, 107, 107, 255} : Color{255, 215, 85, 255};
+        const Color body = collisionFlash_ > 0.0f ? Color{255, 107, 107, 255} : kRetroOrange;
         DrawGroundBox(car_.position, {4.9f, 2.45f}, car_.heading, 0.02f, Fade({6, 9, 15, 255}, 0.35f));
 
+        // Headlight ground pools projecting forward, rotating with heading.
+        const Vector2 forwardDir = ForwardFromAngle(car_.heading);
+        const Vector2 sideDir = {-forwardDir.y, forwardDir.x};
+        const std::array<float, 2> headlightSideOffsets = {0.62f, -0.62f};
+        for (float sideOffset : headlightSideOffsets) {
+            const Vector2 lightOrigin = VAdd(car_.position, RotateVector({1.95f, sideOffset}, car_.heading));
+            const Vector2 poolCenter = VAdd(lightOrigin, VScale(forwardDir, 2.25f));
+            DrawGroundBox(poolCenter, {4.5f, 1.3f}, car_.heading, 0.015f, Fade({255, 217, 160, 255}, 0.10f));
+        }
+        // Taillight glow quads.
+        for (float sideOffset : headlightSideOffsets) {
+            const Vector2 tailOrigin = VAdd(car_.position, RotateVector({-2.05f, sideOffset}, car_.heading));
+            DrawGroundBox(tailOrigin, {0.6f, 0.5f}, car_.heading, 0.01f, Fade(RED, 0.08f));
+        }
+
         DrawShadedOrientedCube(car_.position, 0.68f, {kCarLength, 1.1f, kCarWidth}, car_.heading, body);
+
+        // Fake neon rim light strips along body top edge perimeter.
+        const Color playerRim = {255, 233, 208, 255};
+        const float rimY = 1.23f;
+        DrawOrientedCube(VAdd(car_.position, RotateVector({0.0f, 0.95f}, car_.heading)), rimY, {kCarLength, 0.02f, 0.05f}, car_.heading, playerRim);
+        DrawOrientedCube(VAdd(car_.position, RotateVector({0.0f, -0.95f}, car_.heading)), rimY, {kCarLength, 0.02f, 0.05f}, car_.heading, playerRim);
+        DrawOrientedCube(VAdd(car_.position, RotateVector({2.05f, 0.0f}, car_.heading)), rimY, {0.05f, 0.02f, kCarWidth}, car_.heading, playerRim);
+        DrawOrientedCube(VAdd(car_.position, RotateVector({-2.05f, 0.0f}, car_.heading)), rimY, {0.05f, 0.02f, kCarWidth}, car_.heading, playerRim);
 
         DrawShadedOrientedCube(
             VAdd(car_.position, VScale(ForwardFromAngle(car_.heading), 0.12f)),
@@ -1392,7 +1532,7 @@ class ParkingMasterGame {
 
     void RenderMirrorView(RenderTexture2D& target, const Camera3D& mirrorCamera) {
         BeginTextureMode(target);
-        ClearBackground({58, 64, 78, 255});
+        ClearBackground(kNightBg);
         BeginMode3D(mirrorCamera);
         DrawCourse();
         EndMode3D();
@@ -1568,7 +1708,7 @@ class ParkingMasterGame {
 #endif
         UpdateMirrorTextures();
         BeginDrawing();
-        ClearBackground({18, 24, 42, 255});
+        ClearBackground(kNightBg);
         DrawBackdrop();
 
         BeginMode3D(camera_);
