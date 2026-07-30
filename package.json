@@ -1,9 +1,11 @@
 {
-  "name": "parking-master-webasm",
+  "name": "dobong-driving-test-simulator",
   "private": true,
   "type": "module",
   "scripts": {
     "build:web": "./scripts/build-web.sh",
+    "build:sites": "./scripts/build-sites.sh",
+    "test": "mkdir -p build-test && c++ -std=c++17 -I. tests/exam_rules_test.cpp -o build-test/exam_rules_test && ./build-test/exam_rules_test",
     "preview": "python3 -m http.server 4173 --bind 127.0.0.1 --directory ."
   }
 }

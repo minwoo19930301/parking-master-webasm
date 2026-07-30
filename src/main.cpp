@@ -1,3 +1,6 @@
+#include "exam_rules.h"
+#include "course_data.h"
+
 #include "raylib.h"
 #include "raymath.h"
 #include "rlgl.h"
@@ -7,92 +10,91 @@
 #include <emscripten/html5.h>
 
 EM_JS(float, WebSteerInput, (), {
-    const input = window.__parkingInput || {};
-    if (typeof input.steerValue === "number") return input.steerValue;
-    return (input.left ? -1 : 0) + (input.right ? 1 : 0);
+    const input = window.__examInput || {};
+    return typeof input.steerValue === "number" ? input.steerValue : 0;
 });
 
 EM_JS(float, WebThrottleInput, (), {
-    const input = window.__parkingInput || {};
-    return input.throttle ? 1 : 0;
+    return window.__examInput?.throttle ? 1 : 0;
 });
 
 EM_JS(float, WebBrakeInput, (), {
-    const input = window.__parkingInput || {};
-    return input.brake ? 1 : 0;
+    return window.__examInput?.brake ? 1 : 0;
 });
 
-EM_JS(int, WebConsumeGearDrivePressed, (), {
-    const input = window.__parkingInput || {};
-    const pressed = input.gearDrivePressed ? 1 : 0;
-    input.gearDrivePressed = false;
+EM_JS(int, WebConsumePressed, (const char* key), {
+    const input = window.__examInput || {};
+    const name = UTF8ToString(key);
+    const pressed = input[name] ? 1 : 0;
+    input[name] = false;
     return pressed;
 });
 
-EM_JS(int, WebConsumeGearReversePressed, (), {
-    const input = window.__parkingInput || {};
-    const pressed = input.gearReversePressed ? 1 : 0;
-    input.gearReversePressed = false;
-    return pressed;
-});
-
-EM_JS(int, WebConsumeRetryPressed, (), {
-    const input = window.__parkingInput || {};
-    const pressed = input.retryPressed ? 1 : 0;
-    input.retryPressed = false;
-    return pressed;
-});
-
-EM_JS(void, WebUpdateOverlay,
-      (const char* stageTitle,
-       const char* stageHint,
-       const char* slotLabel,
-       int stageNumber,
-       int stageTotal,
-       float timeSec,
-       int collisions,
-       const char* gearLabel,
-       const char* guideLabel,
+EM_JS(void, WebUpdateExam,
+      (const char* phaseTitle,
+       const char* instruction,
+       const char* status,
+       const char* eventText,
+       int score,
+       int step,
+       int stepTotal,
+       float elapsed,
        float speedKph,
-       float parkProgress,
-       int stageClearing,
-       int gameWon),
+       const char* gear,
+       int phaseCode,
+       int seatbelt,
+       int ignition,
+       int parkingBrake,
+       int headlights,
+       int wiper,
+       int leftSignal,
+       int rightSignal,
+       int hazard,
+       int trafficLight,
+       int emergency,
+       int finished,
+       int passed),
       {
-          const ui = window.__parkingUi;
-          if (!ui) return;
-
-          ui.stageTitle.textContent = UTF8ToString(stageTitle);
-          ui.stageHint.textContent = UTF8ToString(stageHint);
-          ui.slotLabel.textContent = UTF8ToString(slotLabel);
-          ui.stageIndex.textContent = `${stageNumber}/${stageTotal}`;
-          ui.time.textContent = `${timeSec.toFixed(1)}s`;
-          ui.hits.textContent = `${collisions}`;
-          ui.gear.textContent = UTF8ToString(gearLabel);
-          ui.guide.textContent = UTF8ToString(guideLabel);
-          ui.speed.textContent = `${Math.round(speedKph)}`;
-          ui.progress.style.transform = `scaleX(${Math.max(0, Math.min(1, parkProgress))})`;
-          if (ui.progressValue) {
-              ui.progressValue.textContent = `${Math.round(Math.max(0, Math.min(1, parkProgress)) * 100)}%`;
-          }
-          if (ui.driveButton && ui.reverseButton) {
-              const inDrive = UTF8ToString(gearLabel) === "D";
-              ui.driveButton.classList.toggle("selected", inDrive);
-              ui.reverseButton.classList.toggle("selected", !inDrive);
-          }
-
-          let statusText = "Stop fully inside the glowing slot and hold Brake until Parking Lock reaches 100%.";
-          if (stageClearing) statusText = "Locked in. Loading the next parking test.";
-          if (gameWon) statusText = "All bays cleared. Tap Retry to run again.";
-          ui.status.textContent = statusText;
+          if (!window.__examUpdate) return;
+          window.__examUpdate({
+              phaseTitle: UTF8ToString(phaseTitle),
+              instruction: UTF8ToString(instruction),
+              status: UTF8ToString(status),
+              eventText: UTF8ToString(eventText),
+              score,
+              step,
+              stepTotal,
+              elapsed,
+              speedKph,
+              gear: UTF8ToString(gear),
+              phaseCode,
+              seatbelt: Boolean(seatbelt),
+              ignition: Boolean(ignition),
+              parkingBrake: Boolean(parkingBrake),
+              headlights,
+              wiper: Boolean(wiper),
+              leftSignal: Boolean(leftSignal),
+              rightSignal: Boolean(rightSignal),
+              hazard: Boolean(hazard),
+              trafficLight,
+              emergency: Boolean(emergency),
+              finished: Boolean(finished),
+              passed: Boolean(passed),
+          });
       });
+
+EM_JS(void, WebSpeak, (const char* message), {
+    window.__examSpeak?.(UTF8ToString(message));
+});
 #else
 inline float WebSteerInput() { return 0.0f; }
 inline float WebThrottleInput() { return 0.0f; }
 inline float WebBrakeInput() { return 0.0f; }
-inline int WebConsumeGearDrivePressed() { return 0; }
-inline int WebConsumeGearReversePressed() { return 0; }
-inline int WebConsumeRetryPressed() { return 0; }
-inline void WebUpdateOverlay(const char*, const char*, const char*, int, int, float, int, const char*, const char*, float, float, int, int) {}
+inline int WebConsumePressed(const char*) { return 0; }
+inline void WebUpdateExam(const char*, const char*, const char*, const char*, int, int, int,
+                          float, float, const char*, int, int, int, int, int, int, int, int,
+                          int, int, int, int, int) {}
+inline void WebSpeak(const char*) {}
 #endif
 
 #include <algorithm>
@@ -105,30 +107,52 @@ inline void WebUpdateOverlay(const char*, const char*, const char*, int, int, fl
 namespace {
 
 constexpr float kPi = 3.14159265358979323846f;
+constexpr float kWorldHalfWidth = 58.0f;
+constexpr float kWorldHalfHeight = 48.0f;
+constexpr float kCarLength = 4.45f;
+constexpr float kCarWidth = 1.82f;
+constexpr float kHillUpStartX = -37.0f;
+constexpr float kHillTopStartX = -29.0f;
+constexpr float kHillTopEndX = -25.0f;
+constexpr float kHillDownEndX = -12.5f;
 
-// Synthwave Night palette
-constexpr Color kNightBg = {11, 7, 22, 255};
-constexpr Color kNightAsphalt = {20, 18, 31, 255};
-constexpr Color kNeonCyan = {53, 224, 255, 255};
-constexpr Color kHotMagenta = {255, 79, 163, 255};
-constexpr Color kRetroOrange = {255, 138, 61, 255};
-constexpr Color kAmber = {255, 209, 102, 255};
-constexpr Color kIndigo = {85, 97, 217, 255};
-constexpr Color kTeal = {46, 196, 182, 255};
-constexpr float kWorldHalfWidth = 24.0f;
-constexpr float kWorldHalfHeight = 19.0f;
-constexpr float kCarLength = 4.2f;
-constexpr float kCarWidth = 2.0f;
+constexpr Color kSkyTop = {105, 157, 191, 255};
+constexpr Color kSkyHorizon = {218, 230, 232, 255};
+constexpr Color kAsphalt = {67, 72, 72, 255};
+constexpr Color kAsphaltLight = {78, 83, 82, 255};
+constexpr Color kGrass = {92, 119, 80, 255};
+constexpr Color kConcrete = {179, 184, 180, 255};
+constexpr Color kLaneWhite = {238, 238, 226, 255};
+constexpr Color kSafetyYellow = {239, 190, 42, 255};
+constexpr Color kCourseBlue = {32, 105, 157, 255};
+constexpr Color kExamRed = {207, 47, 41, 255};
+constexpr Color kExamGreen = {37, 153, 86, 255};
+constexpr Color kVehicleBlue = {42, 88, 128, 255};
+
+enum class TransmissionGear {
+    Park,
+    Drive,
+    Reverse,
+};
+
+enum class ExamPhase {
+    Briefing = 0,
+    Precheck = 1,
+    Running = 2,
+    Finished = 3,
+    Disqualified = 4,
+};
 
 enum class ObstacleType {
-    ParkedCar,
-    Curb,
+    Building,
+    Barrier,
     Cone,
 };
 
-enum class TransmissionGear {
-    Drive,
-    Reverse,
+enum class CollisionKind {
+    None,
+    CourseBoundary,
+    SolidObstacle,
 };
 
 struct OrientedRect {
@@ -137,24 +161,17 @@ struct OrientedRect {
     float angle = 0.0f;
 };
 
+struct RoadSurface {
+    OrientedRect footprint{};
+    bool centerLine = true;
+    bool edgeLines = true;
+};
+
 struct Obstacle {
     OrientedRect footprint{};
     float height = 1.0f;
     Color color{};
-    ObstacleType type = ObstacleType::ParkedCar;
-};
-
-struct ParkingZone {
-    OrientedRect footprint{};
-    std::string label;
-};
-
-struct Stage {
-    Vector2 spawn{};
-    float spawnAngle = 0.0f;
-    ParkingZone target{};
-    std::string title;
-    std::string hint;
+    ObstacleType type = ObstacleType::Barrier;
 };
 
 struct CarState {
@@ -162,32 +179,25 @@ struct CarState {
     float heading = 0.0f;
     float speed = 0.0f;
     float steering = 0.0f;
-    bool collisionLatch = false;
-};
-
-struct Buttons {
-    Rectangle left{};
-    Rectangle right{};
-    Rectangle throttle{};
-    Rectangle brake{};
-    Rectangle gearDrive{};
-    Rectangle gearReverse{};
-    Rectangle retry{};
-};
-
-struct ButtonLatch {
-    bool gearDrive = false;
-    bool gearReverse = false;
-    bool retry = false;
+    bool contactLatch = false;
 };
 
 struct InputFrame {
     float steer = 0.0f;
     float throttle = 0.0f;
     float brake = 0.0f;
+    bool startPressed = false;
+    bool retryPressed = false;
     bool gearDrivePressed = false;
     bool gearReversePressed = false;
-    bool retryPressed = false;
+    bool seatbeltPressed = false;
+    bool ignitionPressed = false;
+    bool headlightPressed = false;
+    bool wiperPressed = false;
+    bool leftSignalPressed = false;
+    bool rightSignalPressed = false;
+    bool hazardPressed = false;
+    bool parkingBrakePressed = false;
 };
 
 Vector2 VAdd(Vector2 a, Vector2 b) {
@@ -206,15 +216,15 @@ float Clamp01(float value) {
     return std::clamp(value, 0.0f, 1.0f);
 }
 
-float LerpFloat(float a, float b, float t) {
-    return a + (b - a) * Clamp01(t);
+float LerpFloat(float a, float b, float amount) {
+    return a + (b - a) * Clamp01(amount);
 }
 
-Vector3 LerpVector3(Vector3 a, Vector3 b, float t) {
+Vector3 LerpVector3(Vector3 a, Vector3 b, float amount) {
     return {
-        LerpFloat(a.x, b.x, t),
-        LerpFloat(a.y, b.y, t),
-        LerpFloat(a.z, b.z, t),
+        LerpFloat(a.x, b.x, amount),
+        LerpFloat(a.y, b.y, amount),
+        LerpFloat(a.z, b.z, amount),
     };
 }
 
@@ -222,10 +232,6 @@ float NormalizeAngle(float angle) {
     while (angle > kPi) angle -= 2.0f * kPi;
     while (angle < -kPi) angle += 2.0f * kPi;
     return angle;
-}
-
-float AngleDiff(float a, float b) {
-    return NormalizeAngle(a - b);
 }
 
 Vector2 RotateVector(Vector2 value, float angle) {
@@ -242,69 +248,66 @@ Vector2 ForwardFromAngle(float angle) {
 }
 
 std::array<Vector2, 4> GetCorners(const OrientedRect& rect) {
-    const Vector2 right = ForwardFromAngle(rect.angle);
-    const Vector2 up = {-right.y, right.x};
-
+    const Vector2 forward = ForwardFromAngle(rect.angle);
+    const Vector2 side = {-forward.y, forward.x};
     return {
-        VAdd(VAdd(rect.center, VScale(right, rect.half.x)), VScale(up, rect.half.y)),
-        VAdd(VSub(rect.center, VScale(right, rect.half.x)), VScale(up, rect.half.y)),
-        VSub(VSub(rect.center, VScale(right, rect.half.x)), VScale(up, rect.half.y)),
-        VSub(VAdd(rect.center, VScale(right, rect.half.x)), VScale(up, rect.half.y)),
+        VAdd(VAdd(rect.center, VScale(forward, rect.half.x)), VScale(side, rect.half.y)),
+        VAdd(VSub(rect.center, VScale(forward, rect.half.x)), VScale(side, rect.half.y)),
+        VSub(VSub(rect.center, VScale(forward, rect.half.x)), VScale(side, rect.half.y)),
+        VSub(VAdd(rect.center, VScale(forward, rect.half.x)), VScale(side, rect.half.y)),
     };
 }
 
-void ProjectOntoAxis(const std::array<Vector2, 4>& corners, Vector2 axis, float* outMin, float* outMax) {
+bool PointInsideRect(Vector2 point, const OrientedRect& rect, float margin = 0.0f) {
+    const Vector2 local = RotateVector(VSub(point, rect.center), -rect.angle);
+    return std::fabs(local.x) <= rect.half.x + margin &&
+           std::fabs(local.y) <= rect.half.y + margin;
+}
+
+void ProjectOntoAxis(const std::array<Vector2, 4>& corners, Vector2 axis,
+                     float* outMin, float* outMax) {
+    axis = Vector2Normalize(axis);
     float minValue = Vector2DotProduct(corners[0], axis);
     float maxValue = minValue;
-
     for (size_t i = 1; i < corners.size(); ++i) {
         const float projection = Vector2DotProduct(corners[i], axis);
         minValue = std::min(minValue, projection);
         maxValue = std::max(maxValue, projection);
     }
-
     *outMin = minValue;
     *outMax = maxValue;
-}
-
-bool OverlapOnAxis(const std::array<Vector2, 4>& aCorners,
-                   const std::array<Vector2, 4>& bCorners,
-                   Vector2 axis) {
-    axis = Vector2Normalize(axis);
-    float aMin = 0.0f;
-    float aMax = 0.0f;
-    float bMin = 0.0f;
-    float bMax = 0.0f;
-
-    ProjectOntoAxis(aCorners, axis, &aMin, &aMax);
-    ProjectOntoAxis(bCorners, axis, &bMin, &bMax);
-
-    return !(aMax < bMin || bMax < aMin);
 }
 
 bool Intersects(const OrientedRect& a, const OrientedRect& b) {
     const auto aCorners = GetCorners(a);
     const auto bCorners = GetCorners(b);
-
-    const std::array<Vector2, 4> axes = {
+    const std::array<Vector2, 4> edges = {
         VSub(aCorners[1], aCorners[0]),
         VSub(aCorners[3], aCorners[0]),
         VSub(bCorners[1], bCorners[0]),
         VSub(bCorners[3], bCorners[0]),
     };
 
-    for (const Vector2 edge : axes) {
+    for (const Vector2 edge : edges) {
         const Vector2 axis = {-edge.y, edge.x};
-        if (!OverlapOnAxis(aCorners, bCorners, axis)) {
-            return false;
-        }
+        float aMin = 0.0f;
+        float aMax = 0.0f;
+        float bMin = 0.0f;
+        float bMax = 0.0f;
+        ProjectOntoAxis(aCorners, axis, &aMin, &aMax);
+        ProjectOntoAxis(bCorners, axis, &bMin, &bMax);
+        if (aMax < bMin || bMax < aMin) return false;
     }
-
     return true;
 }
 
-Vector3 WorldPoint(Vector2 point, float y = 0.0f) {
-    return {point.x, y, point.y};
+Color Shade(Color color, float factor) {
+    return {
+        static_cast<unsigned char>(std::clamp(static_cast<int>(color.r * factor), 0, 255)),
+        static_cast<unsigned char>(std::clamp(static_cast<int>(color.g * factor), 0, 255)),
+        static_cast<unsigned char>(std::clamp(static_cast<int>(color.b * factor), 0, 255)),
+        color.a,
+    };
 }
 
 void DrawOrientedCube(Vector2 center, float centerY, Vector3 size, float angle, Color color) {
@@ -315,7 +318,8 @@ void DrawOrientedCube(Vector2 center, float centerY, Vector3 size, float angle, 
     rlPopMatrix();
 }
 
-void DrawOrientedCubeWires(Vector2 center, float centerY, Vector3 size, float angle, Color color) {
+void DrawOrientedCubeWires(Vector2 center, float centerY, Vector3 size, float angle,
+                           Color color) {
     rlPushMatrix();
     rlTranslatef(center.x, centerY, center.y);
     rlRotatef(angle * RAD2DEG, 0.0f, 1.0f, 0.0f);
@@ -323,304 +327,115 @@ void DrawOrientedCubeWires(Vector2 center, float centerY, Vector3 size, float an
     rlPopMatrix();
 }
 
-constexpr Vector3 kSunDir = {-0.4409586f, -0.7843265f, -0.4409586f};
-
-static Color ShadeColor(Color c, float brightness) {
-    return {
-        static_cast<unsigned char>(std::clamp(static_cast<int>(c.r * brightness), 0, 255)),
-        static_cast<unsigned char>(std::clamp(static_cast<int>(c.g * brightness), 0, 255)),
-        static_cast<unsigned char>(std::clamp(static_cast<int>(c.b * brightness), 0, 255)),
-        c.a,
-    };
-}
-
-static Color LerpColor(Color a, Color b, float t) {
-    t = std::clamp(t, 0.0f, 1.0f);
-    return {
-        static_cast<unsigned char>(a.r + (b.r - a.r) * t),
-        static_cast<unsigned char>(a.g + (b.g - a.g) * t),
-        static_cast<unsigned char>(a.b + (b.b - a.b) * t),
-        static_cast<unsigned char>(a.a + (b.a - a.a) * t),
-    };
-}
-
-static float FaceBrightness(Vector3 normal) {
-    const float facing = std::max(0.0f, Vector3DotProduct(normal, {-kSunDir.x, -kSunDir.y, -kSunDir.z}));
-    return 0.45f + 0.55f * facing;
-}
-
-static void DrawShadedCubeFace(Vector3 normal, Vector3 a, Vector3 b, Vector3 c, Vector3 d, Color color, float brightnessOverride = -1.0f) {
-    const float brightness = brightnessOverride >= 0.0f ? brightnessOverride : FaceBrightness(normal);
-    const Color shaded = ShadeColor(color, brightness);
-    rlColor4ub(shaded.r, shaded.g, shaded.b, shaded.a);
-    rlVertex3f(a.x, a.y, a.z);
-    rlVertex3f(b.x, b.y, b.z);
-    rlVertex3f(c.x, c.y, c.z);
-    rlVertex3f(d.x, d.y, d.z);
-}
-
-static void DrawShadedCubeLocal(Vector3 size, Color color, float headingRadians) {
-    const float hx = size.x * 0.5f;
-    const float hy = size.y * 0.5f;
-    const float hz = size.z * 0.5f;
-
-    const Vector2 rotatedX = RotateVector({1.0f, 0.0f}, headingRadians);
-    const Vector2 rotatedZ = RotateVector({0.0f, 1.0f}, headingRadians);
-    const Vector3 worldRight = {rotatedX.x, 0.0f, rotatedX.y};
-    const Vector3 worldForward = {rotatedZ.x, 0.0f, rotatedZ.y};
-    const Vector3 worldLeft = {-worldRight.x, -worldRight.y, -worldRight.z};
-    const Vector3 worldBack = {-worldForward.x, -worldForward.y, -worldForward.z};
-
-    rlBegin(RL_QUADS);
-
-    DrawShadedCubeFace({0.0f, 1.0f, 0.0f},
-        {-hx, hy, -hz}, {-hx, hy, hz}, {hx, hy, hz}, {hx, hy, -hz}, color, 1.0f);
-    DrawShadedCubeFace({0.0f, -1.0f, 0.0f},
-        {-hx, -hy, hz}, {-hx, -hy, -hz}, {hx, -hy, -hz}, {hx, -hy, hz}, color, 0.4f);
-    DrawShadedCubeFace(worldForward,
-        {-hx, -hy, hz}, {hx, -hy, hz}, {hx, hy, hz}, {-hx, hy, hz}, color);
-    DrawShadedCubeFace(worldBack,
-        {hx, -hy, -hz}, {-hx, -hy, -hz}, {-hx, hy, -hz}, {hx, hy, -hz}, color);
-    DrawShadedCubeFace(worldRight,
-        {hx, -hy, hz}, {hx, -hy, -hz}, {hx, hy, -hz}, {hx, hy, hz}, color);
-    DrawShadedCubeFace(worldLeft,
-        {-hx, -hy, -hz}, {-hx, -hy, hz}, {-hx, hy, hz}, {-hx, hy, -hz}, color);
-
-    rlEnd();
-}
-
-void DrawShadedCube(Vector3 position, Vector3 size, Color color) {
-    rlPushMatrix();
-    rlTranslatef(position.x, position.y, position.z);
-    DrawShadedCubeLocal(size, color, 0.0f);
-    rlPopMatrix();
-}
-
-void DrawShadedOrientedCube(Vector2 center, float centerY, Vector3 size, float angle, Color color) {
-    rlPushMatrix();
-    rlTranslatef(center.x, centerY, center.y);
-    rlRotatef(angle * RAD2DEG, 0.0f, 1.0f, 0.0f);
-    DrawShadedCubeLocal(size, color, angle);
-    rlPopMatrix();
-}
-
-void DrawCarWheel(Vector2 center, float axleHeadingRadians) {
-    const Vector2 axle2 = RotateVector({0.0f, 1.0f}, axleHeadingRadians);
-    const Vector3 axleDir = Vector3Normalize({axle2.x, 0.0f, axle2.y});
-    const Vector3 hub = {center.x, 0.28f, center.y};
-    const Vector3 tireStart = Vector3Subtract(hub, Vector3Scale(axleDir, 0.12f));
-    const Vector3 rimStart = Vector3Subtract(hub, Vector3Scale(axleDir, 0.13f));
-    DrawCylinderEx(tireStart, Vector3Add(tireStart, Vector3Scale(axleDir, 0.24f)), 0.34f, 0.34f, 14, {24, 26, 30, 255});
-    DrawCylinderEx(rimStart, Vector3Add(rimStart, Vector3Scale(axleDir, 0.26f)), 0.17f, 0.17f, 10, {150, 155, 165, 255});
-}
-
-void DrawSimpleCar(Vector2 position, float heading, Color bodyColor) {
-    const Color cabinColor = ShadeColor(bodyColor, 0.55f);
-    DrawShadedOrientedCube(position, 0.5f, {2.0f, 1.0f, 1.85f}, heading, bodyColor);
-    DrawShadedOrientedCube(
-        VAdd(position, RotateVector({-0.3f, 0.0f}, heading)),
-        1.02f,
-        {1.29f, 0.6f, 1.55f},
-        heading,
-        cabinColor
-    );
-
-    // Fake neon rim light: thin bright strips along the body top edge perimeter.
-    const Color rim = {0xaa, 0xb8, 0xff, 255};
-    const float rimY = 1.0f + 0.02f;
-    DrawOrientedCube(VAdd(position, RotateVector({0.0f, 0.925f}, heading)), rimY, {2.0f, 0.02f, 0.05f}, heading, rim);
-    DrawOrientedCube(VAdd(position, RotateVector({0.0f, -0.925f}, heading)), rimY, {2.0f, 0.02f, 0.05f}, heading, rim);
-    DrawOrientedCube(VAdd(position, RotateVector({0.98f, 0.0f}, heading)), rimY, {0.05f, 0.02f, 1.85f}, heading, rim);
-    DrawOrientedCube(VAdd(position, RotateVector({-0.98f, 0.0f}, heading)), rimY, {0.05f, 0.02f, 1.85f}, heading, rim);
-
-    const Vector2 forward = ForwardFromAngle(heading);
-    const Vector2 side = {-forward.y, forward.x};
-    const std::array<Vector2, 4> wheelCenters = {
-        VAdd(VAdd(position, VScale(forward, 1.05f)), VScale(side, 0.85f)),
-        VAdd(VAdd(position, VScale(forward, 1.05f)), VScale(side, -0.85f)),
-        VAdd(VAdd(position, VScale(forward, -1.05f)), VScale(side, 0.85f)),
-        VAdd(VAdd(position, VScale(forward, -1.05f)), VScale(side, -0.85f)),
-    };
-    for (const Vector2& wheel : wheelCenters) {
-        DrawCarWheel(wheel, heading);
-    }
-}
-
-Rectangle MakeCenteredRect(float centerX, float centerY, float width, float height) {
-    return {centerX - width * 0.5f, centerY - height * 0.5f, width, height};
-}
-
-class ParkingMasterGame {
+class DobongExamSimulator {
   public:
-    ParkingMasterGame() {
+    DobongExamSimulator() {
 #if defined(PLATFORM_WEB)
         SetConfigFlags(FLAG_VSYNC_HINT);
 #else
         SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
 #endif
-        InitWindow(1280, 720, "Parking Master WebASM");
+        SetTraceLogLevel(LOG_WARNING);
+        InitWindow(1280, 720, "Dobong Driving Skills Test Simulator");
         SetTargetFPS(60);
         SetExitKey(KEY_NULL);
 
-        camera_.position = {0.0f, 4.0f, 8.0f};
-        camera_.target = {0.0f, 1.0f, 0.0f};
+        camera_.position = {-43.0f, 1.35f, 30.0f};
+        camera_.target = {-30.0f, 0.8f, 30.0f};
         camera_.up = {0.0f, 1.0f, 0.0f};
-        camera_.fovy = 60.0f;
+        camera_.fovy = 75.0f;
         camera_.projection = CAMERA_PERSPECTIVE;
 
         BuildCourse();
-        RestartRun();
-        InitCockpitRenderTextures();
-        InitGroundTexture();
+        InitRenderTargets();
+        InitGround();
+        ResetExam();
     }
 
-    ~ParkingMasterGame() {
-        UnloadCockpitRenderTextures();
-        UnloadGroundTexture();
+    ~DobongExamSimulator() {
+        UnloadRenderTargets();
+        if (groundReady_) {
+            UnloadModel(groundModel_);
+            UnloadTexture(groundTexture_);
+        }
         CloseWindow();
     }
 
     void Tick() {
         SyncCanvasSize();
-
-        const float dt = std::min(GetFrameTime(), 1.0f / 20.0f);
-        elapsedSceneTime_ += dt;
-        collisionFlash_ = std::max(0.0f, collisionFlash_ - dt);
+        const double now = GetTime();
+        const float clockDt =
+            lastWallClock_ < 0.0
+                ? 0.0f
+                : std::max(0.0f, static_cast<float>(now - lastWallClock_));
+        lastWallClock_ = now;
+        const float physicsDt = std::min(clockDt, 1.0f / 20.0f);
+        sceneTime_ += physicsDt;
+        eventTimer_ = std::max(0.0f, eventTimer_ - clockDt);
+        collisionFlash_ = std::max(0.0f, collisionFlash_ - physicsDt);
 
         const InputFrame input = GatherInput();
-        Update(dt, input);
-        UpdateCamera(dt);
-        PushWebOverlayState();
-        Draw(input);
+        Update(physicsDt, clockDt, input);
+        UpdateCamera(physicsDt);
+        PushWebState();
+        Draw();
     }
 
   private:
+    void AddRoad(Vector2 center, Vector2 half, float angle = 0.0f,
+                 bool centerLine = true, bool edgeLines = true) {
+        roads_.push_back({{center, half, angle}, centerLine, edgeLines});
+    }
+
+    void AddBuilding(Vector2 center, Vector2 half, float height, Color color) {
+        obstacles_.push_back({{center, half, 0.0f}, height, color, ObstacleType::Building});
+    }
+
     void BuildCourse() {
+        roads_.clear();
         obstacles_.clear();
-        paintedSlots_.clear();
-        stages_.clear();
+        route_.clear();
 
-        const Color curbColor = {46, 37, 71, 255};
-        const Color parkedBlue = kIndigo;
-        const Color parkedCoral = kHotMagenta;
-        const Color parkedSteel = kTeal;
-        const Color coneColor = kRetroOrange;
-
-        AddCurb({0.0f, -18.4f}, {24.0f, 0.6f}, 0.0f, curbColor);
-        AddCurb({0.0f, 18.4f}, {24.0f, 0.6f}, 0.0f, curbColor);
-        AddCurb({-23.4f, 0.0f}, {0.6f, 18.4f}, 0.0f, curbColor);
-        AddCurb({23.4f, 0.0f}, {0.6f, 18.4f}, 0.0f, curbColor);
-        AddCurb({0.0f, -12.8f}, {7.4f, 0.4f}, 0.0f, curbColor);
-
-        const std::array<float, 6> slotRows = {-12.0f, -7.0f, -2.0f, 3.0f, 8.0f, 13.0f};
-        for (float row : slotRows) {
-            paintedSlots_.push_back({{-15.6f, row}, {3.2f, 1.8f}, 0.0f});
-            paintedSlots_.push_back({{15.6f, row}, {3.2f, 1.8f}, 0.0f});
+        // The first Dobong pack follows the public 1/2-class course dimensions and
+        // the recognizable compact east-side loop seen in the center's site layout.
+        for (const auto& road : driving_test_data::dobong_v1::kRoads) {
+            AddRoad({road.centerX, road.centerY},
+                    {road.halfLength, road.halfWidth},
+                    road.angleRadians, road.centerLine, road.edgeLines);
         }
-        paintedSlots_.push_back({{0.0f, -15.3f}, {3.4f, 1.7f}, 0.0f});
 
-        AddParkedCar({-15.6f, -12.0f}, 0.0f, parkedSteel);
-        AddParkedCar({-15.6f, 3.0f}, 0.0f, parkedBlue);
-        AddParkedCar({-15.6f, 13.0f}, 0.0f, parkedCoral);
-        AddParkedCar({15.6f, -7.0f}, kPi, parkedBlue);
-        AddParkedCar({15.6f, 3.0f}, kPi, parkedSteel);
-        AddParkedCar({15.6f, 8.0f}, kPi, parkedCoral);
-        AddParkedCar({-6.7f, -15.3f}, 0.0f, parkedBlue);
-        AddParkedCar({6.7f, -15.3f}, kPi, parkedSteel);
+        parkingZone_ = {{-12.0f, -20.0f}, {3.0f, 1.62f}, -kPi * 0.5f};
+        finishZone_ = {{27.0f, 30.0f}, {3.3f, 2.6f}, 0.0f};
 
-        AddCone({-4.2f, 15.8f}, coneColor);
-        AddCone({4.2f, 15.8f}, coneColor);
-        AddCone({-2.0f, 11.4f}, coneColor);
-        AddCone({2.0f, 11.4f}, coneColor);
+        for (const auto& point : driving_test_data::dobong_v1::kRoute) {
+            route_.push_back({point.x, point.y});
+        }
 
-        stages_.push_back({
-            {4.0f, 9.5f},
-            0.12f,
-            {{{15.6f, 13.0f}, {3.2f, 1.8f}, 0.0f}, "E6"},
-            "Stage 1 / Open Bay",
-            "Keep the green bay in view, stop fully inside it, then hold Brake until Parking Lock reaches 100%."
-        });
+        AddBuilding({-3.0f, 43.0f}, {18.0f, 5.0f}, 6.4f, {224, 228, 221, 255});
+        AddBuilding({51.5f, 27.0f}, {4.2f, 7.0f}, 21.0f, {215, 219, 211, 255});
+        AddBuilding({51.5f, 3.0f}, {4.2f, 7.0f}, 24.0f, {220, 223, 215, 255});
+        AddBuilding({51.5f, -22.0f}, {4.2f, 7.0f}, 19.0f, {211, 216, 208, 255});
+        obstacles_.push_back({{{-55.0f, 0.0f}, {1.0f, 43.0f}, 0.0f}, 5.0f,
+                              {116, 128, 127, 255}, ObstacleType::Barrier});
 
-        stages_.push_back({
-            {-4.0f, 6.5f},
-            -2.55f,
-            {{{-15.6f, -2.0f}, {3.2f, 1.8f}, 0.0f}, "W3"},
-            "Stage 2 / Tight Fit",
-            "Aim left into the west bay, straighten the wheel, then hold Brake to lock the stage."
-        });
-
-        stages_.push_back({
-            {7.4f, -11.7f},
-            kPi,
-            {{{0.0f, -15.3f}, {3.4f, 1.7f}, 0.0f}, "P1"},
-            "Stage 3 / Parallel Spot",
-            "Pass the slot, shift to R, back in between the sedans, and stop inside the box."
-        });
-    }
-
-    void RestartRun() {
-        totalCollisions_ = 0;
-        runTimer_ = 0.0f;
-        currentStageIndex_ = 0;
-        stageClearTimer_ = 0.0f;
-        parkHoldTimer_ = 0.0f;
-        gameWon_ = false;
-        gear_ = TransmissionGear::Drive;
-        ResetCurrentStage();
-    }
-
-    void ResetCurrentStage() {
-        const Stage& stage = stages_[currentStageIndex_];
-        car_.heading = stage.spawnAngle;
-        car_.position = stage.spawn;
-        car_.speed = 0.0f;
-        car_.steering = 0.0f;
-        car_.collisionLatch = false;
-        parkHoldTimer_ = 0.0f;
-        gear_ = TransmissionGear::Drive;
-
-        const std::array<Vector2, 11> spawnOffsets = {{
-            {0.0f, 0.0f},
-            {0.0f, -1.2f},
-            {0.0f, 1.2f},
-            {-1.0f, 0.0f},
-            {1.0f, 0.0f},
-            {-1.2f, -0.8f},
-            {1.2f, -0.8f},
-            {-1.2f, 0.8f},
-            {1.2f, 0.8f},
-            {0.0f, -2.1f},
-            {0.0f, 2.1f},
+        const std::array<Vector2, 20> conePositions = {{
+            {-48.0f, 25.4f}, {-42.0f, 25.4f}, {-36.0f, 25.4f}, {-30.0f, 25.4f},
+            {-18.0f, 25.4f}, {-10.0f, 25.4f}, {7.3f, 25.0f}, {16.7f, 21.0f},
+            {16.7f, 14.0f}, {16.7f, -4.0f}, {7.0f, -15.5f}, {0.0f, -15.5f},
+            {-20.5f, -15.5f}, {-29.5f, -18.0f}, {-20.0f, -35.5f}, {-8.0f, -35.5f},
+            {8.0f, -35.5f}, {24.0f, -35.5f}, {35.5f, -28.0f}, {35.5f, -12.0f},
         }};
-
-        for (const Vector2& localOffset : spawnOffsets) {
-            car_.position = VAdd(stage.spawn, RotateVector(localOffset, stage.spawnAngle));
-            if (!CheckCourseCollision()) {
-                return;
-            }
+        for (const Vector2 position : conePositions) {
+            obstacles_.push_back({{position, {0.27f, 0.27f}, 0.0f}, 0.72f,
+                                  {225, 104, 31, 255}, ObstacleType::Cone});
         }
-
-        car_.position = stage.spawn;
     }
 
-    void AddParkedCar(Vector2 center, float angle, Color color) {
-        obstacles_.push_back({{center, {2.15f, 1.05f}, angle}, 1.5f, color, ObstacleType::ParkedCar});
-    }
-
-    void AddCurb(Vector2 center, Vector2 half, float angle, Color color) {
-        obstacles_.push_back({{center, half, angle}, 0.35f, color, ObstacleType::Curb});
-    }
-
-    void AddCone(Vector2 center, Color color) {
-        obstacles_.push_back({{center, {0.35f, 0.35f}, 0.0f}, 0.8f, color, ObstacleType::Cone});
-    }
-
-    void InitCockpitRenderTextures() {
-        mirrorRear_ = LoadRenderTexture(256, 80);
-        mirrorLeft_ = LoadRenderTexture(112, 112);
-        mirrorRight_ = LoadRenderTexture(112, 112);
+    void InitRenderTargets() {
+        mirrorRear_ = LoadRenderTexture(384, 112);
+        mirrorLeft_ = LoadRenderTexture(300, 150);
+        mirrorRight_ = LoadRenderTexture(300, 150);
         mirrorsReady_ = mirrorRear_.id != 0 && mirrorLeft_.id != 0 && mirrorRight_.id != 0;
-
         if (mirrorsReady_) {
             SetTextureFilter(mirrorRear_.texture, TEXTURE_FILTER_BILINEAR);
             SetTextureFilter(mirrorLeft_.texture, TEXTURE_FILTER_BILINEAR);
@@ -628,7 +443,7 @@ class ParkingMasterGame {
         }
     }
 
-    void UnloadCockpitRenderTextures() {
+    void UnloadRenderTargets() {
         if (!mirrorsReady_) return;
         UnloadRenderTexture(mirrorRear_);
         UnloadRenderTexture(mirrorLeft_);
@@ -636,30 +451,23 @@ class ParkingMasterGame {
         mirrorsReady_ = false;
     }
 
-    void InitGroundTexture() {
+    void InitGround() {
         constexpr int kSize = 256;
-        Image image = GenImageColor(kSize, kSize, kNightAsphalt);
+        Image image = GenImageColor(kSize, kSize, kGrass);
         Color* pixels = static_cast<Color*>(image.data);
-
         for (int y = 0; y < kSize; ++y) {
             for (int x = 0; x < kSize; ++x) {
-                unsigned int hash = static_cast<unsigned int>(x) * 374761393u + static_cast<unsigned int>(y) * 668265263u;
+                unsigned int hash = static_cast<unsigned int>(x) * 374761393u +
+                                    static_cast<unsigned int>(y) * 668265263u;
                 hash = (hash ^ (hash >> 13)) * 1274126177u;
-                hash = hash ^ (hash >> 16);
-                const int jitter = static_cast<int>(hash % 11u) - 5;
-
+                const int jitter = static_cast<int>(hash % 15u) - 7;
                 Color& pixel = pixels[y * kSize + x];
-                pixel.r = static_cast<unsigned char>(std::clamp(static_cast<int>(kNightAsphalt.r) + jitter, 0, 255));
-                pixel.g = static_cast<unsigned char>(std::clamp(static_cast<int>(kNightAsphalt.g) + jitter, 0, 255));
-                pixel.b = static_cast<unsigned char>(std::clamp(static_cast<int>(kNightAsphalt.b) + jitter, 0, 255));
-                pixel.a = 255;
-
-                // Sparse neon speckle flecks (~2%): alternate cyan / magenta.
-                if (hash % 50u == 0u) {
-                    pixel.r = kNeonCyan.r; pixel.g = kNeonCyan.g; pixel.b = kNeonCyan.b;
-                } else if (hash % 53u == 0u) {
-                    pixel.r = kHotMagenta.r; pixel.g = kHotMagenta.g; pixel.b = kHotMagenta.b;
-                }
+                pixel.r = static_cast<unsigned char>(
+                    std::clamp(static_cast<int>(kGrass.r) + jitter, 0, 255));
+                pixel.g = static_cast<unsigned char>(
+                    std::clamp(static_cast<int>(kGrass.g) + jitter, 0, 255));
+                pixel.b = static_cast<unsigned char>(
+                    std::clamp(static_cast<int>(kGrass.b) + jitter / 2, 0, 255));
             }
         }
 
@@ -668,28 +476,138 @@ class ParkingMasterGame {
         SetTextureFilter(groundTexture_, TEXTURE_FILTER_BILINEAR);
         SetTextureWrap(groundTexture_, TEXTURE_WRAP_REPEAT);
 
-        groundMesh_ = GenMeshPlane(50.0f, 40.0f, 1, 1);
-        for (int i = 0; i < groundMesh_.vertexCount * 2; ++i) {
-            groundMesh_.texcoords[i] *= 8.0f;
-        }
-
-        groundModel_ = LoadModelFromMesh(groundMesh_);
+        Mesh mesh = GenMeshPlane(kWorldHalfWidth * 2.0f, kWorldHalfHeight * 2.0f, 1, 1);
+        for (int i = 0; i < mesh.vertexCount * 2; ++i) mesh.texcoords[i] *= 12.0f;
+        groundModel_ = LoadModelFromMesh(mesh);
         groundModel_.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = groundTexture_;
         groundReady_ = true;
     }
 
-    void UnloadGroundTexture() {
-        if (!groundReady_) return;
-        UnloadModel(groundModel_);
-        UnloadTexture(groundTexture_);
-        groundReady_ = false;
+    void ResetExam() {
+        phase_ = ExamPhase::Briefing;
+        car_.position = {-44.0f, 30.0f};
+        car_.heading = 0.0f;
+        car_.speed = 0.0f;
+        car_.steering = 0.0f;
+        car_.contactLatch = false;
+        gear_ = TransmissionGear::Park;
+        score_ = dobong_exam::kInitialScore;
+        courseStep_ = 0;
+        precheckStep_ = 0;
+        precheckTimer_ = 0.0f;
+        examTimer_ = 0.0f;
+        stepTimer_ = 0.0f;
+        hillStopTimer_ = 0.0f;
+        hillAttemptTimer_ = 0.0f;
+        hillAttemptStarted_ = false;
+        hillRollbackOrigin_ = -100.0f;
+        hillRollbackPenalty_ = false;
+        hillComplete_ = false;
+        emergencyTriggered_ = false;
+        emergencyActive_ = false;
+        emergencyStopped_ = false;
+        emergencyPenalty_ = false;
+        emergencyTimer_ = 0.0f;
+        stoppedEmergencyTimer_ = 0.0f;
+        trafficLight_ = 0;
+        trafficTimer_ = 0.0f;
+        trafficArmed_ = false;
+        trafficStopped_ = false;
+        parkingTimer_ = 0.0f;
+        parkingComplete_ = false;
+        parkingOvertimePenalty_ = false;
+        accelerationStarted_ = false;
+        accelerationMaxKph_ = 0.0f;
+        speedPenaltyLatch_ = false;
+        ignitionPenaltyLatch_ = false;
+        nextOvertimePenaltyAt_ = dobong_exam::FirstOvertimePenaltyAt();
+        finishSignalPenalty_ = false;
+        resultPassed_ = false;
+        seatbelt_ = false;
+        ignition_ = false;
+        parkingBrake_ = true;
+        headlights_ = 0;
+        wiper_ = false;
+        leftSignal_ = false;
+        rightSignal_ = false;
+        hazard_ = false;
+        eventText_ = "도봉 코스가 준비되었습니다.";
+        eventTimer_ = 3.0f;
+        lastSpoken_.clear();
+    }
+
+    void BeginPrecheck() {
+        phase_ = ExamPhase::Precheck;
+        precheckStep_ = 0;
+        precheckTimer_ = 0.0f;
+        eventText_ = "전자채점 기본조작 시험을 시작합니다.";
+        eventTimer_ = 4.0f;
+        SpeakCurrentInstruction();
+    }
+
+    void BeginDriving() {
+        phase_ = ExamPhase::Running;
+        courseStep_ = 0;
+        examTimer_ = 0.0f;
+        stepTimer_ = 0.0f;
+        parkingBrake_ = true;
+        eventText_ = "기본조작 확인 완료 · 100점";
+        eventTimer_ = 4.0f;
+        SpeakCurrentInstruction();
+    }
+
+    void FinishExam() {
+        car_.speed = 0.0f;
+        phase_ = ExamPhase::Finished;
+        resultPassed_ = dobong_exam::IsPassingScore(score_);
+        eventText_ = resultPassed_ ? "합격 기준을 충족했습니다." : "80점 미만으로 불합격입니다.";
+        eventTimer_ = 999.0f;
+        Speak(resultPassed_ ? "시험이 종료되었습니다. 합격입니다."
+                            : "시험이 종료되었습니다. 불합격입니다.");
+    }
+
+    void Disqualify(const std::string& reason) {
+        if (phase_ == ExamPhase::Disqualified) return;
+        car_.speed = 0.0f;
+        phase_ = ExamPhase::Disqualified;
+        resultPassed_ = false;
+        eventText_ = "실격 · " + reason;
+        eventTimer_ = 999.0f;
+        Speak("실격입니다. " + reason);
+    }
+
+    void ApplyPenalty(dobong_exam::Penalty penalty, const std::string& reason) {
+        const int points = dobong_exam::Points(penalty);
+        score_ = dobong_exam::ApplyPenalty(score_, penalty);
+        char message[196];
+        std::snprintf(message, sizeof(message), "-%d점 · %s", points, reason.c_str());
+        eventText_ = message;
+        eventTimer_ = 5.0f;
+        Speak(eventText_);
+    }
+
+    void AdvanceStep(int nextStep) {
+        courseStep_ = nextStep;
+        stepTimer_ = 0.0f;
+        SpeakCurrentInstruction();
+    }
+
+    void Speak(const std::string& message) {
+        if (message.empty() || message == lastSpoken_) return;
+        lastSpoken_ = message;
+        WebSpeak(message.c_str());
+    }
+
+    void SpeakCurrentInstruction() {
+        Speak(InstructionText());
     }
 
     void SyncCanvasSize() {
 #if defined(PLATFORM_WEB)
         double cssWidth = 0.0;
         double cssHeight = 0.0;
-        if (emscripten_get_element_css_size("#canvas", &cssWidth, &cssHeight) == EMSCRIPTEN_RESULT_SUCCESS) {
+        if (emscripten_get_element_css_size("#canvas", &cssWidth, &cssHeight) ==
+            EMSCRIPTEN_RESULT_SUCCESS) {
             const int width = std::max(1, static_cast<int>(std::round(cssWidth)));
             const int height = std::max(1, static_cast<int>(std::round(cssHeight)));
             if (width != GetScreenWidth() || height != GetScreenHeight()) {
@@ -700,1083 +618,1431 @@ class ParkingMasterGame {
 #endif
     }
 
-    Buttons LayoutButtons() const {
-        const float width = static_cast<float>(GetScreenWidth());
-        const float height = static_cast<float>(GetScreenHeight());
-        const bool portrait = height > width;
-
-        const float pad = portrait ? 14.0f : 18.0f;
-        const float button = portrait ? std::min(width * 0.23f, 128.0f) : std::min(height * 0.19f, 114.0f);
-        const float medium = portrait ? std::min(width * 0.18f, 108.0f) : std::min(height * 0.14f, 92.0f);
-
-        Buttons buttons{};
-
-        if (portrait) {
-            buttons.left = MakeCenteredRect(pad + button * 0.5f, height - pad - button * 0.5f, button, button);
-            buttons.right = MakeCenteredRect(pad + button * 1.62f, height - pad - button * 0.5f, button, button);
-            buttons.brake = MakeCenteredRect(width - pad - button * 1.62f, height - pad - button * 0.5f, button, button);
-            buttons.throttle = MakeCenteredRect(width - pad - button * 0.5f, height - pad - button * 0.5f, button, button);
-            buttons.gearDrive = MakeCenteredRect(width * 0.5f - medium * 0.58f, height - pad - button * 0.66f, medium, medium * 0.78f);
-            buttons.gearReverse = MakeCenteredRect(width * 0.5f + medium * 0.58f, height - pad - button * 0.66f, medium, medium * 0.78f);
-            buttons.retry = MakeCenteredRect(width - pad - medium * 0.5f, pad + medium * 0.5f, medium, medium * 0.78f);
-        } else {
-            buttons.left = MakeCenteredRect(pad + button * 0.5f, height - pad - button * 0.5f, button, button);
-            buttons.right = MakeCenteredRect(pad + button * 1.62f, height - pad - button * 0.5f, button, button);
-            buttons.brake = MakeCenteredRect(width - pad - button * 1.62f, height - pad - button * 0.5f, button, button);
-            buttons.throttle = MakeCenteredRect(width - pad - button * 0.5f, height - pad - button * 0.5f, button, button);
-            buttons.gearDrive = MakeCenteredRect(width * 0.5f - medium * 0.58f, height - pad - button * 0.66f, medium, medium * 0.78f);
-            buttons.gearReverse = MakeCenteredRect(width * 0.5f + medium * 0.58f, height - pad - button * 0.66f, medium, medium * 0.78f);
-            buttons.retry = MakeCenteredRect(width - pad - medium * 0.5f, pad + medium * 0.5f, medium, medium * 0.78f);
-        }
-
-        return buttons;
-    }
-
-    bool PointerDownInRect(const Rectangle& bounds) const {
-        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), bounds)) {
-            return true;
-        }
-
-        const int touchCount = GetTouchPointCount();
-        for (int i = 0; i < touchCount; ++i) {
-            if (CheckCollisionPointRec(GetTouchPosition(i), bounds)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    InputFrame GatherInput() {
-        buttons_ = LayoutButtons();
-
+    InputFrame GatherInput() const {
         InputFrame input{};
         if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) input.steer -= 1.0f;
         if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) input.steer += 1.0f;
         if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) input.throttle = 1.0f;
-        if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_SPACE)) input.brake = 1.0f;
-        input.gearDrivePressed = IsKeyPressed(KEY_E);
-        input.gearReversePressed = IsKeyPressed(KEY_Q);
+        if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_SPACE)) {
+            input.brake = 1.0f;
+        }
+
+        input.startPressed = IsKeyPressed(KEY_ENTER);
+        input.retryPressed = IsKeyPressed(KEY_R);
+        input.gearDrivePressed = IsKeyPressed(KEY_ONE);
+        input.gearReversePressed = IsKeyPressed(KEY_TWO);
+        input.seatbeltPressed = IsKeyPressed(KEY_K);
+        input.ignitionPressed = IsKeyPressed(KEY_I);
+        input.headlightPressed = IsKeyPressed(KEY_L);
+        input.wiperPressed = IsKeyPressed(KEY_V);
+        input.leftSignalPressed = IsKeyPressed(KEY_Z);
+        input.rightSignalPressed = IsKeyPressed(KEY_X);
+        input.hazardPressed = IsKeyPressed(KEY_C);
+        input.parkingBrakePressed = IsKeyPressed(KEY_B);
 
 #if defined(PLATFORM_WEB)
         input.steer += WebSteerInput();
         input.throttle = std::max(input.throttle, WebThrottleInput());
         input.brake = std::max(input.brake, WebBrakeInput());
-        input.gearDrivePressed = input.gearDrivePressed || WebConsumeGearDrivePressed();
-        input.gearReversePressed = input.gearReversePressed || WebConsumeGearReversePressed();
-        input.retryPressed = IsKeyPressed(KEY_R) || WebConsumeRetryPressed();
-#else
-        if (PointerDownInRect(buttons_.left)) input.steer -= 1.0f;
-        if (PointerDownInRect(buttons_.right)) input.steer += 1.0f;
-        if (PointerDownInRect(buttons_.throttle)) input.throttle = 1.0f;
-        if (PointerDownInRect(buttons_.brake)) input.brake = 1.0f;
-
-        const bool driveHeld = PointerDownInRect(buttons_.gearDrive);
-        const bool reverseHeld = PointerDownInRect(buttons_.gearReverse);
-        const bool retryHeld = PointerDownInRect(buttons_.retry);
-
-        input.gearDrivePressed = input.gearDrivePressed || (driveHeld && !buttonLatch_.gearDrive);
-        input.gearReversePressed = input.gearReversePressed || (reverseHeld && !buttonLatch_.gearReverse);
-        input.retryPressed = IsKeyPressed(KEY_R) || (retryHeld && !buttonLatch_.retry);
-
-        buttonLatch_.gearDrive = driveHeld;
-        buttonLatch_.gearReverse = reverseHeld;
-        buttonLatch_.retry = retryHeld;
+        input.startPressed = input.startPressed || WebConsumePressed("startPressed");
+        input.retryPressed = input.retryPressed || WebConsumePressed("retryPressed");
+        input.gearDrivePressed =
+            input.gearDrivePressed || WebConsumePressed("gearDrivePressed");
+        input.gearReversePressed =
+            input.gearReversePressed || WebConsumePressed("gearReversePressed");
+        input.seatbeltPressed =
+            input.seatbeltPressed || WebConsumePressed("seatbeltPressed");
+        input.ignitionPressed =
+            input.ignitionPressed || WebConsumePressed("ignitionPressed");
+        input.headlightPressed =
+            input.headlightPressed || WebConsumePressed("headlightPressed");
+        input.wiperPressed = input.wiperPressed || WebConsumePressed("wiperPressed");
+        input.leftSignalPressed =
+            input.leftSignalPressed || WebConsumePressed("leftSignalPressed");
+        input.rightSignalPressed =
+            input.rightSignalPressed || WebConsumePressed("rightSignalPressed");
+        input.hazardPressed = input.hazardPressed || WebConsumePressed("hazardPressed");
+        input.parkingBrakePressed =
+            input.parkingBrakePressed || WebConsumePressed("parkingBrakePressed");
 #endif
         input.steer = std::clamp(input.steer, -1.0f, 1.0f);
         return input;
+    }
+
+    void HandleToggleInputs(const InputFrame& input) {
+        if (input.seatbeltPressed) seatbelt_ = !seatbelt_;
+        if (input.ignitionPressed) ignition_ = !ignition_;
+        if (input.headlightPressed) headlights_ = (headlights_ + 1) % 3;
+        if (input.wiperPressed) wiper_ = !wiper_;
+
+        if (input.leftSignalPressed) {
+            const bool turnOn = !leftSignal_;
+            leftSignal_ = turnOn;
+            rightSignal_ = false;
+            if (turnOn) hazard_ = false;
+        }
+        if (input.rightSignalPressed) {
+            const bool turnOn = !rightSignal_;
+            rightSignal_ = turnOn;
+            leftSignal_ = false;
+            if (turnOn) hazard_ = false;
+        }
+        if (input.hazardPressed) {
+            hazard_ = !hazard_;
+            if (hazard_) {
+                leftSignal_ = false;
+                rightSignal_ = false;
+            }
+        }
+        if (input.parkingBrakePressed && std::fabs(car_.speed) < 0.3f) {
+            parkingBrake_ = !parkingBrake_;
+        }
+    }
+
+    void Update(float physicsDt, float clockDt, const InputFrame& input) {
+        if (input.retryPressed &&
+            (phase_ == ExamPhase::Finished || phase_ == ExamPhase::Disqualified)) {
+            ResetExam();
+            return;
+        }
+
+        if (phase_ == ExamPhase::Briefing) {
+            if (input.startPressed) BeginPrecheck();
+            return;
+        }
+
+        HandleToggleInputs(input);
+
+        if (phase_ == ExamPhase::Precheck) {
+            UpdatePrecheck(clockDt, input);
+            return;
+        }
+
+        if (phase_ == ExamPhase::Finished || phase_ == ExamPhase::Disqualified) {
+            car_.speed = LerpFloat(car_.speed, 0.0f, physicsDt * 6.0f);
+            return;
+        }
+
+        if (!seatbelt_) {
+            Disqualify("시험 중 좌석안전띠를 해제했습니다.");
+            return;
+        }
+
+        if (!ignition_) {
+            if (!ignitionPenaltyLatch_) {
+                ApplyPenalty(dobong_exam::Penalty::EngineState,
+                             "시험 중 시동 상태를 유지하지 못했습니다.");
+            }
+            ignitionPenaltyLatch_ = true;
+        } else {
+            ignitionPenaltyLatch_ = false;
+        }
+
+        examTimer_ += clockDt;
+        stepTimer_ += clockDt;
+        while (examTimer_ >= nextOvertimePenaltyAt_) {
+            ApplyPenalty(dobong_exam::Penalty::TimeOrSpeed,
+                         "전체 지정시간을 5초 초과했습니다.");
+            nextOvertimePenaltyAt_ +=
+                dobong_exam::kOvertimePenaltyIntervalSeconds;
+        }
+        const CarState previous = car_;
+        UpdateVehicle(physicsDt, input);
+
+        const CollisionKind collision = DetectCollision();
+        if (collision == CollisionKind::SolidObstacle) {
+            car_ = previous;
+            car_.speed = 0.0f;
+            collisionFlash_ = 0.42f;
+            Disqualify("안전사고 또는 연석 접촉이 발생했습니다.");
+            return;
+        }
+        if (collision == CollisionKind::CourseBoundary) {
+            car_ = previous;
+            car_.speed = 0.0f;
+            if (!previous.contactLatch) {
+                ApplyPenalty(dobong_exam::Penalty::RoadBoundary,
+                             "차로·길가장자리 구역선을 이탈하거나 표지물을 접촉했습니다.");
+                collisionFlash_ = 0.42f;
+            }
+            car_.contactLatch = true;
+        } else {
+            car_.contactLatch = false;
+        }
+
+        const float speedKph = DisplaySpeedKph();
+        const bool inAcceleration = courseStep_ == 7 && accelerationStarted_;
+        if (!inAcceleration && dobong_exam::IsNormalSpeedViolation(speedKph)) {
+            if (!speedPenaltyLatch_) {
+                ApplyPenalty(dobong_exam::Penalty::TimeOrSpeed,
+                             "가속구간 밖에서 시속 20km를 초과했습니다.");
+            }
+            speedPenaltyLatch_ = true;
+        } else if (speedKph < 18.5f) {
+            speedPenaltyLatch_ = false;
+        }
+
+        UpdateCourseLogic(clockDt, input);
+    }
+
+    void UpdatePrecheck(float clockDt, const InputFrame& input) {
+        precheckTimer_ += clockDt;
+        const bool wrongBasicControl =
+            (precheckStep_ != 1 && input.ignitionPressed) ||
+            (precheckStep_ != 2 && input.headlightPressed) ||
+            (precheckStep_ != 3 && input.wiperPressed) ||
+            (precheckStep_ != 4 &&
+             (input.leftSignalPressed || input.rightSignalPressed)) ||
+            input.gearDrivePressed || input.gearReversePressed;
+        if (wrongBasicControl) {
+            ApplyPenalty(dobong_exam::Penalty::BasicControl,
+                         "시험관 지시와 다른 기본조작을 했습니다.");
+        }
+
+        bool completed = false;
+        switch (precheckStep_) {
+            case 0:
+                completed = input.seatbeltPressed && seatbelt_;
+                break;
+            case 1:
+                completed = input.ignitionPressed && ignition_;
+                break;
+            case 2:
+                completed = input.headlightPressed && headlights_ == 1;
+                break;
+            case 3:
+                completed = input.wiperPressed && wiper_;
+                break;
+            case 4:
+                completed = input.leftSignalPressed && leftSignal_;
+                break;
+            default:
+                BeginDriving();
+                return;
+        }
+
+        if (completed) {
+            ++precheckStep_;
+            precheckTimer_ = 0.0f;
+            eventText_ = "기본조작 확인";
+            eventTimer_ = 1.2f;
+            if (precheckStep_ >= 5) {
+                BeginDriving();
+            } else {
+                SpeakCurrentInstruction();
+            }
+        } else if (dobong_exam::IsBasicControlOvertime(precheckTimer_)) {
+            ApplyPenalty(dobong_exam::Penalty::BasicControl,
+                         "기본조작 지시를 5초 이내에 이행하지 못했습니다.");
+            ++precheckStep_;
+            precheckTimer_ = 0.0f;
+            if (precheckStep_ >= 5) {
+                BeginDriving();
+            } else {
+                SpeakCurrentInstruction();
+            }
+        }
+    }
+
+    void UpdateVehicle(float dt, const InputFrame& input) {
+        if (input.gearDrivePressed && input.brake > 0.0f && std::fabs(car_.speed) < 0.5f) {
+            gear_ = TransmissionGear::Drive;
+        }
+        if (input.gearReversePressed && input.brake > 0.0f && std::fabs(car_.speed) < 0.5f) {
+            gear_ = TransmissionGear::Reverse;
+        }
+
+        const float targetSteering = input.steer * 0.66f;
+        car_.steering = LerpFloat(car_.steering, targetSteering, dt * 7.0f);
+
+        if (!ignition_ || parkingBrake_ || gear_ == TransmissionGear::Park) {
+            car_.speed = LerpFloat(car_.speed, 0.0f, dt * 9.0f);
+            return;
+        }
+
+        float desiredSpeed = car_.speed;
+        const float direction = gear_ == TransmissionGear::Drive ? 1.0f : -1.0f;
+        const float creep = gear_ == TransmissionGear::Drive ? 1.05f : -0.85f;
+
+        if (input.brake > 0.0f) {
+            const float brakeDelta = 8.8f * dt;
+            if (desiredSpeed > brakeDelta) {
+                desiredSpeed -= brakeDelta;
+            } else if (desiredSpeed < -brakeDelta) {
+                desiredSpeed += brakeDelta;
+            } else {
+                desiredSpeed = 0.0f;
+            }
+        } else {
+            desiredSpeed = LerpFloat(desiredSpeed, creep, dt * 1.25f);
+            if (input.throttle > 0.0f) {
+                desiredSpeed += direction * 4.1f * dt;
+            }
+        }
+
+        if (car_.position.y > 25.5f && car_.position.y < 34.5f &&
+            car_.position.x > kHillUpStartX &&
+            car_.position.x < kHillTopStartX && input.brake <= 0.0f) {
+            desiredSpeed -= 1.55f * dt;
+        } else if (car_.position.y > 25.5f && car_.position.y < 34.5f &&
+                   car_.position.x > kHillTopEndX &&
+                   car_.position.x < kHillDownEndX && input.brake <= 0.0f) {
+            desiredSpeed += 0.78f * dt;
+        }
+
+        car_.speed = std::clamp(desiredSpeed, -3.2f, 7.2f);
+        const float turnRate = std::tan(car_.steering) * car_.speed / 2.72f;
+        car_.heading = NormalizeAngle(car_.heading + turnRate * dt);
+        car_.position =
+            VAdd(car_.position, VScale(ForwardFromAngle(car_.heading), car_.speed * dt));
+    }
+
+    void UpdateCourseLogic(float dt, const InputFrame& input) {
+        switch (courseStep_) {
+            case 0:
+                UpdateStartCourse();
+                break;
+            case 1:
+                UpdateHillCourse(dt, input);
+                break;
+            case 2:
+                UpdateEmergencyCourse(dt);
+                break;
+            case 3:
+                UpdateFirstTurn();
+                break;
+            case 4:
+                UpdateSignalIntersection(dt);
+                break;
+            case 5:
+                UpdateParkingCourse(dt);
+                break;
+            case 6:
+                UpdateConnectorTurns();
+                break;
+            case 7:
+                UpdateAccelerationCourse();
+                break;
+            case 8:
+                UpdateFinishCourse(input);
+                break;
+            default:
+                break;
+        }
+    }
+
+    void UpdateStartCourse() {
+        if (dobong_exam::IsStartOvertime(stepTimer_)) {
+            Disqualify("출발지시 후 30초 이내에 출발하지 못했습니다.");
+            return;
+        }
+
+        if (car_.position.x > -39.0f) {
+            if (!leftSignal_) {
+                ApplyPenalty(dobong_exam::Penalty::TurnSignal,
+                             "출발 시 좌측 방향지시등을 켜지 않았습니다.");
+            }
+            leftSignal_ = false;
+            AdvanceStep(1);
+        }
+    }
+
+    void UpdateHillCourse(float dt, const InputFrame& input) {
+        if (!hillAttemptStarted_ && car_.position.x >= kHillUpStartX) {
+            hillAttemptStarted_ = true;
+            hillAttemptTimer_ = 0.0f;
+        }
+        if (hillAttemptStarted_) {
+            hillAttemptTimer_ += dt;
+            if (dobong_exam::IsHillCourseOvertime(hillAttemptTimer_)) {
+                Disqualify("경사로 진입 후 30초 이내에 통과하지 못했습니다.");
+                return;
+            }
+        }
+
+        const bool inStopZone = car_.position.x >= -28.5f && car_.position.x <= -25.5f &&
+                                std::fabs(car_.position.y - 30.0f) < 3.2f;
+        if (inStopZone && std::fabs(car_.speed) < 0.22f && input.brake > 0.0f) {
+            hillStopTimer_ += dt;
+            if (hillRollbackOrigin_ < -90.0f) hillRollbackOrigin_ = car_.position.x;
+            if (hillStopTimer_ >= 3.0f && !hillComplete_) {
+                hillComplete_ = true;
+                eventText_ = "경사로 정지 3초 확인";
+                eventTimer_ = 3.0f;
+                Speak("경사로 정지 확인. 뒤로 밀리지 않게 출발하세요.");
+            }
+        }
+
+        if (hillRollbackOrigin_ > -90.0f) {
+            const float rollback = std::max(0.0f, hillRollbackOrigin_ - car_.position.x);
+            if (!hillRollbackPenalty_ &&
+                dobong_exam::IsHillRollbackPenalty(rollback)) {
+                ApplyPenalty(dobong_exam::Penalty::HillStop,
+                             "경사로 출발 시 50센티미터 이상 밀렸습니다.");
+                hillRollbackPenalty_ = true;
+            }
+            if (dobong_exam::IsHillRollbackFailure(rollback)) {
+                Disqualify("경사로에서 1미터 이상 후방으로 밀렸습니다.");
+                return;
+            }
+        }
+
+        if (car_.position.x > kHillDownEndX) {
+            if (!hillComplete_) {
+                Disqualify("경사로 정지구간을 이행하지 않았습니다.");
+                return;
+            }
+            AdvanceStep(2);
+        }
+    }
+
+    void UpdateEmergencyCourse(float dt) {
+        if (!emergencyTriggered_ && car_.position.x > -12.0f) {
+            emergencyTriggered_ = true;
+            emergencyActive_ = true;
+            emergencyTimer_ = 0.0f;
+            eventText_ = "돌발! 즉시 정지";
+            eventTimer_ = 6.0f;
+            Speak("돌발. 돌발. 즉시 정지하세요.");
+        }
+
+        if (!emergencyActive_) return;
+        emergencyTimer_ += dt;
+
+        if (!emergencyStopped_ && std::fabs(car_.speed) < 0.22f) {
+            emergencyStopped_ = true;
+            stoppedEmergencyTimer_ = 0.0f;
+            if (dobong_exam::IsEmergencyStopLate(emergencyTimer_)) {
+                ApplyPenalty(dobong_exam::Penalty::EmergencyStop,
+                             "돌발등 점등 후 2초 이내 정지하지 못했습니다.");
+                emergencyPenalty_ = true;
+            }
+            Speak("정지 확인. 3초 이내에 비상점멸등을 켜세요.");
+        }
+
+        if (emergencyStopped_) {
+            stoppedEmergencyTimer_ += dt;
+            if (!hazard_ && !emergencyPenalty_ &&
+                dobong_exam::IsHazardLate(stoppedEmergencyTimer_)) {
+                ApplyPenalty(dobong_exam::Penalty::EmergencyStop,
+                             "정지 후 3초 이내 비상점멸등을 켜지 않았습니다.");
+                emergencyPenalty_ = true;
+            }
+
+            if (hazard_) {
+                eventText_ = "돌발 대응 확인 · 비상등을 끄고 출발";
+                eventTimer_ = 4.0f;
+            }
+
+            if (hazard_ == false && stoppedEmergencyTimer_ > 0.35f &&
+                (std::fabs(car_.speed) > 0.35f || car_.position.x > -6.0f)) {
+                emergencyActive_ = false;
+                AdvanceStep(3);
+            }
+        }
+    }
+
+    void UpdateFirstTurn() {
+        const bool turnedSouth = car_.position.y < 26.0f &&
+                                 std::sin(car_.heading) < -0.55f &&
+                                 car_.position.x > 7.0f &&
+                                 car_.position.x < 17.0f;
+        if (turnedSouth) {
+            if (!rightSignal_) {
+                ApplyPenalty(dobong_exam::Penalty::TurnSignal,
+                             "우회전 시 방향지시등을 켜지 않았습니다.");
+            }
+            rightSignal_ = false;
+            AdvanceStep(4);
+        }
+    }
+
+    void UpdateSignalIntersection(float dt) {
+        const bool inSignalLane =
+            car_.position.x >= 8.0f && car_.position.x <= 16.0f;
+        if (!trafficArmed_ && inSignalLane && car_.position.y < 11.5f) {
+            trafficArmed_ = true;
+            trafficLight_ = 1;
+            trafficTimer_ = 0.0f;
+            Speak("신호교차로입니다. 적색 신호에 정지하세요.");
+        }
+
+        if (trafficArmed_ && trafficLight_ == 1) {
+            trafficTimer_ += dt;
+            const Vector2 frontBumper =
+                VAdd(car_.position,
+                     VScale(ForwardFromAngle(car_.heading), kCarLength * 0.5f));
+            if (std::fabs(car_.speed) < 0.22f && frontBumper.y >= 7.4f &&
+                frontBumper.y <= 11.5f) {
+                trafficStopped_ = true;
+            }
+            if (inSignalLane && frontBumper.y < 7.4f) {
+                Disqualify("신호교차로에서 적색 신호를 위반했습니다.");
+                return;
+            }
+            if (trafficTimer_ >= 4.5f) {
+                trafficLight_ = 2;
+                eventText_ = "녹색 신호 · 직진";
+                eventTimer_ = 3.0f;
+                Speak("녹색 신호입니다. 직진하세요.");
+            }
+        }
+
+        if (trafficLight_ == 2 && inSignalLane && car_.position.y < -0.5f) {
+            if (!trafficStopped_) {
+                ApplyPenalty(dobong_exam::Penalty::SignalIntersection,
+                             "신호교차로에서 정지 확인을 이행하지 않았습니다.");
+            }
+            trafficLight_ = 0;
+            AdvanceStep(5);
+        }
+    }
+
+    void UpdateParkingCourse(float dt) {
+        parkingTimer_ += dt;
+        if (!parkingOvertimePenalty_ &&
+            dobong_exam::IsParkingOvertime(parkingTimer_)) {
+            ApplyPenalty(dobong_exam::Penalty::PerpendicularParking,
+                         "직각주차 지정시간 120초를 초과했습니다.");
+            parkingOvertimePenalty_ = true;
+        }
+
+        if (!parkingComplete_ && IsFullyInside(parkingZone_) &&
+            TouchesParkingConfirmationLine() &&
+            std::fabs(car_.speed) < 0.22f && parkingBrake_) {
+            parkingComplete_ = true;
+            eventText_ = "직각주차 확인선 접촉 · 주차브레이크 확인";
+            eventTimer_ = 5.0f;
+            Speak("직각주차 확인되었습니다. 주차브레이크를 해제하고 전진으로 나오세요.");
+        }
+
+        if (parkingComplete_ && car_.position.y > -13.5f &&
+            car_.position.x < -18.0f) {
+            AdvanceStep(6);
+        }
+    }
+
+    void UpdateConnectorTurns() {
+        const bool turnedSouth = car_.position.x < -21.0f && car_.position.y < -16.0f &&
+                                 std::sin(car_.heading) < -0.52f;
+        if (turnedSouth) {
+            if (!leftSignal_) {
+                ApplyPenalty(dobong_exam::Penalty::TurnSignal,
+                             "진로변경 시 좌측 방향지시등을 켜지 않았습니다.");
+            }
+            leftSignal_ = false;
+            AdvanceStep(7);
+        }
+    }
+
+    void UpdateAccelerationCourse() {
+        const bool enteredStraight = car_.position.y < -27.0f &&
+                                     car_.position.x > -22.0f &&
+                                     std::cos(car_.heading) > 0.55f;
+        if (!accelerationStarted_ && enteredStraight) {
+            if (!leftSignal_) {
+                ApplyPenalty(dobong_exam::Penalty::TurnSignal,
+                             "가속구간 진입 좌회전 시 방향지시등을 켜지 않았습니다.");
+            }
+            leftSignal_ = false;
+            accelerationStarted_ = true;
+            accelerationMaxKph_ = DisplaySpeedKph();
+            eventText_ = "40m 가속구간 · 시속 20km 이상";
+            eventTimer_ = 5.0f;
+            Speak("가속구간입니다. 시속 20킬로미터 이상으로 주행하세요.");
+        }
+
+        if (accelerationStarted_) {
+            accelerationMaxKph_ = std::max(accelerationMaxKph_, DisplaySpeedKph());
+            if (car_.position.x > 22.0f) {
+                if (accelerationMaxKph_ < 20.0f) {
+                    ApplyPenalty(dobong_exam::Penalty::Acceleration,
+                                 "가속구간에서 시속 20km에 도달하지 못했습니다.");
+                }
+                AdvanceStep(8);
+            }
+        }
+    }
+
+    void UpdateFinishCourse(const InputFrame& input) {
+        if (PointInsideRect(car_.position, finishZone_) && !rightSignal_ &&
+            !finishSignalPenalty_) {
+            ApplyPenalty(dobong_exam::Penalty::TurnSignal,
+                         "종료지점 진입 시 우측 방향지시등을 켜지 않았습니다.");
+            finishSignalPenalty_ = true;
+        }
+
+        if (PointInsideRect(car_.position, finishZone_) &&
+            std::fabs(car_.speed) < 0.2f && input.brake > 0.0f) {
+            FinishExam();
+        }
     }
 
     OrientedRect CarRect() const {
         return {car_.position, {kCarLength * 0.5f, kCarWidth * 0.5f}, car_.heading};
     }
 
-    bool CheckCourseCollision() const {
-        const OrientedRect carRect = CarRect();
-        for (const Obstacle& obstacle : obstacles_) {
-            if (Intersects(carRect, obstacle.footprint)) {
+    bool IsCarOnCourse() const {
+        const auto corners = GetCorners(CarRect());
+        for (const Vector2 corner : corners) {
+            bool onSurface = false;
+            for (const RoadSurface& road : roads_) {
+                if (PointInsideRect(corner, road.footprint, 0.06f)) {
+                    onSurface = true;
+                    break;
+                }
+            }
+            if (!onSurface) return false;
+        }
+        return true;
+    }
+
+    bool TouchesRoadEdgeLine() const {
+        const RoadSurface* activeRoad = nullptr;
+        int containingRoads = 0;
+        for (const RoadSurface& road : roads_) {
+            if (PointInsideRect(car_.position, road.footprint, 0.08f)) {
+                activeRoad = &road;
+                ++containingRoads;
+            }
+        }
+        if (containingRoads != 1 || activeRoad == nullptr ||
+            !activeRoad->edgeLines) {
+            return false;
+        }
+
+        const Vector2 forward = ForwardFromAngle(car_.heading);
+        const Vector2 side = {-forward.y, forward.x};
+        constexpr float kWheelLongitudinal = kCarLength * 0.32f;
+        constexpr float kWheelLateral = kCarWidth * 0.38f;
+        const std::array<Vector2, 4> wheels = {{
+            VAdd(VAdd(car_.position, VScale(forward, kWheelLongitudinal)),
+                 VScale(side, kWheelLateral)),
+            VSub(VAdd(car_.position, VScale(forward, kWheelLongitudinal)),
+                 VScale(side, kWheelLateral)),
+            VAdd(VSub(car_.position, VScale(forward, kWheelLongitudinal)),
+                 VScale(side, kWheelLateral)),
+            VSub(VSub(car_.position, VScale(forward, kWheelLongitudinal)),
+                 VScale(side, kWheelLateral)),
+        }};
+
+        const OrientedRect& footprint = activeRoad->footprint;
+        const float edgeOffset = footprint.half.y - 0.17f;
+        for (const Vector2 wheel : wheels) {
+            const Vector2 local =
+                RotateVector(VSub(wheel, footprint.center), -footprint.angle);
+            if (std::fabs(local.x) <= footprint.half.x &&
+                std::fabs(std::fabs(local.y) - edgeOffset) <= 0.11f) {
                 return true;
             }
         }
         return false;
     }
 
-    bool IsFullyInsideZone(const ParkingZone& zone) const {
-        const auto corners = GetCorners(CarRect());
-        for (const Vector2& corner : corners) {
-            const Vector2 local = RotateVector(VSub(corner, zone.footprint.center), -zone.footprint.angle);
-            if (std::fabs(local.x) > zone.footprint.half.x - 0.1f ||
-                std::fabs(local.y) > zone.footprint.half.y - 0.1f) {
-                return false;
+    CollisionKind DetectCollision() const {
+        const OrientedRect carRect = CarRect();
+        bool touchedCone = false;
+        for (const Obstacle& obstacle : obstacles_) {
+            if (!Intersects(carRect, obstacle.footprint)) continue;
+            if (obstacle.type == ObstacleType::Cone) {
+                touchedCone = true;
+            } else {
+                return CollisionKind::SolidObstacle;
             }
+        }
+        if (touchedCone || TouchesRoadEdgeLine() || !IsCarOnCourse()) {
+            return CollisionKind::CourseBoundary;
+        }
+        return CollisionKind::None;
+    }
+
+    bool IsFullyInside(const OrientedRect& zone) const {
+        for (const Vector2 corner : GetCorners(CarRect())) {
+            if (!PointInsideRect(corner, zone, -0.08f)) return false;
         }
         return true;
     }
 
-    bool IsParkedCorrectly() const {
-        const Stage& stage = stages_[currentStageIndex_];
-        const float facingErrorA = std::fabs(AngleDiff(car_.heading, stage.target.footprint.angle));
-        const float facingErrorB = std::fabs(AngleDiff(car_.heading, stage.target.footprint.angle + kPi));
-        const float facingError = std::min(facingErrorA, facingErrorB);
-
-        return std::fabs(car_.speed) < 0.8f &&
-               facingError < 0.24f &&
-               IsFullyInsideZone(stage.target);
+    bool TouchesParkingConfirmationLine() const {
+        const OrientedRect confirmationLine{{-12.0f, -22.4f}, {2.9f, 0.12f}, 0.0f};
+        return Intersects(CarRect(), confirmationLine);
     }
 
-    int FinalStars() const {
-        if (totalCollisions_ == 0 && runTimer_ < 75.0f) return 3;
-        if (totalCollisions_ <= 2 && runTimer_ < 120.0f) return 2;
-        return 1;
+    float GroundHeightAt(Vector2 position) const {
+        if (std::fabs(position.y - 30.0f) > 4.2f) return 0.0f;
+        if (position.x >= kHillUpStartX && position.x < kHillTopStartX) {
+            return (position.x - kHillUpStartX) /
+                   (kHillTopStartX - kHillUpStartX);
+        }
+        if (position.x >= kHillTopStartX && position.x <= kHillTopEndX) {
+            return 1.0f;
+        }
+        if (position.x > kHillTopEndX && position.x <= kHillDownEndX) {
+            return 1.0f - (position.x - kHillTopEndX) /
+                              (kHillDownEndX - kHillTopEndX);
+        }
+        return 0.0f;
     }
 
     float DisplaySpeedKph() const {
-        return std::fabs(car_.speed) * 8.8f;
-    }
-
-    float ParkingProgress() const {
-        return Clamp01(parkHoldTimer_ / 0.9f);
+        return std::fabs(car_.speed) * 3.6f;
     }
 
     const char* GearLabel() const {
+        if (gear_ == TransmissionGear::Park) return "P";
         return gear_ == TransmissionGear::Drive ? "D" : "R";
     }
 
-    std::string DirectionPromptToTarget() const {
-        const ParkingZone& target = stages_[currentStageIndex_].target;
-        const Vector2 toTarget = VSub(target.footprint.center, car_.position);
-        const float distance = Vector2Length(toTarget);
-        if (distance < 0.01f) {
-            return "Target centered. Straighten the wheel and brake.";
-        }
-
-        const Vector2 forward = ForwardFromAngle(car_.heading);
-        const Vector2 side = {-forward.y, forward.x};
-        const Vector2 direction = VScale(toTarget, 1.0f / distance);
-        const float forwardDot = Vector2DotProduct(direction, forward);
-        const float sideDot = Vector2DotProduct(direction, side);
-
-        std::string turnText = "keep the bay centered";
-        if (sideDot > 0.28f) turnText = "turn right toward the glowing bay";
-        if (sideDot < -0.28f) turnText = "turn left toward the glowing bay";
-
-        if (forwardDot < -0.2f) {
-            return "The bay is behind you. Reposition, then " + turnText + ".";
-        }
-        return "Guide: " + turnText + ", stop fully inside, then hold Brake to 100%.";
-    }
-
-    std::string GuidanceText() const {
-        if (gameWon_) return "All stages clear. Tap Retry to start another run.";
-        if (stageClearTimer_ > 0.0f) return "Parking Lock complete. Loading the next stage.";
-
-        if (currentStageIndex_ == 2 && gear_ != TransmissionGear::Reverse) {
-            return "Stage 3 needs reverse parking. Hold Brake, shift to R, then back into the glowing box.";
-        }
-
-        if (ParkingProgress() > 0.0f) {
-            return "Stay still and keep Brake held until Parking Lock reaches 100%.";
-        }
-
-        return DirectionPromptToTarget();
-    }
-
-    void Update(float dt, const InputFrame& input) {
-        if (input.gearDrivePressed && input.brake > 0.0f && std::fabs(car_.speed) < 1.8f) {
-            gear_ = TransmissionGear::Drive;
-        }
-        if (input.gearReversePressed && input.brake > 0.0f && std::fabs(car_.speed) < 1.8f) {
-            gear_ = TransmissionGear::Reverse;
-        }
-
-        if (input.retryPressed) {
-            if (gameWon_) {
-                RestartRun();
-            } else {
-                ResetCurrentStage();
-            }
-        }
-
-        if (gameWon_) {
-            car_.speed = LerpFloat(car_.speed, 0.0f, dt * 4.0f);
-            return;
-        }
-
-        if (stageClearTimer_ > 0.0f) {
-            stageClearTimer_ -= dt;
-            car_.speed = LerpFloat(car_.speed, 0.0f, dt * 5.0f);
-            if (stageClearTimer_ <= 0.0f) {
-                if (currentStageIndex_ + 1 >= static_cast<int>(stages_.size())) {
-                    gameWon_ = true;
-                } else {
-                    ++currentStageIndex_;
-                    ResetCurrentStage();
+    std::string PhaseTitle() const {
+        switch (phase_) {
+            case ExamPhase::Briefing:
+                return "도봉 2종 보통 자동 기능시험";
+            case ExamPhase::Precheck:
+                return "출발 전 기본조작";
+            case ExamPhase::Running:
+                switch (courseStep_) {
+                    case 0: return "출발";
+                    case 1: return "경사로 정지·출발";
+                    case 2: return "돌발상황 급정지";
+                    case 3: return "우회전";
+                    case 4: return "신호교차로";
+                    case 5: return "직각주차";
+                    case 6: return "연결구간";
+                    case 7: return "가속구간";
+                    case 8: return "종료";
+                    default: return "장내기능시험";
                 }
-            }
-            return;
+            case ExamPhase::Finished:
+                return resultPassed_ ? "시험 종료 · 합격" : "시험 종료 · 불합격";
+            case ExamPhase::Disqualified:
+                return "시험 종료 · 실격";
         }
+        return "장내기능시험";
+    }
 
-        runTimer_ += dt;
-
-        const CarState previous = car_;
-        const float targetSteering = input.steer * 0.72f;
-        car_.steering = LerpFloat(car_.steering, targetSteering, dt * 8.0f);
-
-        float desiredSpeed = car_.speed;
-        const float gearDirection = gear_ == TransmissionGear::Drive ? 1.0f : -1.0f;
-        const float creepSpeed = gear_ == TransmissionGear::Drive ? 2.2f : -1.7f;
-
-        if (input.brake > 0.0f) {
-            const float brakeStrength = 24.0f * dt;
-            if (desiredSpeed > brakeStrength) {
-                desiredSpeed -= brakeStrength;
-            } else if (desiredSpeed < -brakeStrength) {
-                desiredSpeed += brakeStrength;
-            } else {
-                desiredSpeed = 0.0f;
-            }
-        } else {
-            desiredSpeed = LerpFloat(desiredSpeed, creepSpeed, dt * 1.6f);
+    std::string InstructionText() const {
+        if (phase_ == ExamPhase::Briefing) {
+            return "도봉운전면허시험장 재구성 코스에서 실전 순서로 연습합니다.";
         }
-
-        if (input.throttle > 0.0f) {
-            const float accelStrength = gear_ == TransmissionGear::Drive ? 14.0f : 11.0f;
-            desiredSpeed += gearDirection * accelStrength * dt;
-        }
-
-        car_.speed = std::clamp(desiredSpeed, -5.8f, 10.5f);
-
-        const float turnRate = std::tan(car_.steering) * car_.speed / 2.85f;
-        car_.heading = NormalizeAngle(car_.heading + turnRate * dt);
-        car_.position = VAdd(car_.position, VScale(ForwardFromAngle(car_.heading), car_.speed * dt));
-
-        const bool collided = CheckCourseCollision();
-        if (collided) {
-            car_.position = previous.position;
-            car_.heading = previous.heading;
-            car_.speed = -previous.speed * 0.18f;
-            car_.steering = previous.steering * 0.5f;
-            if (!car_.collisionLatch) {
-                ++totalCollisions_;
-                collisionFlash_ = 0.34f;
-            }
-            car_.collisionLatch = true;
-            parkHoldTimer_ = 0.0f;
-        } else {
-            car_.collisionLatch = false;
-            parkHoldTimer_ = IsParkedCorrectly() ? parkHoldTimer_ + dt : 0.0f;
-            if (parkHoldTimer_ >= 0.9f) {
-                parkHoldTimer_ = 0.9f;
-                stageClearTimer_ = 1.35f;
+        if (phase_ == ExamPhase::Precheck) {
+            switch (precheckStep_) {
+                case 0: return "좌석안전띠를 착용하세요.";
+                case 1: return "브레이크를 밟고 시동을 켜세요.";
+                case 2: return "전조등을 하향으로 켜세요.";
+                case 3: return "앞유리 와이퍼를 작동하세요.";
+                case 4: return "좌측 방향지시등을 켜세요.";
+                default: return "기본조작 확인을 마쳤습니다.";
             }
         }
+        if (phase_ == ExamPhase::Finished || phase_ == ExamPhase::Disqualified) {
+            return "다시 응시를 눌러 처음부터 연습할 수 있습니다.";
+        }
+
+        switch (courseStep_) {
+            case 0:
+                return "브레이크를 밟아 D로 전환하고 주차브레이크를 해제한 뒤 좌측 방향지시등을 켜고 출발하세요.";
+            case 1:
+                return hillComplete_
+                           ? "뒤로 밀리지 않게 가속하여 경사로를 통과하세요."
+                           : "경사로 정지검지구역 안에서 3초 이상 완전히 정지하세요.";
+            case 2:
+                if (!emergencyTriggered_) return "속도를 유지하며 돌발구간으로 진입하세요.";
+                if (!emergencyStopped_) return "돌발! 2초 이내에 완전히 정지하세요.";
+                if (!hazard_) return "정지 후 3초 이내에 비상점멸등을 켜세요.";
+                return "비상점멸등을 끈 뒤 다시 출발하세요.";
+            case 3:
+                return "교차로 앞에서 우측 방향지시등을 켜고 우회전하세요.";
+            case 4:
+                return trafficLight_ == 1 ? "적색 신호입니다. 정지선 앞에 정지하세요."
+                                         : "녹색 신호에 직진 통과하세요.";
+            case 5:
+                return parkingComplete_
+                           ? "주차브레이크를 해제하고 D로 전환해 차고를 빠져나오세요."
+                           : "우측 통로로 진입한 뒤 R로 전환해 직각주차 확인선까지 후진하세요.";
+            case 6:
+                return "좌측 방향지시등을 켜고 왼쪽 연결로로 진행하세요.";
+            case 7:
+                return accelerationStarted_
+                           ? "가속구간에서 시속 20km 이상에 도달한 뒤 부드럽게 감속하세요."
+                           : "좌측 방향지시등을 켜고 가속 직선구간에 진입하세요.";
+            case 8:
+                return "왼쪽으로 돌아 종료선에 접근해 우측 방향지시등을 켜고 정지하세요.";
+            default:
+                return "음성 안내와 차로 표시를 따라 진행하세요.";
+        }
+    }
+
+    std::string StatusText() const {
+        if (phase_ == ExamPhase::Briefing) {
+            return "100점 시작 · 80점 이상 합격 · 공개 법정 규격 기반";
+        }
+        if (phase_ == ExamPhase::Precheck) {
+            char buffer[96];
+            std::snprintf(buffer, sizeof(buffer),
+                          "기본조작 %d/5 · 직접 조작 · 남은 시간 %.1f초",
+                          std::min(precheckStep_ + 1, 5),
+                          std::max(0.0f, dobong_exam::kBasicControlLimitSeconds -
+                                             precheckTimer_));
+            return buffer;
+        }
+        if (phase_ == ExamPhase::Disqualified) return "즉시 실격 처리되었습니다.";
+        if (phase_ == ExamPhase::Finished) {
+            return resultPassed_ ? "최종점수 80점 이상" : "합격 기준 80점 미달";
+        }
+
+        if (courseStep_ == 1) {
+            char buffer[96];
+            std::snprintf(buffer, sizeof(buffer), "경사로 정지 %.1f / 3.0초",
+                          std::min(hillStopTimer_, 3.0f));
+            return buffer;
+        }
+        if (courseStep_ == 2 && emergencyTriggered_) {
+            char buffer[96];
+            std::snprintf(buffer, sizeof(buffer), "돌발 대응 %.1f초", emergencyTimer_);
+            return buffer;
+        }
+        if (courseStep_ == 5) {
+            char buffer[96];
+            std::snprintf(buffer, sizeof(buffer), "직각주차 %.0f / 120초", parkingTimer_);
+            return buffer;
+        }
+        if (courseStep_ == 7 && accelerationStarted_) {
+            char buffer[96];
+            std::snprintf(buffer, sizeof(buffer), "가속구간 최고 %.0f km/h",
+                          accelerationMaxKph_);
+            return buffer;
+        }
+        return "차로 경계 접촉과 시속 20km 초과에 주의하세요.";
+    }
+
+    void PushWebState() const {
+        const std::string phaseTitle = PhaseTitle();
+        const std::string instruction = InstructionText();
+        const std::string status = StatusText();
+        const std::string event = eventTimer_ > 0.0f ? eventText_ : "";
+        const int displayStep =
+            phase_ == ExamPhase::Precheck ? std::min(precheckStep_ + 1, 5)
+                                         : std::min(courseStep_ + 1, 9);
+        const int displayTotal = phase_ == ExamPhase::Precheck ? 5 : 9;
+
+        WebUpdateExam(
+            phaseTitle.c_str(), instruction.c_str(), status.c_str(), event.c_str(),
+            score_, displayStep, displayTotal, examTimer_, DisplaySpeedKph(), GearLabel(),
+            static_cast<int>(phase_), seatbelt_ ? 1 : 0, ignition_ ? 1 : 0,
+            parkingBrake_ ? 1 : 0, headlights_, wiper_ ? 1 : 0,
+            leftSignal_ ? 1 : 0, rightSignal_ ? 1 : 0, hazard_ ? 1 : 0,
+            trafficLight_, emergencyActive_ ? 1 : 0,
+            (phase_ == ExamPhase::Finished || phase_ == ExamPhase::Disqualified) ? 1 : 0,
+            resultPassed_ ? 1 : 0);
     }
 
     void UpdateCamera(float dt) {
-        const Vector2 forward2 = ForwardFromAngle(car_.heading);
-        const Vector2 side2 = {-forward2.y, forward2.x};
-        const float speedRatio = Clamp01(std::fabs(car_.speed) / 11.5f);
-        const float headBob = std::sin(elapsedSceneTime_ * (4.0f + speedRatio * 7.0f)) * 0.012f * speedRatio;
-        const float lookSide = car_.steering * 1.6f;
+        const Vector2 forward = ForwardFromAngle(car_.heading);
+        const Vector2 side = {-forward.y, forward.x};
+        const float groundY = GroundHeightAt(car_.position);
+        const float speedRatio = Clamp01(DisplaySpeedKph() / 26.0f);
+        const float vibration =
+            std::sin(sceneTime_ * (6.0f + speedRatio * 8.0f)) * 0.009f * speedRatio;
+        const float glance = car_.steering * 1.05f;
 
         const Vector3 desiredPosition = {
-            car_.position.x + forward2.x * 0.42f + side2.x * 0.28f,
-            1.28f + headBob,
-            car_.position.y + forward2.y * 0.42f + side2.y * 0.28f,
+            car_.position.x + forward.x * 0.42f - side.x * 0.25f,
+            groundY + 1.28f + vibration,
+            car_.position.y + forward.y * 0.42f - side.y * 0.25f,
         };
         const Vector3 desiredTarget = {
-            car_.position.x + forward2.x * 12.5f + side2.x * lookSide,
-            0.72f + headBob * 0.2f,
-            car_.position.y + forward2.y * 12.5f + side2.y * lookSide,
+            car_.position.x + forward.x * 15.0f + side.x * glance,
+            groundY + 0.82f,
+            car_.position.y + forward.y * 15.0f + side.y * glance,
         };
-        camera_.fovy = 78.0f;
-
-        const float blend = 1.0f - std::exp(-dt * 7.0f);
+        const float blend = 1.0f - std::exp(-dt * 8.0f);
         camera_.position = LerpVector3(camera_.position, desiredPosition, blend);
         camera_.target = LerpVector3(camera_.target, desiredTarget, blend);
+        camera_.fovy = 74.0f;
     }
 
-    void PushWebOverlayState() const {
-        const Stage& stage = stages_[currentStageIndex_];
-        const std::string guide = GuidanceText();
-        WebUpdateOverlay(stage.title.c_str(),
-                         stage.hint.c_str(),
-                         stage.target.label.c_str(),
-                         currentStageIndex_ + 1,
-                         static_cast<int>(stages_.size()),
-                         runTimer_,
-                         totalCollisions_,
-                         GearLabel(),
-                         guide.c_str(),
-                         DisplaySpeedKph(),
-                         ParkingProgress(),
-                         stageClearTimer_ > 0.0f ? 1 : 0,
-                         gameWon_ ? 1 : 0);
+    void DrawGroundBox(Vector2 center, Vector2 size, float angle, float thickness,
+                       Color color, float elevation = 0.0f) const {
+        DrawOrientedCube(center, elevation + thickness * 0.5f,
+                         {size.x, thickness, size.y}, angle, color);
     }
 
-    void DrawGroundBox(Vector2 center, Vector2 size, float angle, float thickness, Color color) const {
-        DrawOrientedCube(center, thickness * 0.5f, {size.x, thickness, size.y}, angle, color);
-    }
-
-    void DrawLineBox(Vector2 start, Vector2 end, float width, Color color) const {
+    void DrawLineBox(Vector2 start, Vector2 end, float width, Color color,
+                     float elevation = 0.03f) const {
         const Vector2 delta = VSub(end, start);
         const float length = Vector2Length(delta);
         const Vector2 center = VScale(VAdd(start, end), 0.5f);
-        const float angle = std::atan2(delta.y, delta.x);
-        DrawGroundBox(center, {length, width}, angle, 0.03f, color);
+        DrawGroundBox(center, {length, width}, std::atan2(delta.y, delta.x), 0.018f,
+                      color, elevation);
     }
 
-    void DrawParkingOutline(const OrientedRect& rect, Color color) const {
+    void DrawOutline(const OrientedRect& rect, Color color, float width = 0.12f) const {
         const auto corners = GetCorners(rect);
-        DrawLineBox(corners[0], corners[1], 0.12f, color);
-        DrawLineBox(corners[1], corners[2], 0.12f, color);
-        DrawLineBox(corners[2], corners[3], 0.12f, color);
-        DrawLineBox(corners[3], corners[0], 0.12f, color);
-    }
-
-    void DrawArrowMarker(Vector2 center, float angle, Color color) const {
-        DrawGroundBox(center, {0.34f, 1.6f}, angle + kPi * 0.5f, 0.02f, color);
-        DrawGroundBox(VAdd(center, RotateVector({0.0f, 0.72f}, angle)), {0.28f, 0.9f}, angle + 0.68f, 0.02f, color);
-        DrawGroundBox(VAdd(center, RotateVector({0.0f, 0.72f}, angle)), {0.28f, 0.9f}, angle - 0.68f, 0.02f, color);
+        DrawLineBox(corners[0], corners[1], width, color);
+        DrawLineBox(corners[1], corners[2], width, color);
+        DrawLineBox(corners[2], corners[3], width, color);
+        DrawLineBox(corners[3], corners[0], width, color);
     }
 
     void DrawBackdrop() const {
         const int width = GetScreenWidth();
         const int height = GetScreenHeight();
+        const int horizon = static_cast<int>(height * 0.66f);
+        DrawRectangleGradientV(0, 0, width, horizon, kSkyTop, kSkyHorizon);
+        DrawRectangleGradientV(0, horizon, width, height - horizon,
+                               Fade(kSkyHorizon, 0.9f), Fade(kGrass, 0.1f));
 
-        // Sky gradient: deep bg -> purple -> horizon glow band.
-        const int horizonY = static_cast<int>(height * 0.58f);
-        DrawRectangleGradientV(0, 0, width, horizonY / 2, kNightBg, {43, 17, 64, 255});
-        DrawRectangleGradientV(0, horizonY / 2, width, horizonY - horizonY / 2, {43, 17, 64, 255}, {120, 40, 90, 255});
-        DrawRectangleGradientV(0, horizonY, width, height - horizonY, {120, 40, 90, 120}, Fade(kNightBg, 0.0f));
-
-        float parallax = std::fmod(car_.heading / (2.0f * kPi) * static_cast<float>(width), static_cast<float>(width));
-        if (parallax < 0.0f) parallax += static_cast<float>(width);
-
-        // Static stars: ~40 small dots, two sizes.
-        for (int i = 0; i < 40; ++i) {
-            unsigned int hash = static_cast<unsigned int>(i) * 2654435761u;
-            hash = (hash ^ (hash >> 13)) * 1274126177u;
-            const float sx = static_cast<float>(hash % 10007u) / 10007.0f;
-            const float sy = static_cast<float>((hash / 7u) % 10007u) / 10007.0f * 0.55f;
-            const int x = static_cast<int>(sx * width);
-            const int y = static_cast<int>(sy * height);
-            const float radius = (hash % 3u == 0u) ? 1.6f : 1.0f;
-            DrawCircle(x, y, radius, Fade(WHITE, 0.8f));
-        }
-
-        // Giant retro sun semicircle at horizon with scanline gaps.
-        const float sunCenterX = width * 0.5f;
-        const float sunCenterY = static_cast<float>(horizonY);
-        const float sunRadius = height * 0.32f;
-        {
-            rlPushMatrix();
-            const int segments = 40;
-            rlBegin(RL_TRIANGLES);
-            for (int i = 0; i < segments; ++i) {
-                const float a0 = kPi + (static_cast<float>(i) / segments) * kPi;
-                const float a1 = kPi + (static_cast<float>(i + 1) / segments) * kPi;
-                const float t0 = static_cast<float>(i) / segments;
-                const float t1 = static_cast<float>(i + 1) / segments;
-                const Color c0 = LerpColor({255, 79, 126, 255}, {255, 138, 61, 255}, t0);
-                const Color c1 = LerpColor({255, 79, 126, 255}, {255, 138, 61, 255}, t1);
-                const Vector2 p0 = {sunCenterX + std::cos(a0) * sunRadius, sunCenterY + std::sin(a0) * sunRadius};
-                const Vector2 p1 = {sunCenterX + std::cos(a1) * sunRadius, sunCenterY + std::sin(a1) * sunRadius};
-                rlColor4ub(c0.r, c0.g, c0.b, 255);
-                rlVertex2f(sunCenterX, sunCenterY);
-                rlColor4ub(c0.r, c0.g, c0.b, 255);
-                rlVertex2f(p0.x, p0.y);
-                rlColor4ub(c1.r, c1.g, c1.b, 255);
-                rlVertex2f(p1.x, p1.y);
+        const float headingShift = car_.heading / (2.0f * kPi) * width;
+        for (int layer = 0; layer < 2; ++layer) {
+            const float baseY = height * (0.48f + layer * 0.07f);
+            const Color mountain =
+                layer == 0 ? Color{119, 139, 143, 255} : Color{92, 118, 110, 255};
+            for (int i = -2; i < 8; ++i) {
+                const float x = i * width * 0.2f - std::fmod(headingShift * (0.15f + layer * 0.08f),
+                                                            width * 0.4f);
+                const float peak = 55.0f + ((i + layer * 3) % 3) * 28.0f;
+                DrawTriangle({x, baseY}, {x + width * 0.13f, baseY - peak},
+                             {x + width * 0.28f, baseY}, Fade(mountain, 0.72f));
             }
-            rlEnd();
-            rlPopMatrix();
+        }
+    }
 
-            // Scanline gaps cut across the sun disc.
-            const int gapCount = 4;
-            for (int g = 0; g < gapCount; ++g) {
-                const float t = 0.32f + g * 0.16f;
-                const float gapY = sunCenterY - sunRadius * (1.0f - t);
-                if (gapY < sunCenterY - sunRadius || gapY > sunCenterY) continue;
-                const float halfChord = std::sqrt(std::max(0.0f, sunRadius * sunRadius - (sunCenterY - gapY) * (sunCenterY - gapY)));
-                DrawRectangle(static_cast<int>(sunCenterX - halfChord), static_cast<int>(gapY), static_cast<int>(halfChord * 2.0f), 5, kNightBg);
+    void DrawRoad(const RoadSurface& road) const {
+        const OrientedRect& rect = road.footprint;
+        DrawGroundBox(rect.center, {rect.half.x * 2.0f, rect.half.y * 2.0f},
+                      rect.angle, 0.035f, kAsphalt);
+
+        const Vector2 forward = ForwardFromAngle(rect.angle);
+        const Vector2 side = {-forward.y, forward.x};
+        if (road.edgeLines) {
+            for (const float sideSign : {-1.0f, 1.0f}) {
+                const Vector2 lineCenter =
+                    VAdd(rect.center, VScale(side, sideSign * (rect.half.y - 0.17f)));
+                DrawGroundBox(lineCenter, {rect.half.x * 2.0f, 0.12f}, rect.angle,
+                              0.018f, kLaneWhite, 0.04f);
             }
         }
 
-        // Skyline silhouettes with a few lit windows.
-        const int skylineBase = horizonY + static_cast<int>(height * 0.03f);
-        for (int pass = 0; pass < 2; ++pass) {
-            const float xOffset = parallax - static_cast<float>(pass) * static_cast<float>(width);
-            for (int i = 0; i < 10; ++i) {
-                const int buildingWidth = 80 + (i % 3) * 28;
-                const int buildingHeight = 70 + (i % 5) * 30;
-                const int x = static_cast<int>(i * (width / 9) - 14 + xOffset);
-                const int by = skylineBase - buildingHeight;
-                DrawRectangle(x, by, buildingWidth, buildingHeight, Fade({20, 12, 34, 255}, 0.92f));
+        if (road.centerLine) {
+            const int dashCount = std::max(1, static_cast<int>(rect.half.x / 2.4f));
+            for (int i = 0; i < dashCount; ++i) {
+                const float t = dashCount == 1 ? 0.0f
+                                               : -rect.half.x + 2.0f +
+                                                     i * ((rect.half.x * 2.0f - 4.0f) /
+                                                          (dashCount - 1));
+                DrawGroundBox(VAdd(rect.center, VScale(forward, t)), {1.8f, 0.11f},
+                              rect.angle, 0.018f, Fade(kLaneWhite, 0.9f), 0.041f);
+            }
+        }
+    }
 
-                unsigned int wh = static_cast<unsigned int>(i * 97 + pass * 13) * 2246822519u;
-                for (int w = 0; w < 4; ++w) {
-                    wh = (wh ^ (wh >> 13)) * 3266489917u;
-                    if (wh % 3u != 0u) continue;
-                    const int wx = x + 10 + static_cast<int>((wh >> 4) % static_cast<unsigned int>(std::max(1, buildingWidth - 20)));
-                    const int wy = by + 8 + static_cast<int>((wh >> 8) % static_cast<unsigned int>(std::max(1, buildingHeight - 16)));
-                    const Color winColor = (wh % 2u == 0u) ? kAmber : Color{125, 232, 255, 255};
-                    DrawRectangle(wx, wy, 3, 5, Fade(winColor, 0.85f));
+    void DrawRampQuad(float x0, float x1, float h0, float h1, float z0, float z1,
+                      Color color) const {
+        rlBegin(RL_QUADS);
+        rlColor4ub(color.r, color.g, color.b, color.a);
+        rlVertex3f(x0, h0 + 0.055f, z0);
+        rlVertex3f(x1, h1 + 0.055f, z0);
+        rlVertex3f(x1, h1 + 0.055f, z1);
+        rlVertex3f(x0, h0 + 0.055f, z1);
+        rlEnd();
+    }
+
+    void DrawHillSurface() const {
+        DrawRampQuad(kHillUpStartX, kHillTopStartX, 0.0f, 1.0f, 26.05f, 33.95f,
+                     kAsphaltLight);
+        DrawRampQuad(kHillTopStartX, kHillTopEndX, 1.0f, 1.0f, 26.05f, 33.95f,
+                     kAsphaltLight);
+        DrawRampQuad(kHillTopEndX, kHillDownEndX, 1.0f, 0.0f, 26.05f, 33.95f,
+                     kAsphaltLight);
+
+        for (const float z : {26.18f, 33.82f}) {
+            DrawRampQuad(kHillUpStartX, kHillTopStartX, 0.03f, 1.03f,
+                         z - 0.06f, z + 0.06f, kLaneWhite);
+            DrawRampQuad(kHillTopStartX, kHillTopEndX, 1.03f, 1.03f,
+                         z - 0.06f, z + 0.06f, kLaneWhite);
+            DrawRampQuad(kHillTopEndX, kHillDownEndX, 1.03f, 0.03f,
+                         z - 0.06f, z + 0.06f, kLaneWhite);
+        }
+
+        const OrientedRect stopZone{{-27.0f, 30.0f}, {2.0f, 3.72f}, 0.0f};
+        DrawOutline(stopZone, kSafetyYellow, 0.16f);
+    }
+
+    void DrawArrow(Vector2 center, float angle, Color color) const {
+        const Vector2 forward = ForwardFromAngle(angle);
+        const Vector2 side = {-forward.y, forward.x};
+        const Vector2 tail = VSub(center, VScale(forward, 1.4f));
+        DrawLineBox(tail, center, 0.22f, color, 0.055f);
+        DrawLineBox(center, VSub(VAdd(center, VScale(side, 0.72f)), VScale(forward, 0.7f)),
+                    0.22f, color, 0.055f);
+        DrawLineBox(center, VSub(VSub(center, VScale(side, 0.72f)), VScale(forward, 0.7f)),
+                    0.22f, color, 0.055f);
+    }
+
+    Vector2 GuidanceTarget() const {
+        switch (courseStep_) {
+            case 0: return {-38.0f, 30.0f};
+            case 1: return {-25.0f, 30.0f};
+            case 2: return {-6.0f, 30.0f};
+            case 3: return {12.0f, 25.0f};
+            case 4: return {12.0f, 7.5f};
+            case 5: return parkingComplete_ ? Vector2{-21.0f, -11.0f}
+                                            : parkingZone_.center;
+            case 6: return {-25.0f, -22.0f};
+            case 7: return {20.0f, -31.0f};
+            case 8: return finishZone_.center;
+            default: return car_.position;
+        }
+    }
+
+    void DrawCourseMarkings() const {
+        DrawGroundBox({-45.5f, 30.0f}, {0.28f, 7.2f}, 0.0f, 0.02f,
+                      kLaneWhite, 0.055f);
+        DrawGroundBox({27.0f, 30.0f}, {0.28f, 7.2f}, 0.0f, 0.02f,
+                      kLaneWhite, 0.055f);
+        DrawGroundBox({12.0f, 7.4f}, {7.0f, 0.28f}, 0.0f, 0.02f,
+                      kLaneWhite, 0.055f);
+
+        // Crosswalk at the signalized intersection.
+        for (int i = -3; i <= 3; ++i) {
+            DrawGroundBox({12.0f + i * 0.76f, 5.2f}, {0.42f, 2.0f}, 0.0f,
+                          0.018f, Fade(kLaneWhite, 0.9f), 0.055f);
+        }
+
+        DrawOutline(parkingZone_, kSafetyYellow, 0.15f);
+        const Vector2 confirmationStart{-14.9f, -22.4f};
+        const Vector2 confirmationEnd{-9.1f, -22.4f};
+        DrawLineBox(confirmationStart, confirmationEnd, 0.22f, kSafetyYellow, 0.06f);
+
+        const Vector2 target = GuidanceTarget();
+        const Vector2 toTarget = VSub(target, car_.position);
+        if (Vector2Length(toTarget) > 2.5f) {
+            const float angle = std::atan2(toTarget.y, toTarget.x);
+            DrawArrow(target, angle, Fade(kCourseBlue, 0.62f));
+        }
+    }
+
+    void DrawTrafficSignal() const {
+        const Vector3 poleBase{7.2f, 2.5f, 8.3f};
+        DrawCylinder(poleBase, 0.12f, 0.12f, 5.0f, 10, {80, 87, 84, 255});
+        DrawCube({9.4f, 4.65f, 8.3f}, 4.4f, 0.14f, 0.14f, {80, 87, 84, 255});
+        DrawCube({11.2f, 4.2f, 8.3f}, 0.72f, 1.65f, 0.58f, {42, 47, 45, 255});
+        const Color red = trafficLight_ == 1 ? Color{255, 55, 45, 255}
+                                            : Color{83, 28, 25, 255};
+        const Color green = trafficLight_ == 2 ? Color{54, 230, 116, 255}
+                                              : Color{25, 73, 42, 255};
+        DrawSphere({11.2f, 4.66f, 7.98f}, 0.19f, red);
+        DrawSphere({11.2f, 3.78f, 7.98f}, 0.19f, green);
+    }
+
+    void DrawTree(Vector2 position, float scale) const {
+        DrawCylinder({position.x, 1.25f * scale, position.y}, 0.18f * scale,
+                     0.25f * scale, 2.5f * scale, 8, {95, 70, 48, 255});
+        DrawSphere({position.x, 3.25f * scale, position.y}, 1.25f * scale,
+                   {74, 116, 69, 255});
+        DrawSphere({position.x + 0.65f * scale, 3.0f * scale, position.y},
+                   0.9f * scale, {86, 129, 76, 255});
+    }
+
+    void DrawEnvironment() const {
+        for (const Obstacle& obstacle : obstacles_) {
+            if (obstacle.type == ObstacleType::Building) {
+                DrawOrientedCube(obstacle.footprint.center, obstacle.height * 0.5f,
+                                 {obstacle.footprint.half.x * 2.0f, obstacle.height,
+                                  obstacle.footprint.half.y * 2.0f},
+                                 obstacle.footprint.angle, obstacle.color);
+                const Color roof =
+                    obstacle.footprint.center.y > 35.0f ? Color{67, 126, 99, 255}
+                                                       : Color{66, 123, 94, 255};
+                DrawOrientedCube(obstacle.footprint.center, obstacle.height + 0.15f,
+                                 {obstacle.footprint.half.x * 2.08f, 0.3f,
+                                  obstacle.footprint.half.y * 2.08f},
+                                 obstacle.footprint.angle, roof);
+
+                if (obstacle.height > 10.0f) {
+                    for (int floor = 1; floor < static_cast<int>(obstacle.height / 2.5f);
+                         ++floor) {
+                        for (const float side : {-1.0f, 1.0f}) {
+                            DrawCube({obstacle.footprint.center.x + side *
+                                         (obstacle.footprint.half.x + 0.03f),
+                                      floor * 2.5f,
+                                      obstacle.footprint.center.y},
+                                     0.08f, 0.8f, 7.5f, {92, 124, 137, 255});
+                        }
+                    }
                 }
+            } else if (obstacle.type == ObstacleType::Barrier) {
+                DrawOrientedCube(obstacle.footprint.center, obstacle.height * 0.5f,
+                                 {obstacle.footprint.half.x * 2.0f, obstacle.height,
+                                  obstacle.footprint.half.y * 2.0f},
+                                 obstacle.footprint.angle, obstacle.color);
+                for (float z = -40.0f; z <= 40.0f; z += 4.0f) {
+                    DrawCube({-53.95f, 2.5f, z}, 0.12f, 5.0f, 0.18f,
+                             Shade(obstacle.color, 0.72f));
+                }
+            } else {
+                DrawCylinder({obstacle.footprint.center.x, 0.36f,
+                              obstacle.footprint.center.y},
+                             0.24f, 0.08f, 0.72f, 10, obstacle.color);
+                DrawCylinder({obstacle.footprint.center.x, 0.35f,
+                              obstacle.footprint.center.y},
+                             0.18f, 0.13f, 0.16f, 10, kLaneWhite);
             }
         }
 
-        // Streak clouds: thin dark purple horizontal streaks.
-        const float cloudDrift = elapsedSceneTime_ * 6.0f;
-        const std::array<Vector2, 4> clouds = {{
-            {0.12f, 0.14f}, {0.42f, 0.09f}, {0.68f, 0.2f}, {0.88f, 0.12f},
+        const std::array<Vector2, 18> trees = {{
+            {-47.0f, 42.0f}, {-40.0f, 42.5f}, {-33.0f, 42.0f}, {-28.0f, 42.0f},
+            {-51.0f, 18.0f}, {-50.5f, 8.0f}, {-50.5f, -7.0f}, {-50.0f, -22.0f},
+            {-42.0f, -42.0f}, {-31.0f, -42.0f}, {-16.0f, -42.0f}, {0.0f, -42.0f},
+            {17.0f, -42.0f}, {31.0f, -42.0f}, {48.0f, -40.0f}, {48.0f, -4.0f},
+            {47.0f, 14.0f}, {45.0f, 40.0f},
         }};
-        for (size_t i = 0; i < clouds.size(); ++i) {
-            const float baseX = clouds[i].x * static_cast<float>(width) + cloudDrift * (1.0f + static_cast<float>(i) * 0.3f) + parallax * 0.4f;
-            float x = std::fmod(baseX, static_cast<float>(width));
-            if (x < 0.0f) x += static_cast<float>(width);
-            const float y = clouds[i].y * static_cast<float>(height);
-            DrawRectangle(static_cast<int>(x - 30.0f), static_cast<int>(y), 60, 3, Fade({58, 30, 82, 255}, 0.5f));
-            DrawRectangle(static_cast<int>(x - 16.0f), static_cast<int>(y) + 6, 40, 2, Fade({58, 30, 82, 255}, 0.4f));
+        for (size_t i = 0; i < trees.size(); ++i) {
+            DrawTree(trees[i], 0.85f + static_cast<float>(i % 3) * 0.12f);
         }
 
-        DrawRectangle(0, skylineBase, width, height - skylineBase, Fade(kNightBg, 0.34f));
-    }
+        // Course control booth and observation canopy.
+        DrawCube({19.0f, 1.3f, -2.0f}, 4.5f, 2.6f, 3.6f, {225, 229, 221, 255});
+        DrawCube({19.0f, 2.75f, -2.0f}, 5.0f, 0.3f, 4.1f, {54, 121, 93, 255});
+        DrawCube({16.7f, 1.45f, -2.0f}, 0.08f, 1.0f, 2.5f, {78, 119, 135, 255});
 
-    void DrawEnvironmentDetails() const {
-        for (int i = 0; i < 7; ++i) {
-            const float z = -15.0f + i * 5.0f;
-            const bool cyanSide = (i % 2 == 0);
-            const Color leftBulb = cyanSide ? kNeonCyan : kHotMagenta;
-            const Color rightBulb = cyanSide ? kHotMagenta : kNeonCyan;
-
-            DrawCylinder({-10.7f, 2.4f, z}, 0.12f, 0.12f, 4.8f, 8, {40, 34, 58, 255});
-            DrawCylinder({10.7f, 2.4f, z}, 0.12f, 0.12f, 4.8f, 8, {40, 34, 58, 255});
-            // Thin bright vertical line on each pole.
-            DrawCylinder({-10.7f, 2.4f, z}, 0.02f, 0.02f, 4.8f, 6, leftBulb);
-            DrawCylinder({10.7f, 2.4f, z}, 0.02f, 0.02f, 4.8f, 6, rightBulb);
-
-            DrawSphere({-10.7f, 5.1f, z}, 0.3f, Fade(leftBulb, 0.9f));
-            DrawSphere({10.7f, 5.1f, z}, 0.3f, Fade(rightBulb, 0.9f));
-            DrawCylinder({-10.7f, 0.02f, z}, 0.1f, 2.4f, 4.9f, 14, Fade(leftBulb, 0.16f));
-            DrawCylinder({10.7f, 0.02f, z}, 0.1f, 2.4f, 4.9f, 14, Fade(rightBulb, 0.16f));
-        }
-
-        for (int i = 0; i < 6; ++i) {
-            const float x = i < 3 ? -19.5f : 19.5f;
-            const float z = -14.0f + (i % 3) * 13.0f;
-            const float height = 5.5f + (i % 3) * 2.0f;
-            const Color tower = {36, 29, 56, 255};
-
-            const float baseHeight = height * 0.55f;
-            const float midHeight = height * 0.3f;
-            const float topHeight = height * 0.15f;
-            const float baseY = baseHeight * 0.5f;
-            const float midY = baseHeight + midHeight * 0.5f;
-            const float topY = baseHeight + midHeight + topHeight * 0.5f;
-
-            DrawShadedCube({x, baseY, z}, {4.8f, baseHeight, 5.0f}, tower);
-            DrawShadedCube({x, midY, z}, {3.9f, midHeight, 4.1f}, tower);
-            DrawShadedCube({x, topY, z}, {3.0f, topHeight, 3.2f}, tower);
-            DrawCubeWires({x, baseY, z}, 4.8f, baseHeight, 5.0f, Fade(kNeonCyan, 0.1f));
-            DrawCubeWires({x, midY, z}, 3.9f, midHeight, 4.1f, Fade(kNeonCyan, 0.1f));
-            DrawCubeWires({x, topY, z}, 3.0f, topHeight, 3.2f, Fade(kNeonCyan, 0.1f));
-
-            const float faceX = x + (x < 0.0f ? 2.42f : -2.42f);
-            for (int w = 0; w < 8; ++w) {
-                unsigned int wh = static_cast<unsigned int>(i * 31 + w * 17) * 2246822519u;
-                wh = (wh ^ (wh >> 13)) * 3266489917u;
-                if (wh % 5u == 0u) continue;
-                const float wy = baseHeight * (0.08f + (w % 4) * 0.24f) + (w >= 4 ? midHeight * 0.4f : 0.0f);
-                const float wz = z - 2.2f + (w % 4) * 1.3f;
-                const Color windowColor = (wh % 2u == 0u) ? kAmber : Color{125, 232, 255, 255};
-                DrawCube({faceX, wy, wz}, 0.06f, baseHeight * 0.14f, 0.5f, Fade(windowColor, 0.85f));
-            }
-
-            // One antenna with tiny red blink.
-            if (i == 2) {
-                const float antennaTopY = baseHeight + midHeight + topHeight + 1.2f;
-                DrawCylinder({x, baseHeight + midHeight + topHeight, z}, 0.03f, 0.015f, 1.2f, 6, {60, 50, 80, 255});
-                const float blink = 0.5f + 0.5f * std::sin(elapsedSceneTime_ * 3.0f);
-                DrawSphere({x, antennaTopY, z}, 0.08f, Fade(RED, 0.4f + blink * 0.6f));
-            }
-        }
-
-        const std::array<Vector2, 4> planters = {{{-8.7f, -16.0f}, {8.7f, -16.0f}, {-8.7f, 16.0f}, {8.7f, 16.0f}}};
-        for (const Vector2& planter : planters) {
-            DrawShadedOrientedCube(planter, 0.45f, {1.8f, 0.9f, 1.8f}, 0.0f, {108, 89, 72, 255});
-            DrawSphere(WorldPoint(planter, 1.3f), 0.82f, {79, 154, 112, 255});
-        }
-    }
-
-    void DrawShadowBlob(Vector2 center, Vector2 size, float angle) const {
-        DrawGroundBox(center, size, angle, 0.008f, Fade({4, 6, 10, 255}, 0.3f));
-    }
-
-    void DrawSceneShadows() const {
-        for (const Obstacle& obstacle : obstacles_) {
-            const Vector2 footSize = {
-                obstacle.footprint.half.x * 2.0f + 0.28f,
-                obstacle.footprint.half.y * 2.0f + 0.28f,
-            };
-            DrawShadowBlob(VAdd(obstacle.footprint.center, {0.08f, 0.1f}), footSize, obstacle.footprint.angle);
-        }
-
-        const std::array<Vector2, 4> planters = {{{-8.7f, -16.0f}, {8.7f, -16.0f}, {-8.7f, 16.0f}, {8.7f, 16.0f}}};
-        for (const Vector2& planter : planters) {
-            DrawShadowBlob(VAdd(planter, {0.1f, 0.12f}), {2.2f, 2.2f}, 0.0f);
-        }
-
-        for (int i = 0; i < 6; ++i) {
-            const float x = i < 3 ? -19.5f : 19.5f;
-            const float z = -14.0f + (i % 3) * 13.0f;
-            DrawShadowBlob(VAdd(Vector2{x, z}, {0.15f, 0.18f}), {5.4f, 5.6f}, 0.0f);
-        }
-
-        for (int i = 0; i < 7; ++i) {
-            const float z = -15.0f + i * 5.0f;
-            DrawShadowBlob(VAdd(Vector2{-10.7f, z}, {0.06f, 0.08f}), {0.4f, 0.4f}, 0.0f);
-            DrawShadowBlob(VAdd(Vector2{10.7f, z}, {0.06f, 0.08f}), {0.4f, 0.4f}, 0.0f);
-        }
-    }
-
-    void DrawCourse() const {
-        if (groundReady_) {
-            DrawModel(groundModel_, {0.0f, 0.0f, 0.0f}, 1.0f, WHITE);
-        } else {
-            DrawPlane({0.0f, 0.0f, 0.0f}, {50.0f, 40.0f}, kNightAsphalt);
-        }
-        DrawPlane({0.0f, -0.02f, 0.0f}, {56.0f, 46.0f}, {8, 6, 14, 255});
-
-        const Color laneColor = {24, 20, 38, 255};
-        DrawGroundBox({0.0f, 0.0f}, {11.0f, 31.5f}, 0.0f, 0.01f, laneColor);
-        DrawGroundBox({0.0f, -15.3f}, {14.0f, 3.7f}, 0.0f, 0.01f, laneColor);
-        DrawGroundBox({0.0f, 0.0f}, {11.9f, 32.4f}, 0.0f, 0.005f, Fade(kIndigo, 0.05f));
-
-        for (float y = -13.8f; y <= 14.0f; y += 3.8f) {
-            DrawGroundBox({0.0f, y}, {0.36f, 1.8f}, 0.0f, 0.02f, kNeonCyan);
-        }
-        DrawGroundBox({-5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, kNeonCyan);
-        DrawGroundBox({5.5f, 0.0f}, {0.15f, 31.4f}, 0.0f, 0.02f, kNeonCyan);
-        DrawArrowMarker({0.0f, 10.6f}, 0.0f, kHotMagenta);
-        DrawArrowMarker({0.0f, -5.0f}, kPi, kHotMagenta);
-
-        for (const OrientedRect& slot : paintedSlots_) {
-            DrawParkingOutline(slot, Fade({159, 180, 216, 255}, 0.6f));
-        }
-
-        DrawSceneShadows();
-
-        const ParkingZone& target = stages_[currentStageIndex_].target;
-        const float pulseT = 0.5f + 0.5f * std::sin(elapsedSceneTime_ * 1.6f);
-        const Color pulseColor = LerpColor(kNeonCyan, kHotMagenta, pulseT);
-        DrawGroundBox(target.footprint.center, {target.footprint.half.x * 2.0f, target.footprint.half.y * 2.0f}, target.footprint.angle, 0.03f, Fade(pulseColor, 0.24f));
-        DrawParkingOutline(target.footprint, kNeonCyan);
-
-        const float pulse = 0.85f + std::sin(elapsedSceneTime_ * 3.2f) * 0.18f;
-        DrawSphere(WorldPoint(target.footprint.center, 1.9f + std::sin(elapsedSceneTime_ * 2.5f) * 0.18f), 0.3f * pulse, Fade(kHotMagenta, 0.86f));
-        DrawCylinder(WorldPoint(target.footprint.center, 0.8f), 0.32f, 0.32f, 1.8f, 16, Fade(kNeonCyan, 0.14f));
-
-        const std::array<Vector2, 4> zoneCornerSigns = {{{1.0f, 1.0f}, {1.0f, -1.0f}, {-1.0f, 1.0f}, {-1.0f, -1.0f}}};
-        for (const Vector2& sign : zoneCornerSigns) {
-            const Vector2 local = {sign.x * (target.footprint.half.x - 0.12f), sign.y * (target.footprint.half.y - 0.12f)};
-            const Vector2 corner = VAdd(target.footprint.center, RotateVector(local, target.footprint.angle));
-            DrawShadedOrientedCube(corner, 0.14f, {0.2f, 0.28f, 0.2f}, target.footprint.angle, kNeonCyan);
-        }
-
-        for (const Obstacle& obstacle : obstacles_) {
-            switch (obstacle.type) {
-                case ObstacleType::ParkedCar:
-                    DrawSimpleCar(obstacle.footprint.center, obstacle.footprint.angle, obstacle.color);
-                    DrawOrientedCubeWires(
-                        obstacle.footprint.center,
-                        obstacle.height * 0.5f,
-                        {obstacle.footprint.half.x * 2.0f, obstacle.height, obstacle.footprint.half.y * 2.0f},
-                        obstacle.footprint.angle,
-                        {16, 20, 30, 200}
-                    );
-                    break;
-                case ObstacleType::Curb:
-                    DrawShadedOrientedCube(
-                        obstacle.footprint.center,
-                        obstacle.height * 0.5f,
-                        {obstacle.footprint.half.x * 2.0f, obstacle.height, obstacle.footprint.half.y * 2.0f},
-                        obstacle.footprint.angle,
-                        obstacle.color
-                    );
-                    DrawShadedOrientedCube(
-                        obstacle.footprint.center,
-                        obstacle.height + 0.01f,
-                        {obstacle.footprint.half.x * 2.0f, 0.02f, obstacle.footprint.half.y * 2.0f},
-                        obstacle.footprint.angle,
-                        kNeonCyan
-                    );
-                    break;
-                case ObstacleType::Cone: {
-                    DrawGroundBox(obstacle.footprint.center, {0.7f, 0.7f}, 0.0f, 0.01f, Fade(kRetroOrange, 0.28f));
-                    DrawCylinder(WorldPoint(obstacle.footprint.center, obstacle.height * 0.5f), 0.28f, 0.08f, obstacle.height, 10, obstacle.color);
-                    DrawCylinderWires(WorldPoint(obstacle.footprint.center, obstacle.height * 0.5f), 0.28f, 0.08f, obstacle.height, 10, {255, 245, 220, 180});
-                    const float bandBottomT = 0.42f;
-                    const float bandTopT = 0.58f;
-                    const float bandBottomRadius = LerpFloat(0.28f, 0.08f, bandBottomT);
-                    const float bandTopRadius = LerpFloat(0.28f, 0.08f, bandTopT);
-                    DrawCylinder(
-                        WorldPoint(obstacle.footprint.center, obstacle.height * bandBottomT),
-                        bandBottomRadius,
-                        bandTopRadius,
-                        obstacle.height * (bandTopT - bandBottomT),
-                        10,
-                        {245, 246, 250, 255}
-                    );
-                    break;
-                }
-            }
-        }
-
-        DrawEnvironmentDetails();
+        DrawTrafficSignal();
     }
 
     void DrawPlayerCar() const {
-        const Color body = collisionFlash_ > 0.0f ? Color{255, 107, 107, 255} : kRetroOrange;
-        DrawGroundBox(car_.position, {4.9f, 2.45f}, car_.heading, 0.02f, Fade({6, 9, 15, 255}, 0.35f));
-
-        // Headlight ground pools projecting forward, rotating with heading.
-        const Vector2 forwardDir = ForwardFromAngle(car_.heading);
-        const Vector2 sideDir = {-forwardDir.y, forwardDir.x};
-        const std::array<float, 2> headlightSideOffsets = {0.62f, -0.62f};
-        for (float sideOffset : headlightSideOffsets) {
-            const Vector2 lightOrigin = VAdd(car_.position, RotateVector({1.95f, sideOffset}, car_.heading));
-            const Vector2 poolCenter = VAdd(lightOrigin, VScale(forwardDir, 2.25f));
-            DrawGroundBox(poolCenter, {4.5f, 1.3f}, car_.heading, 0.015f, Fade({255, 217, 160, 255}, 0.10f));
-        }
-        // Taillight glow quads.
-        for (float sideOffset : headlightSideOffsets) {
-            const Vector2 tailOrigin = VAdd(car_.position, RotateVector({-2.05f, sideOffset}, car_.heading));
-            DrawGroundBox(tailOrigin, {0.6f, 0.5f}, car_.heading, 0.01f, Fade(RED, 0.08f));
-        }
-
-        DrawShadedOrientedCube(car_.position, 0.68f, {kCarLength, 1.1f, kCarWidth}, car_.heading, body);
-
-        // Fake neon rim light strips along body top edge perimeter.
-        const Color playerRim = {255, 233, 208, 255};
-        const float rimY = 1.23f;
-        DrawOrientedCube(VAdd(car_.position, RotateVector({0.0f, 0.95f}, car_.heading)), rimY, {kCarLength, 0.02f, 0.05f}, car_.heading, playerRim);
-        DrawOrientedCube(VAdd(car_.position, RotateVector({0.0f, -0.95f}, car_.heading)), rimY, {kCarLength, 0.02f, 0.05f}, car_.heading, playerRim);
-        DrawOrientedCube(VAdd(car_.position, RotateVector({2.05f, 0.0f}, car_.heading)), rimY, {0.05f, 0.02f, kCarWidth}, car_.heading, playerRim);
-        DrawOrientedCube(VAdd(car_.position, RotateVector({-2.05f, 0.0f}, car_.heading)), rimY, {0.05f, 0.02f, kCarWidth}, car_.heading, playerRim);
-
-        DrawShadedOrientedCube(
+        const float base = GroundHeightAt(car_.position);
+        const Color body = collisionFlash_ > 0.0f ? Color{184, 49, 44, 255}
+                                                  : kVehicleBlue;
+        DrawOrientedCube(car_.position, base + 0.52f,
+                         {kCarLength, 0.96f, kCarWidth}, car_.heading, body);
+        DrawOrientedCube(
             VAdd(car_.position, VScale(ForwardFromAngle(car_.heading), 0.12f)),
-            1.25f,
-            {2.1f, 0.6f, 1.55f},
-            car_.heading,
-            {37, 53, 88, 255}
-        );
-        DrawOrientedCube(car_.position, 1.04f, {3.2f, 0.05f, 0.08f}, car_.heading, {240, 108, 66, 255});
-
-        DrawShadedOrientedCube(
-            VAdd(car_.position, RotateVector({0.72f, 0.0f}, car_.heading)),
-            1.32f,
-            {0.1f, 0.4f, 1.35f},
-            car_.heading,
-            Fade({22, 32, 58, 255}, 0.85f)
-        );
-        DrawShadedOrientedCube(
-            VAdd(car_.position, RotateVector({-0.72f, 0.0f}, car_.heading)),
-            1.32f,
-            {0.1f, 0.4f, 1.35f},
-            car_.heading,
-            Fade({22, 32, 58, 255}, 0.85f)
-        );
-        DrawShadedOrientedCube(VAdd(car_.position, RotateVector({0.0f, 0.64f}, car_.heading)), 0.82f, {0.12f, 0.08f, 0.38f}, car_.heading, {255, 246, 204, 255});
-        DrawShadedOrientedCube(VAdd(car_.position, RotateVector({0.0f, -0.64f}, car_.heading)), 0.82f, {0.12f, 0.08f, 0.38f}, car_.heading, {255, 246, 204, 255});
+            base + 1.12f, {2.2f, 0.55f, 1.48f}, car_.heading,
+            {62, 91, 105, 255});
 
         const Vector2 forward = ForwardFromAngle(car_.heading);
         const Vector2 side = {-forward.y, forward.x};
-        const std::array<Vector2, 4> wheelCenters = {
-            VAdd(VAdd(car_.position, VScale(forward, 1.25f)), VScale(side, 0.9f)),
-            VAdd(VAdd(car_.position, VScale(forward, 1.25f)), VScale(side, -0.9f)),
-            VAdd(VAdd(car_.position, VScale(forward, -1.25f)), VScale(side, 0.9f)),
-            VAdd(VAdd(car_.position, VScale(forward, -1.25f)), VScale(side, -0.9f)),
-        };
-
-        constexpr float kMaxSteerVisualAngle = 28.0f * DEG2RAD;
-        const float frontWheelAngle = car_.heading + car_.steering * kMaxSteerVisualAngle;
-        DrawCarWheel(wheelCenters[0], frontWheelAngle);
-        DrawCarWheel(wheelCenters[1], frontWheelAngle);
-        DrawCarWheel(wheelCenters[2], car_.heading);
-        DrawCarWheel(wheelCenters[3], car_.heading);
-
-        const auto drawLight = [&](Vector2 local, float height, Vector3 size, Color color) {
-            DrawOrientedCube(VAdd(car_.position, RotateVector(local, car_.heading)), height, size, car_.heading, color);
-        };
-        drawLight({1.95f, 0.62f}, 0.78f, {0.14f, 0.16f, 0.3f}, {255, 244, 196, 255});
-        drawLight({1.95f, -0.62f}, 0.78f, {0.14f, 0.16f, 0.3f}, {255, 244, 196, 255});
-        drawLight({-1.95f, 0.64f}, 0.78f, {0.14f, 0.16f, 0.28f}, {255, 99, 89, 255});
-        drawLight({-1.95f, -0.64f}, 0.78f, {0.14f, 0.16f, 0.28f}, {255, 99, 89, 255});
-    }
-
-    Vector2 ToMiniMap(Vector2 worldPoint, Rectangle area) const {
-        const float x = (worldPoint.x + kWorldHalfWidth) / (kWorldHalfWidth * 2.0f);
-        const float y = (worldPoint.y + kWorldHalfHeight) / (kWorldHalfHeight * 2.0f);
-        return {
-            area.x + x * area.width,
-            area.y + y * area.height,
-        };
-    }
-
-    void DrawMiniRect(Rectangle area, const OrientedRect& rect, Color color) const {
-        const Vector2 center = ToMiniMap(rect.center, area);
-        const float scaleX = area.width / (kWorldHalfWidth * 2.0f);
-        const float scaleY = area.height / (kWorldHalfHeight * 2.0f);
-        Rectangle projected{
-            center.x,
-            center.y,
-            rect.half.x * 2.0f * scaleX,
-            rect.half.y * 2.0f * scaleY,
-        };
-        DrawRectanglePro(projected, {projected.width * 0.5f, projected.height * 0.5f}, rect.angle * RAD2DEG, color);
-    }
-
-    void DrawMiniMap() const {
-        const bool portrait = GetScreenHeight() > GetScreenWidth();
-        const float size = std::min(GetScreenWidth(), GetScreenHeight()) * (portrait ? 0.19f : 0.22f);
-        Rectangle area{
-            static_cast<float>(GetScreenWidth()) - size - 20.0f,
-            portrait ? 162.0f : 116.0f,
-            size,
-            size,
-        };
-
-        DrawRectangleRounded(area, 0.08f, 10, Fade({10, 14, 28, 255}, 0.82f));
-        DrawRectangleRoundedLinesEx(area, 0.08f, 10, 2.0f, Fade({255, 255, 255, 255}, 0.12f));
-
-        for (const OrientedRect& slot : paintedSlots_) {
-            DrawMiniRect(area, slot, Fade({210, 220, 233, 255}, 0.16f));
-        }
-
-        for (const Obstacle& obstacle : obstacles_) {
-            const Color color = obstacle.type == ObstacleType::Cone ? Color{255, 164, 71, 255} : obstacle.color;
-            DrawMiniRect(area, obstacle.footprint, color);
-        }
-
-        DrawMiniRect(area, stages_[currentStageIndex_].target.footprint, Fade({86, 240, 164, 255}, 0.55f));
-        DrawMiniRect(area, CarRect(), {255, 215, 85, 255});
-
-        DrawText("RADAR", static_cast<int>(area.x) + 14, static_cast<int>(area.y) + 12, 18, {237, 242, 252, 255});
-    }
-
-    void DrawPanel(Rectangle rect, Color fill, Color stroke) const {
-        DrawRectangleRounded(rect, 0.2f, 12, fill);
-        DrawRectangleRoundedLinesEx(rect, 0.2f, 12, 2.0f, stroke);
-    }
-
-    void DrawHud() const {
-        const bool portrait = GetScreenHeight() > GetScreenWidth();
-        const Rectangle hudPanel{
-            20.0f,
-            18.0f,
-            portrait ? std::min(320.0f, GetScreenWidth() * 0.7f) : std::min(460.0f, GetScreenWidth() * 0.56f),
-            portrait ? 124.0f : 134.0f
-        };
-        DrawPanel(hudPanel, Fade({10, 14, 28, 255}, 0.78f), Fade({255, 255, 255, 255}, 0.1f));
-
-        const Stage& stage = stages_[currentStageIndex_];
-
-        DrawText(stage.title.c_str(), static_cast<int>(hudPanel.x) + 18, static_cast<int>(hudPanel.y) + 16, 28, {247, 249, 255, 255});
-        DrawText(stage.hint.c_str(), static_cast<int>(hudPanel.x) + 18, static_cast<int>(hudPanel.y) + 50, portrait ? 16 : 18, {196, 205, 220, 255});
-
-        char statsLine[128];
-        std::snprintf(statsLine, sizeof(statsLine), "Slot %s  |  Time %.1fs  |  Hits %d  |  1st Person",
-                      stage.target.label.c_str(),
-                      runTimer_,
-                      totalCollisions_);
-        DrawText(statsLine, static_cast<int>(hudPanel.x) + 18, static_cast<int>(hudPanel.y) + (portrait ? 86 : 92), portrait ? 16 : 18, {86, 240, 164, 255});
-
-        if (portrait) {
-            DrawText("Landscape feels better for this run.", 20, GetScreenHeight() - 170, 18, Fade(WHITE, 0.8f));
-        }
-
-        if (parkHoldTimer_ > 0.0f && stageClearTimer_ <= 0.0f) {
-            const float barWidth = hudPanel.width - 36.0f;
-            const float barY = portrait ? hudPanel.y + 108.0f : hudPanel.y + 118.0f;
-            DrawRectangleRounded({hudPanel.x + 18.0f, barY, barWidth, 8.0f}, 0.9f, 10, Fade(WHITE, 0.1f));
-            DrawRectangleRounded({hudPanel.x + 18.0f, barY, barWidth * (parkHoldTimer_ / 0.9f), 8.0f}, 0.9f, 10, {86, 240, 164, 255});
+        for (const float fore : {-1.35f, 1.35f}) {
+            for (const float lateral : {-0.83f, 0.83f}) {
+                const Vector2 wheel =
+                    VAdd(VAdd(car_.position, VScale(forward, fore)), VScale(side, lateral));
+                DrawOrientedCube(wheel, base + 0.34f, {0.58f, 0.58f, 0.22f},
+                                 car_.heading, {29, 31, 31, 255});
+            }
         }
     }
 
-    void DrawButton(const Rectangle& rect, const char* label, bool active, Color color) const {
-        const Color fill = active ? color : Fade(color, 0.38f);
-        const Color stroke = active ? Fade(WHITE, 0.85f) : Fade(WHITE, 0.28f);
-        DrawRectangleRounded({rect.x + 4.0f, rect.y + 6.0f, rect.width, rect.height}, 0.2f, 12, Fade(BLACK, 0.16f));
-        DrawPanel(rect, fill, stroke);
+    void DrawWorld() const {
+        if (groundReady_) {
+            DrawModel(groundModel_, {0.0f, -0.025f, 0.0f}, 1.0f, WHITE);
+        } else {
+            DrawPlane({0.0f, -0.02f, 0.0f},
+                      {kWorldHalfWidth * 2.0f, kWorldHalfHeight * 2.0f}, kGrass);
+        }
 
-        const int fontSize = static_cast<int>(std::min(rect.width, rect.height) * 0.26f);
-        const int textWidth = MeasureText(label, fontSize);
-        DrawText(label,
-                 static_cast<int>(rect.x + rect.width * 0.5f - textWidth * 0.5f),
-                 static_cast<int>(rect.y + rect.height * 0.5f - fontSize * 0.45f),
-                 fontSize,
-                 WHITE);
-    }
-
-    void DrawControls(const InputFrame& input) const {
-        DrawButton(buttons_.left, "LEFT", input.steer < -0.2f, {47, 102, 212, 255});
-        DrawButton(buttons_.right, "RIGHT", input.steer > 0.2f, {47, 102, 212, 255});
-        DrawButton(buttons_.throttle, "GAS", input.throttle > 0.0f, {33, 183, 109, 255});
-        DrawButton(buttons_.brake, "BRK", input.brake > 0.0f, {241, 145, 58, 255});
-        DrawButton(buttons_.gearDrive, "D", gear_ == TransmissionGear::Drive, {70, 188, 156, 255});
-        DrawButton(buttons_.gearReverse, "R", gear_ == TransmissionGear::Reverse, {212, 120, 84, 255});
-        DrawButton(buttons_.retry, "RETRY", false, {229, 86, 113, 255});
+        for (const RoadSurface& road : roads_) DrawRoad(road);
+        DrawHillSurface();
+        DrawCourseMarkings();
+        DrawEnvironment();
     }
 
     void RenderMirrorView(RenderTexture2D& target, const Camera3D& mirrorCamera) {
         BeginTextureMode(target);
-        ClearBackground(kNightBg);
+        ClearBackground(kSkyHorizon);
         BeginMode3D(mirrorCamera);
-        DrawCourse();
+        DrawWorld();
+        DrawPlayerCar();
         EndMode3D();
         EndTextureMode();
     }
 
     void UpdateMirrorTextures() {
         if (!mirrorsReady_) return;
+        if ((mirrorFrame_++ % 2) != 0) return;
 
         const Vector2 forward = ForwardFromAngle(car_.heading);
         const Vector2 side = {-forward.y, forward.x};
+        const float base = GroundHeightAt(car_.position);
 
         Camera3D rear = camera_;
-        rear.position = {
-            car_.position.x - forward.x * 0.6f,
-            1.35f,
-            car_.position.y - forward.y * 0.6f,
-        };
-        rear.target = {
-            rear.position.x - forward.x * 14.0f,
-            1.0f,
-            rear.position.z - forward.y * 14.0f,
-        };
-        rear.fovy = 48.0f;
+        rear.position = {car_.position.x - forward.x * 0.45f, base + 1.45f,
+                         car_.position.y - forward.y * 0.45f};
+        rear.target = {rear.position.x - forward.x * 18.0f, base + 1.05f,
+                       rear.position.z - forward.y * 18.0f};
+        rear.fovy = 43.0f;
 
         Camera3D left = camera_;
         left.position = {
-            car_.position.x + forward.x * 0.05f - side.x * 0.92f,
-            1.18f,
-            car_.position.y + forward.y * 0.05f - side.y * 0.92f,
+            car_.position.x + forward.x * 0.2f - side.x * 0.96f,
+            base + 1.18f,
+            car_.position.y + forward.y * 0.2f - side.y * 0.96f,
         };
         left.target = {
-            left.position.x - forward.x * 16.0f - side.x * 4.2f,
-            1.04f,
-            left.position.z - forward.y * 16.0f - side.y * 4.2f,
+            left.position.x - forward.x * 17.0f - side.x * 4.8f,
+            base + 0.92f,
+            left.position.z - forward.y * 17.0f - side.y * 4.8f,
         };
-        left.fovy = 46.0f;
+        left.fovy = 47.0f;
 
         Camera3D right = camera_;
         right.position = {
-            car_.position.x + forward.x * 0.05f + side.x * 0.92f,
-            1.18f,
-            car_.position.y + forward.y * 0.05f + side.y * 0.92f,
+            car_.position.x + forward.x * 0.2f + side.x * 0.96f,
+            base + 1.18f,
+            car_.position.y + forward.y * 0.2f + side.y * 0.96f,
         };
         right.target = {
-            right.position.x - forward.x * 16.0f + side.x * 4.2f,
-            1.04f,
-            right.position.z - forward.y * 16.0f + side.y * 4.2f,
+            right.position.x - forward.x * 17.0f + side.x * 4.8f,
+            base + 0.92f,
+            right.position.z - forward.y * 17.0f + side.y * 4.8f,
         };
-        right.fovy = 46.0f;
+        right.fovy = 47.0f;
 
         RenderMirrorView(mirrorRear_, rear);
         RenderMirrorView(mirrorLeft_, left);
         RenderMirrorView(mirrorRight_, right);
     }
 
-    void DrawMirrorSurface(Rectangle rect, const RenderTexture2D& texture, float tiltDegrees) const {
-        DrawRectangleRounded(rect, 0.24f, 10, Fade({8, 10, 14, 255}, 0.96f));
-        DrawRectangleRoundedLinesEx(rect, 0.24f, 10, 2.0f, Fade({244, 231, 208, 255}, 0.12f));
-
-        Rectangle inner{
-            rect.x + 6.0f,
-            rect.y + 6.0f,
-            rect.width - 12.0f,
-            rect.height - 12.0f,
-        };
-        Rectangle source{
-            0.0f,
-            0.0f,
-            static_cast<float>(texture.texture.width),
-            -static_cast<float>(texture.texture.height),
-        };
-        DrawTexturePro(texture.texture, source, inner, {0.0f, 0.0f}, tiltDegrees, Fade(WHITE, 0.9f));
-        DrawRectangleRounded(inner, 0.18f, 8, Fade({124, 152, 178, 255}, 0.08f));
+    void DrawMirror(Rectangle rect, const RenderTexture2D& texture) const {
+        DrawRectangleRounded({rect.x - 7.0f, rect.y - 7.0f, rect.width + 14.0f,
+                              rect.height + 14.0f},
+                             0.22f, 10, {26, 30, 30, 255});
+        const Rectangle source{0.0f, 0.0f,
+                               -static_cast<float>(texture.texture.width),
+                               -static_cast<float>(texture.texture.height)};
+        DrawTexturePro(texture.texture, source, rect, {0.0f, 0.0f}, 0.0f, WHITE);
+        DrawRectangleRoundedLinesEx(rect, 0.18f, 10, 2.0f,
+                                    Fade({220, 229, 230, 255}, 0.45f));
     }
 
-    void DrawCockpitOverlay() const {
+    void DrawCockpit() const {
         const float width = static_cast<float>(GetScreenWidth());
         const float height = static_cast<float>(GetScreenHeight());
-        const float dashTop = height * 0.82f;
-        const float hoodTop = height * 0.79f;
-        const float hoodWidth = width * 0.36f;
-        const float hoodLift = 26.0f + Clamp01(std::fabs(car_.speed) / 11.5f) * 12.0f;
-        const float speedRatio = Clamp01(DisplaySpeedKph() / 80.0f);
-        const Rectangle rearMirror{width * 0.34f, height * 0.19f, width * 0.32f, height * 0.06f};
-        const Rectangle leftMirror{width * 0.018f, height * 0.44f, width * 0.16f, height * 0.09f};
-        const Rectangle rightMirror{width * 0.822f, height * 0.44f, width * 0.16f, height * 0.09f};
-        const Rectangle cluster{width * 0.3f, height * 0.73f, width * 0.4f, height * 0.08f};
+        const Rectangle rear{width * 0.36f, height * 0.12f, width * 0.28f,
+                             height * 0.075f};
+        const Rectangle left{width * 0.025f, height * 0.39f, width * 0.19f,
+                             height * 0.13f};
+        const Rectangle right{width * 0.785f, height * 0.39f, width * 0.19f,
+                              height * 0.13f};
 
-        DrawRectangleGradientV(0, static_cast<int>(height * 0.74f), static_cast<int>(width), static_cast<int>(height * 0.26f), Fade({5, 8, 12, 255}, 0), Fade({5, 8, 12, 255}, 0.98f));
-        DrawTriangle({0.0f, 0.0f}, {width * 0.09f, 0.0f}, {0.0f, height * 0.48f}, Fade({4, 6, 10, 255}, 0.92f));
-        DrawTriangle({width, 0.0f}, {width * 0.91f, 0.0f}, {width, height * 0.48f}, Fade({4, 6, 10, 255}, 0.92f));
-        DrawRectangleGradientV(static_cast<int>(width * 0.2f), static_cast<int>(dashTop), static_cast<int>(width * 0.6f), static_cast<int>(height - dashTop), Fade({14, 17, 23, 255}, 0.06f), Fade({9, 11, 15, 255}, 0.98f));
-        DrawLineEx({width * 0.2f, dashTop}, {width * 0.8f, dashTop}, 2.0f, Fade({255, 255, 255, 255}, 0.08f));
-
-        DrawTriangle({width * 0.5f - hoodWidth * 0.5f, height}, {width * 0.5f, hoodTop + hoodLift}, {width * 0.5f + hoodWidth * 0.5f, height}, Fade({176, 145, 92, 255}, 0.92f));
-        DrawTriangle({width * 0.5f - hoodWidth * 0.37f, height}, {width * 0.5f, hoodTop + hoodLift + 12.0f}, {width * 0.5f + hoodWidth * 0.37f, height}, Fade({216, 186, 116, 255}, 0.22f));
+        DrawTriangle({0.0f, 0.0f}, {width * 0.055f, 0.0f},
+                     {0.0f, height * 0.64f}, {39, 44, 44, 255});
+        DrawTriangle({width, 0.0f}, {width * 0.945f, 0.0f},
+                     {width, height * 0.64f}, {39, 44, 44, 255});
 
         if (mirrorsReady_) {
-            DrawMirrorSurface(rearMirror, mirrorRear_, 0.0f);
-            DrawMirrorSurface(leftMirror, mirrorLeft_, -2.0f);
-            DrawMirrorSurface(rightMirror, mirrorRight_, 2.0f);
+            DrawMirror(rear, mirrorRear_);
+            DrawMirror(left, mirrorLeft_);
+            DrawMirror(right, mirrorRight_);
         }
 
-        DrawPanel(cluster, Fade({8, 10, 14, 255}, 0.92f), Fade({244, 231, 208, 255}, 0.08f));
-        char speedText[24];
-        std::snprintf(speedText, sizeof(speedText), "%02d", static_cast<int>(std::round(DisplaySpeedKph())));
-        DrawText(speedText, static_cast<int>(cluster.x) + 22, static_cast<int>(cluster.y) + 14, 34, {243, 239, 231, 255});
-        DrawText("KM/H", static_cast<int>(cluster.x) + 26, static_cast<int>(cluster.y) + 50, 14, {157, 166, 181, 255});
-        DrawText(GearLabel(), static_cast<int>(cluster.x + cluster.width) - 50, static_cast<int>(cluster.y) + 16, 30, gear_ == TransmissionGear::Drive ? Color{118, 215, 186, 255} : Color{240, 188, 120, 255});
-        DrawText("GEAR", static_cast<int>(cluster.x + cluster.width) - 68, static_cast<int>(cluster.y) + 50, 14, {157, 166, 181, 255});
-        DrawRectangleRounded({cluster.x + 96.0f, cluster.y + cluster.height - 18.0f, cluster.width - 120.0f, 6.0f}, 0.9f, 10, Fade(WHITE, 0.08f));
-        DrawRectangleRounded({cluster.x + 96.0f, cluster.y + cluster.height - 18.0f, (cluster.width - 120.0f) * ParkingProgress(), 6.0f}, 0.9f, 10, {118, 215, 186, 255});
+        DrawRectangleGradientV(0, static_cast<int>(height * 0.76f),
+                               static_cast<int>(width), static_cast<int>(height * 0.24f),
+                               Fade({41, 47, 47, 255}, 0.15f), {24, 28, 29, 255});
 
-        const Vector2 wheelCenter{width * 0.5f, height * 0.85f};
-        const float wheelOuter = std::min(width, height) * 0.16f;
-        const float wheelInner = wheelOuter * 0.72f;
-        const float wheelRotation = -car_.steering * 52.0f;
-        DrawRing(wheelCenter, wheelInner, wheelOuter, 198.0f, 342.0f, 52, Fade({22, 24, 30, 255}, 0.98f));
-        DrawRing(wheelCenter, wheelInner + 6.0f, wheelOuter - 10.0f, 198.0f, 342.0f, 52, Fade({189, 154, 96, 255}, 0.78f));
+        DrawTriangle({width * 0.33f, height}, {width * 0.5f, height * 0.765f},
+                     {width * 0.67f, height}, {47, 88, 117, 255});
+        DrawTriangle({width * 0.38f, height}, {width * 0.5f, height * 0.79f},
+                     {width * 0.62f, height}, Fade({91, 135, 157, 255}, 0.55f));
 
-        const auto drawSpoke = [&](float angleDeg, float start, float end, float thickness) {
-            const float angle = (angleDeg + wheelRotation) * DEG2RAD;
-            const Vector2 dir{std::cos(angle), std::sin(angle)};
-            DrawLineEx(
-                VAdd(wheelCenter, VScale(dir, start)),
-                VAdd(wheelCenter, VScale(dir, end)),
-                thickness,
-                Fade({28, 30, 37, 255}, 0.96f)
-            );
+        const Vector2 wheelCenter{width * 0.5f, height * 0.89f};
+        const float wheelOuter = std::min(width, height) * 0.15f;
+        DrawRing(wheelCenter, wheelOuter * 0.74f, wheelOuter, 190.0f, 350.0f, 64,
+                 {20, 23, 24, 255});
+        const float rotation = car_.steering * 58.0f;
+        for (const float angleDegrees : {215.0f, 270.0f, 325.0f}) {
+            const float angle = (angleDegrees + rotation) * DEG2RAD;
+            const Vector2 direction{std::cos(angle), std::sin(angle)};
+            DrawLineEx(VAdd(wheelCenter, VScale(direction, 18.0f)),
+                       VAdd(wheelCenter, VScale(direction, wheelOuter * 0.78f)),
+                       14.0f, {28, 31, 32, 255});
+        }
+        DrawCircleV(wheelCenter, 27.0f, {24, 28, 29, 255});
+
+        const Rectangle cluster{width * 0.39f, height * 0.73f, width * 0.22f,
+                                height * 0.075f};
+        DrawRectangleRounded(cluster, 0.18f, 10, Fade({10, 14, 15, 255}, 0.92f));
+        char speed[16];
+        std::snprintf(speed, sizeof(speed), "%02d",
+                      static_cast<int>(std::round(DisplaySpeedKph())));
+        DrawText(speed, static_cast<int>(cluster.x) + 18,
+                 static_cast<int>(cluster.y) + 8, 28, {229, 239, 232, 255});
+        DrawText("KM/H", static_cast<int>(cluster.x) + 58,
+                 static_cast<int>(cluster.y) + 18, 12, {142, 158, 154, 255});
+        DrawText(GearLabel(), static_cast<int>(cluster.x + cluster.width) - 36,
+                 static_cast<int>(cluster.y) + 8, 27,
+                 gear_ == TransmissionGear::Drive ? kExamGreen : kSafetyYellow);
+    }
+
+    Vector2 ToMap(Vector2 point, Rectangle area) const {
+        return {
+            area.x + (point.x + kWorldHalfWidth) / (kWorldHalfWidth * 2.0f) * area.width,
+            area.y + (point.y + kWorldHalfHeight) / (kWorldHalfHeight * 2.0f) * area.height,
         };
-        drawSpoke(270.0f, 18.0f, wheelInner + 18.0f, 18.0f);
-        drawSpoke(215.0f, 18.0f, wheelInner - 2.0f, 14.0f);
-        drawSpoke(325.0f, 18.0f, wheelInner - 2.0f, 14.0f);
-        DrawCircleV(wheelCenter, 28.0f, Fade({20, 22, 28, 255}, 0.98f));
-        DrawCircleLines(static_cast<int>(wheelCenter.x), static_cast<int>(wheelCenter.y), 28.0f, Fade({255, 255, 255, 255}, 0.1f));
-        DrawRectangleRounded({width * 0.28f, height * 0.87f, width * 0.44f, height * 0.024f}, 0.7f, 8, Fade({11, 14, 18, 255}, 0.96f));
-        DrawRectangleRounded({width * 0.28f, height * 0.87f, width * 0.44f * speedRatio, height * 0.024f}, 0.7f, 8, Fade({240, 188, 120, 255}, 0.72f));
     }
 
-    void DrawCenterBanner() const {
-        if (stageClearTimer_ > 0.0f) {
-            const Rectangle panel{
-                GetScreenWidth() * 0.5f - 200.0f,
-                24.0f,
-                400.0f,
-                72.0f,
-            };
-            DrawPanel(panel, Fade({11, 46, 29, 255}, 0.88f), Fade({86, 240, 164, 255}, 0.35f));
-            DrawText("Parked. Loading next challenge...", static_cast<int>(panel.x) + 28, static_cast<int>(panel.y) + 24, 24, WHITE);
-        }
-
-        if (gameWon_) {
-            const Rectangle overlay{
-                GetScreenWidth() * 0.5f - std::min(260.0f, GetScreenWidth() * 0.4f),
-                GetScreenHeight() * 0.5f - 120.0f,
-                std::min(520.0f, GetScreenWidth() * 0.8f),
-                240.0f,
-            };
-            DrawPanel(overlay, Fade({8, 13, 26, 255}, 0.92f), Fade({255, 255, 255, 255}, 0.12f));
-            DrawText("All bays cleared", static_cast<int>(overlay.x) + 28, static_cast<int>(overlay.y) + 28, 34, WHITE);
-
-            char summary[128];
-            std::snprintf(summary, sizeof(summary), "Final time %.1fs  |  collisions %d  |  stars %d/3", runTimer_, totalCollisions_, FinalStars());
-            DrawText(summary, static_cast<int>(overlay.x) + 28, static_cast<int>(overlay.y) + 88, 22, {86, 240, 164, 255});
-            DrawText("Tap RETRY or press R to restart the full run.", static_cast<int>(overlay.x) + 28, static_cast<int>(overlay.y) + 146, 20, {196, 205, 220, 255});
-        }
+    void DrawMiniRect(Rectangle area, const OrientedRect& rect, Color color) const {
+        const Vector2 center = ToMap(rect.center, area);
+        const float sx = area.width / (kWorldHalfWidth * 2.0f);
+        const float sy = area.height / (kWorldHalfHeight * 2.0f);
+        const Rectangle projected{
+            center.x,
+            center.y,
+            rect.half.x * 2.0f * sx,
+            rect.half.y * 2.0f * sy,
+        };
+        DrawRectanglePro(projected, {projected.width * 0.5f, projected.height * 0.5f},
+                         rect.angle * RAD2DEG, color);
     }
 
-    void Draw(const InputFrame& input) {
-#if defined(PLATFORM_WEB)
-        (void)input;
-#endif
+    void DrawMiniMap() const {
+        const float width = static_cast<float>(GetScreenWidth());
+        const float height = static_cast<float>(GetScreenHeight());
+        const float mapWidth = std::clamp(width * 0.17f, 150.0f, 230.0f);
+        const float mapHeight = mapWidth * 0.72f;
+        const Rectangle panel{width - mapWidth - 18.0f, height * 0.17f,
+                              mapWidth, mapHeight};
+        DrawRectangleRounded(panel, 0.08f, 8, Fade({19, 27, 27, 255}, 0.78f));
+        DrawRectangleRoundedLinesEx(panel, 0.08f, 8, 1.0f,
+                                    Fade(WHITE, 0.22f));
+
+        const Rectangle area{panel.x + 8.0f, panel.y + 19.0f,
+                             panel.width - 16.0f, panel.height - 27.0f};
+        for (const RoadSurface& road : roads_) {
+            DrawMiniRect(area, road.footprint, Fade({165, 175, 172, 255}, 0.76f));
+        }
+
+        for (size_t i = 1; i < route_.size(); ++i) {
+            DrawLineEx(ToMap(route_[i - 1], area), ToMap(route_[i], area), 1.5f,
+                       Fade(kCourseBlue, 0.78f));
+        }
+        DrawMiniRect(area, CarRect(), kSafetyYellow);
+        DrawText("DOBONG", static_cast<int>(panel.x) + 9,
+                 static_cast<int>(panel.y) + 5, 10, Fade(WHITE, 0.72f));
+    }
+
+    void DrawCenterAlert() const {
+        if (!emergencyActive_) return;
+        const float width = static_cast<float>(GetScreenWidth());
+        const float pulse = 0.55f + 0.45f * std::sin(sceneTime_ * 12.0f);
+        const Rectangle banner{width * 0.5f - 150.0f, 28.0f, 300.0f, 54.0f};
+        DrawRectangleRounded(banner, 0.16f, 10, Fade(kExamRed, 0.78f + pulse * 0.16f));
+        const char* label = emergencyStopped_ ? "HAZARD LIGHTS" : "EMERGENCY STOP";
+        const int textWidth = MeasureText(label, 22);
+        DrawText(label, static_cast<int>(banner.x + banner.width * 0.5f -
+                                         textWidth * 0.5f),
+                 static_cast<int>(banner.y) + 16, 22, WHITE);
+    }
+
+    void Draw() {
         UpdateMirrorTextures();
         BeginDrawing();
-        ClearBackground(kNightBg);
+        ClearBackground(kSkyHorizon);
         DrawBackdrop();
 
         BeginMode3D(camera_);
-        DrawCourse();
+        DrawWorld();
         EndMode3D();
 
-        DrawCockpitOverlay();
-        DrawCenterBanner();
-
-#if !defined(PLATFORM_WEB)
-        DrawHud();
-        DrawControls(input);
-#endif
+        DrawCockpit();
+        DrawMiniMap();
+        DrawCenterAlert();
 
         if (collisionFlash_ > 0.0f) {
-            DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade({255, 88, 88, 255}, collisionFlash_ * 0.22f));
+            DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(),
+                          Fade(kExamRed, collisionFlash_ * 0.28f));
         }
         EndDrawing();
     }
 
     Camera3D camera_{};
     CarState car_{};
-    TransmissionGear gear_ = TransmissionGear::Drive;
-    Buttons buttons_{};
-    ButtonLatch buttonLatch_{};
+    TransmissionGear gear_ = TransmissionGear::Park;
+    ExamPhase phase_ = ExamPhase::Briefing;
+
+    std::vector<RoadSurface> roads_{};
+    std::vector<Obstacle> obstacles_{};
+    std::vector<Vector2> route_{};
+    OrientedRect parkingZone_{};
+    OrientedRect finishZone_{};
+
     RenderTexture2D mirrorRear_{};
     RenderTexture2D mirrorLeft_{};
     RenderTexture2D mirrorRight_{};
+    bool mirrorsReady_ = false;
+    int mirrorFrame_ = 0;
+
     Texture2D groundTexture_{};
-    Mesh groundMesh_{};
     Model groundModel_{};
     bool groundReady_ = false;
-    std::vector<Obstacle> obstacles_{};
-    std::vector<OrientedRect> paintedSlots_{};
-    std::vector<Stage> stages_{};
-    int currentStageIndex_ = 0;
-    int totalCollisions_ = 0;
-    float runTimer_ = 0.0f;
-    float parkHoldTimer_ = 0.0f;
-    float stageClearTimer_ = 0.0f;
+
+    int score_ = dobong_exam::kInitialScore;
+    int courseStep_ = 0;
+    int precheckStep_ = 0;
+    float precheckTimer_ = 0.0f;
+    float examTimer_ = 0.0f;
+    float stepTimer_ = 0.0f;
+    float hillStopTimer_ = 0.0f;
+    float hillAttemptTimer_ = 0.0f;
+    bool hillAttemptStarted_ = false;
+    float hillRollbackOrigin_ = -100.0f;
+    bool hillRollbackPenalty_ = false;
+    bool hillComplete_ = false;
+    bool emergencyTriggered_ = false;
+    bool emergencyActive_ = false;
+    bool emergencyStopped_ = false;
+    bool emergencyPenalty_ = false;
+    float emergencyTimer_ = 0.0f;
+    float stoppedEmergencyTimer_ = 0.0f;
+    int trafficLight_ = 0;
+    float trafficTimer_ = 0.0f;
+    bool trafficArmed_ = false;
+    bool trafficStopped_ = false;
+    float parkingTimer_ = 0.0f;
+    bool parkingComplete_ = false;
+    bool parkingOvertimePenalty_ = false;
+    bool accelerationStarted_ = false;
+    float accelerationMaxKph_ = 0.0f;
+    bool speedPenaltyLatch_ = false;
+    bool ignitionPenaltyLatch_ = false;
+    float nextOvertimePenaltyAt_ = dobong_exam::FirstOvertimePenaltyAt();
+    bool finishSignalPenalty_ = false;
+    bool resultPassed_ = false;
+
+    bool seatbelt_ = false;
+    bool ignition_ = false;
+    bool parkingBrake_ = true;
+    int headlights_ = 0;
+    bool wiper_ = false;
+    bool leftSignal_ = false;
+    bool rightSignal_ = false;
+    bool hazard_ = false;
+
+    std::string eventText_{};
+    std::string lastSpoken_{};
+    float eventTimer_ = 0.0f;
+    float sceneTime_ = 0.0f;
     float collisionFlash_ = 0.0f;
-    float elapsedSceneTime_ = 0.0f;
-    bool mirrorsReady_ = false;
-    bool gameWon_ = false;
+    double lastWallClock_ = -1.0;
 };
 
-ParkingMasterGame* gGame = nullptr;
+DobongExamSimulator* gSimulator = nullptr;
 
 void TickFrame() {
-    if (gGame != nullptr) {
-        gGame->Tick();
-    }
+    if (gSimulator != nullptr) gSimulator->Tick();
 }
 
 }  // namespace
 
 int main() {
-    ParkingMasterGame game;
-    gGame = &game;
+    DobongExamSimulator simulator;
+    gSimulator = &simulator;
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(TickFrame, 0, 1);
 #else
-    while (!WindowShouldClose()) {
-        TickFrame();
-    }
+    while (!WindowShouldClose()) TickFrame();
 #endif
 
-    gGame = nullptr;
+    gSimulator = nullptr;
     return 0;
 }
