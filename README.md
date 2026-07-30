@@ -1,69 +1,128 @@
-# Parking Master WebASM
+# 기능시험장 시뮬레이터 — 도봉
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel%20WebAssembly-black?style=for-the-badge&logo=vercel)](https://parking-master-webasm.vercel.app)
+한국도로교통공단 **도봉운전면허시험장 제2종 보통(자동) 장내기능시험**을
+브라우저에서 연습할 수 있도록 재구성한 WebAssembly 시뮬레이터입니다.
 
+기존 주차 게임의 WebAssembly 엔진을 기반으로 하되 코스, 채점, 화면, 조작 체계를
+기능시험용으로 전면 교체했습니다. 현재 첫 코스 팩은 도봉이며, 전국 27개 공식
+운전면허시험장을 같은 구조로 확장할 수 있도록 시험장 선택 UI를 포함합니다.
 
-`주차의 달인` 감성에서 출발한 3D 모바일 웹 주차 게임입니다. 코어 로직은 `C++`로 작성했고, `raylib + Emscripten`으로 `WebAssembly` 번들을 만들어 브라우저에서 실행합니다. 현재 버전은 `1인칭 전용` 시점과 절제된 모바일 HUD를 기준으로 설계했습니다.
+> 이 프로젝트는 한국도로교통공단의 공식 서비스가 아닌 독립 연습용 소프트웨어입니다.
+> 실제 시험장 배치는 공개 자료와 항공 배치를 참고해 재구성했으며, 현장 공사·운영에
+> 따라 실제 코스와 차이가 있을 수 있습니다.
 
-## Links
+## 구현 범위
 
-- Live site: [Parking Master WebASM](https://parking-master-webasm.vercel.app)
-- GitHub: [minwoo19930301/parking-master-webasm](https://github.com/minwoo19930301/parking-master-webasm)
+- 도봉운전면허시험장을 본뜬 주간 3D 시험장 환경
+- 운전석 전방 시야, 룸미러, 실제 후방 장면을 렌더링하는 좌·우 사이드미러
+- 출발 전 기본조작
+  - 좌석안전띠
+  - 시동
+  - 전조등
+  - 와이퍼
+  - 방향지시등
+- 실전 진행 순서
+  - 출발
+  - 경사로 정지·출발
+  - 돌발상황 급정지 및 비상점멸등
+  - 우회전
+  - 신호교차로
+  - 직각주차
+  - 연결구간
+  - 40m 가속구간
+  - 종료지점 정지
+- 100점 시작, 80점 합격 기준의 감점제와 즉시 실격 조건
+- 300m 이상 주행 경로와 법정 규격 경사로(상승 12.5%, 하강 8%, 정상부 4m)
+- 한국어 음성 안내와 실시간 감점 내역
+- 키보드, 마우스, 모바일 터치 조작
+- 전국 27개 공식 운전면허시험장 카탈로그
+  - 도봉 코스 사용 가능
+  - 나머지 시험장은 코스 팩 준비 중으로 명확히 표시
 
-## Features
+## 조작
 
-- 1인칭 고정 운전 시점
-- `D/R` 기어와 `브레이크` 분리 조작
-- 모바일 터치 버튼과 키보드 입력 동시 지원
-- 좁은 베이 주차 + 평행 주차 챌린지
-- 가벼운 모바일 HUD와 retry 중심 인터페이스
-- 사이드 미러 / 룸 미러 / 계기판 / 운전대가 보이는 콕핏 오버레이
-- C++ 단일 코드베이스에서 web build 생성
-- 정적 파일만으로 배포 가능해서 Vercel에 바로 연결 가능
+| 기능 | 키보드 | 화면 |
+|---|---|---|
+| 조향 | `A` / `D`, 방향키 | 핸들 드래그 |
+| 가속 | `W`, 위 방향키 | 가속페달 누르기 |
+| 제동 | `S`, 아래 방향키, `Space` | 브레이크 누르기 |
+| 전진 / 후진 | `1` / `2` | `D` / `R` |
+| 좌 / 우 방향지시등 | `Z` / `X` | 좌 / 우 버튼 |
+| 비상점멸등 | `C` | 비상등 버튼 |
+| 주차브레이크 | `B` | 주차브레이크 버튼 |
+| 시동 | `I` | 시동 버튼 |
+| 전조등 | `L` | 전조등 버튼 |
+| 와이퍼 | `V` | 와이퍼 버튼 |
+| 좌석안전띠 | `K` | 안전띠 버튼 |
+| 다시 응시 | `R` | 다시 응시 버튼 |
 
-## Controls
+시험은 `P`에서 시작하며, 기어 변경은 정지 상태에서 브레이크를 밟은 채로 해야
+합니다. 현재 차량 프로필은 **제2종 보통 자동변속기**입니다. 제1종 보통의
+수동변속기·클러치 모델은 후속 코스 팩 범위입니다.
 
-- `A/D` or arrow keys: steer
-- `W` or up arrow: gas
-- `S`, down arrow, or `Space`: brake
-- `E`: shift to Drive
-- `Q`: shift to Reverse
-- `R`: retry current stage
-- Mobile: on-screen steering, gas, brake, Drive/Reverse shift, retry buttons
+## 채점 기준
 
-## Local Build
+핵심 수치와 감점값은 2026년 2월 24일 개정된
+「도로교통법 시행규칙」 별표 23·24를 기준으로 구현했습니다.
 
-macOS 기준:
+- 합격: 80점 이상
+- 차로·길가장자리구역선 접촉·이탈 또는 표지물 접촉: 15점 감점
+- 돌발 급정지·비상점멸등: 10점 감점
+- 경사로 정지·출발: 10점 감점
+- 방향지시등: 5점 감점
+- 가속구간 시속 20km 미달: 10점 감점
+- 직각주차: 10점 감점
+- 가속구간 외 시속 20km 초과: 3점 감점
+
+정지선은 앞범퍼, 직각주차는 차량 전체 진입과 확인선 교차, 경사로와 돌발 과제는
+실제 경과시간으로 판정합니다. 다만 개별 바퀴의 중앙선 접촉, 실제 시험차의
+차체·센서 오차, 좌·우회전 궤적 판정은 브라우저 연습용으로 단순화했습니다.
+실제 응시 전에는 반드시 최신 공식 안내를 다시 확인하세요.
+
+## 근거 자료
+
+- [국가법령정보센터 — 도로교통법 시행규칙 별표 23](https://www.law.go.kr/flDownload.do?bylClsCd=110201&flSeq=164311549&gubun=)
+- [국가법령정보센터 — 도로교통법 시행규칙 별표 24](https://www.law.go.kr/LSW/flDownload.do?flSeq=162951849)
+- [한국도로교통공단 — 1·2종 보통 장내기능시험 안내](https://www.koroad.or.kr/main/board/26/241/board_view.do)
+- [한국도로교통공단 — 도봉운전면허시험장](https://www.koroad.or.kr/main/content/view/MN05010522.do?bcstIdx1=61&bcstIdx2=73)
+- [안전운전 통합민원 — 전국 운전면허시험장](https://www.safedriving.or.kr/dtGuide/selectDtGuide08.do)
+
+## 개발
+
+필요 도구:
+
+- CMake
+- Ninja
+- Emscripten
+- C++17 컴파일러
 
 ```bash
-brew install cmake ninja emscripten
-cd "/Users/minwokim/Documents/New project/parking-master-webasm"
+npm test
 npm run build:web
+npm run build:sites
 npm run preview
 ```
 
-브라우저: `http://127.0.0.1:4173`
+로컬 미리보기: `http://127.0.0.1:4173`
 
-## Project Layout
+## 구조
 
-- `src/main.cpp`: gameplay, cameras, touch UI, collision, parking validation
-- `web/shell.html`: responsive fullscreen shell for wasm canvas
-- `scripts/build-web.sh`: Emscripten build entrypoint
-- `index.html`, `index.js`, `index.wasm`: generated web bundle committed for static hosting
+- `src/main.cpp` — 차량 물리, 시험 상태 머신, 코스, 채점, 3D 렌더링, 미러
+- `src/course_data.h` — 전국 공식 시험장 카탈로그와 도봉 코스 팩 좌표
+- `src/exam_rules.h` — 법정 기준에서 분리한 점수·시간·속도 규칙
+- `tests/exam_rules_test.cpp` — 핵심 규칙 회귀 테스트
+- `web/shell.html` — 한국어 시험 UI, 터치 조작, 전국 시험장 카탈로그
+- `scripts/build-web.sh` — Emscripten 웹 번들 생성
+- `index.html`, `index.js`, `index.wasm` — 정적 배포 번들
 
-## Vercel
+## 다음 시험장 팩
 
-이 저장소는 루트에 `index.html`이 생성되도록 구성했습니다. 그래서 별도 서버 없이도 Vercel에서 정적 사이트로 바로 배포할 수 있습니다.
+도봉에서 검증한 공통 엔진 위에 시험장별로 아래 데이터만 추가하는 방향입니다.
 
-- Production URL: [https://parking-master-webasm.vercel.app](https://parking-master-webasm.vercel.app)
+- 코스 중심선과 도로 폭
+- 경사로·직각주차·가속·신호 위치
+- 출발·종료 방향
+- 관제동, 방음벽, 주변 건물 등 시각 기준점
+- 현장별 안내 문구와 주의 구간
 
-1. GitHub public repo로 push
-2. Vercel에서 해당 repo import
-3. Framework preset 없이 deploy
-
-## Stack
-
-- `C++17`
-- `raylib 5.5`
-- `Emscripten 5`
-- static hosting for Vercel / GitHub
+코스 팩은 공식 운전면허시험장만 대상으로 하며 운전전문학원 코스는 포함하지 않습니다.

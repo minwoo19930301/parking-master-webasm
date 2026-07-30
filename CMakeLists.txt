@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(parking_master_webasm LANGUAGES C CXX)
+project(dobong_driving_test_simulator LANGUAGES C CXX)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
@@ -14,6 +14,7 @@ if(EMSCRIPTEN)
 endif()
 
 set(WEB_SHELL_FILE "${CMAKE_SOURCE_DIR}/web/shell.html" CACHE STRING "Shell template for Emscripten builds")
+set(WEB_OUTPUT_DIR "${CMAKE_SOURCE_DIR}" CACHE PATH "Directory for generated web bundle")
 
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(BUILD_GAMES OFF CACHE BOOL "" FORCE)
@@ -28,22 +29,23 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(raylib)
 
-add_executable(parking_master_webasm
+add_executable(dobong_driving_test_simulator
   src/main.cpp
 )
 
-target_link_libraries(parking_master_webasm PRIVATE raylib)
+target_link_libraries(dobong_driving_test_simulator PRIVATE raylib)
 
 if(EMSCRIPTEN)
-  set_target_properties(parking_master_webasm PROPERTIES
+  set_target_properties(dobong_driving_test_simulator PROPERTIES
     OUTPUT_NAME "index"
     SUFFIX ".html"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY "${WEB_OUTPUT_DIR}"
   )
 
-  target_link_options(parking_master_webasm PRIVATE
+  target_link_options(dobong_driving_test_simulator PRIVATE
     "-sUSE_GLFW=3"
-    "-sALLOW_MEMORY_GROWTH=1"
+    "-sALLOW_MEMORY_GROWTH=0"
+    "-sINITIAL_MEMORY=67108864"
     "-sMIN_WEBGL_VERSION=1"
     "-sMAX_WEBGL_VERSION=1"
     "-sASSERTIONS=1"

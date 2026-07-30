@@ -1,0 +1,8 @@
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.wasm
+  Cache-Control: public, max-age=0, must-revalidate
