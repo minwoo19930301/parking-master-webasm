@@ -1590,15 +1590,15 @@
       }
 
       .hud-chips {
-        position: absolute;
-        top: calc(var(--safe-top) + 4px);
-        right: var(--safe-right);
+        position: static;
+        justify-self: end;
         z-index: 3;
         display: flex;
         gap: 6px;
-        pointer-events: auto;
+        pointer-events: none;
       }
       .hud-chip {
+        pointer-events: auto;
         padding: 5px 10px;
         border: 1px solid rgba(255, 255, 255, 0.5);
         border-radius: 999px;
@@ -2801,6 +2801,7 @@
 
         // === Bind all controls ===
         bindSteering();
+        document.querySelector(".top-stack").appendChild(document.querySelector(".hud-chips"));
         byId("gear-gate").closest(".drive-card").prepend(steerModeBtn);
         document.querySelectorAll("[data-hold]").forEach(bindHoldButton);
         document.querySelectorAll("[data-latch]").forEach(bindLatchButton);
