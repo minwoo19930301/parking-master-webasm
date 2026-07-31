@@ -111,6 +111,8 @@ constexpr float kWorldHalfWidth = 78.0f;
 constexpr float kWorldHalfHeight = 72.0f;
 constexpr float kCarLength = 4.45f;
 constexpr float kCarWidth = 1.82f;
+constexpr float kPadHalfX = 46.0f;
+constexpr float kPadHalfY = 34.0f;
 constexpr float kHillUpStartX = -37.0f;
 constexpr float kHillTopStartX = -29.0f;
 constexpr float kHillTopEndX = -25.0f;
@@ -352,7 +354,7 @@ class DobongExamSimulator {
         BuildCourse();
         InitRenderTargets();
         InitGround();
-        ResetExam();
+        BeginFreeDrive();
     }
 
     ~DobongExamSimulator() {
@@ -566,6 +568,8 @@ class DobongExamSimulator {
     void BeginFreeDrive() {
         ResetExam();
         phase_ = ExamPhase::FreeDrive;
+        car_.position = {-22.0f, 6.0f};
+        car_.heading = 0.0f;
         seatbelt_ = true;
         ignition_ = true;
         parkingBrake_ = false;
@@ -576,6 +580,11 @@ class DobongExamSimulator {
     }
 
     void UpdateFreeDrive(float dt, const InputFrame& input) {
+        if (input.startPressed) {
+            ResetExam();
+            BeginPrecheck();
+            return;
+        }
         if (input.retryPressed) {
             BeginFreeDrive();
             return;
@@ -913,13 +922,18 @@ class DobongExamSimulator {
     }
 
     void UpdateVehicle(float dt, const InputFrame& input) {
-        if (input.gearDrivePressed && input.brake > 0.0f && std::fabs(car_.speed) < 0.5f) {
+        const bool shiftAllowed =
+            std::fabs(car_.speed) < 0.5f &&
+            (input.brake > 0.0f || phase_ == ExamPhase::FreeDrive);
+        if (input.gearDrivePressed && shiftAllowed) {
             gear_ = TransmissionGear::Drive;
+            if (phase_ == ExamPhase::FreeDrive) parkingBrake_ = false;
         }
-        if (input.gearReversePressed && input.brake > 0.0f && std::fabs(car_.speed) < 0.5f) {
+        if (input.gearReversePressed && shiftAllowed) {
             gear_ = TransmissionGear::Reverse;
+            if (phase_ == ExamPhase::FreeDrive) parkingBrake_ = false;
         }
-        if (input.gearParkPressed && input.brake > 0.0f && std::fabs(car_.speed) < 0.5f) {
+        if (input.gearParkPressed && shiftAllowed) {
             gear_ = TransmissionGear::Park;
         }
 
@@ -1322,6 +1336,19 @@ class DobongExamSimulator {
 
     CollisionKind DetectCollision() const {
         const OrientedRect carRect = CarRect();
+        if (phase_ == ExamPhase::FreeDrive) {
+            for (const Obstacle& obstacle : obstacles_) {
+                if (obstacle.type == ObstacleType::Cone) continue;
+                if (Intersects(carRect, obstacle.footprint)) {
+                    return CollisionKind::SolidObstacle;
+                }
+            }
+            if (std::fabs(car_.position.x) > kPadHalfX ||
+                std::fabs(car_.position.y) > kPadHalfY) {
+                return CollisionKind::SolidObstacle;
+            }
+            return CollisionKind::None;
+        }
         bool touchedCone = false;
         for (const Obstacle& obstacle : obstacles_) {
             if (!Intersects(carRect, obstacle.footprint)) continue;
@@ -1537,7 +1564,7 @@ class DobongExamSimulator {
 
         // Driver seat offset: ~0.50m left of vehicle center (left-hand drive Korea)
         // Provides bonnet-left sensation matching real driver perspective
-        constexpr float kDriverLateralOffset = -0.50f;
+        constexpr float kDriverLateralOffset = -0.62f;
         constexpr float kDriverLongitudinalOffset = 0.42f;
 
         const Vector3 desiredPosition = {
@@ -1740,6 +1767,7 @@ class DobongExamSimulator {
         DrawGroundBox({-12.0f, -22.7f}, {2.5f, 0.4f}, 0.0f, 0.015f,
                       Fade(kSafetyYellow, 0.5f), 0.058f);
 
+        if (phase_ == ExamPhase::FreeDrive) return;
         const Vector2 target = GuidanceTarget();
         const Vector2 toTarget = VSub(target, car_.position);
         if (Vector2Length(toTarget) > 2.5f) {
@@ -1898,6 +1926,26 @@ class DobongExamSimulator {
                       {kWorldHalfWidth * 2.0f, kWorldHalfHeight * 2.0f}, kGrass);
         }
 
+        if (phase_ == ExamPhase::FreeDrive) {
+            DrawGroundBox({0.0f, 0.0f}, {kPadHalfX * 2.0f, kPadHalfY * 2.0f}, 0.0f,
+                          0.03f, kAsphalt);
+            for (float x = -kPadHalfX + 10.0f; x < kPadHalfX; x += 10.0f) {
+                DrawGroundBox({x, 0.0f}, {0.16f, kPadHalfY * 2.0f - 2.0f}, 0.0f, 0.016f,
+                              Fade(kLaneWhite, 0.32f), 0.038f);
+            }
+            for (float y = -kPadHalfY + 10.0f; y < kPadHalfY; y += 10.0f) {
+                DrawGroundBox({0.0f, y}, {kPadHalfX * 2.0f - 2.0f, 0.16f}, 0.0f, 0.016f,
+                              Fade(kLaneWhite, 0.32f), 0.038f);
+            }
+            DrawGroundBox({0.0f, -kPadHalfY}, {kPadHalfX * 2.0f, 0.4f}, 0.0f, 0.02f,
+                          kSafetyYellow, 0.04f);
+            DrawGroundBox({0.0f, kPadHalfY}, {kPadHalfX * 2.0f, 0.4f}, 0.0f, 0.02f,
+                          kSafetyYellow, 0.04f);
+            DrawGroundBox({-kPadHalfX, 0.0f}, {0.4f, kPadHalfY * 2.0f}, 0.0f, 0.02f,
+                          kSafetyYellow, 0.04f);
+            DrawGroundBox({kPadHalfX, 0.0f}, {0.4f, kPadHalfY * 2.0f}, 0.0f, 0.02f,
+                          kSafetyYellow, 0.04f);
+        }
         for (const RoadSurface& road : roads_) DrawRoad(road);
         DrawHillSurface();
         DrawCourseMarkings();
@@ -1975,12 +2023,13 @@ class DobongExamSimulator {
     void DrawCockpit() const {
         const float width = static_cast<float>(GetScreenWidth());
         const float height = static_cast<float>(GetScreenHeight());
-        const Rectangle rear{width * 0.36f, height * 0.12f, width * 0.28f,
-                             height * 0.075f};
-        const Rectangle left{width * 0.025f, height * 0.39f, width * 0.19f,
-                             height * 0.13f};
-        const Rectangle right{width * 0.785f, height * 0.39f, width * 0.19f,
-                              height * 0.13f};
+        // Left-hand drive: the interior mirror sits right of the driver's eye line.
+        const Rectangle rear{width * 0.50f, height * 0.10f, width * 0.27f,
+                             height * 0.072f};
+        const Rectangle left{width * 0.02f, height * 0.40f, width * 0.175f,
+                             height * 0.125f};
+        const Rectangle right{width * 0.805f, height * 0.40f, width * 0.175f,
+                              height * 0.125f};
 
         DrawTriangle({0.0f, 0.0f}, {width * 0.055f, 0.0f},
                      {0.0f, height * 0.64f}, {39, 44, 44, 255});
@@ -2004,8 +2053,8 @@ class DobongExamSimulator {
                      {width * 0.64f, height}, Fade({86, 96, 106, 255}, 0.45f));
 
         // Cockpit steering wheel: full rim, three spokes, airbag hub.
-        const Vector2 wheelCenter{width * 0.5f, height * 1.0f};
-        const float wheelOuter = std::min(width, height) * 0.22f;
+        const Vector2 wheelCenter{width * 0.30f, height * 1.02f};
+        const float wheelOuter = std::min(width, height) * 0.36f;
         const float rotation = car_.steering * 150.0f;
         DrawRing(wheelCenter, wheelOuter * 0.80f, wheelOuter, 0.0f, 360.0f, 96,
                  {20, 25, 30, 255});
@@ -2021,7 +2070,7 @@ class DobongExamSimulator {
         DrawCircleV(wheelCenter, wheelOuter * 0.30f, {33, 40, 48, 255});
         DrawCircleV(wheelCenter, wheelOuter * 0.30f - 3.0f, {19, 24, 30, 255});
 
-        const Rectangle cluster{width * 0.39f, height * 0.73f, width * 0.22f,
+        const Rectangle cluster{width * 0.185f, height * 0.70f, width * 0.23f,
                                 height * 0.075f};
         DrawRectangleRounded(cluster, 0.18f, 10, Fade({10, 14, 15, 255}, 0.92f));
         char speed[16];

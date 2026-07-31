@@ -1404,17 +1404,17 @@
 
       /* === Cockpit 720° Wheel (realistic rim, spokes, airbag hub) === */
       .steer-pad {
-        width: 170px;
-        height: 170px;
+        width: 236px;
+        height: 236px;
         border: 1px solid rgba(13, 56, 86, 0.13);
         background:
           radial-gradient(circle at 38% 26%, #fbfdfe 0%, #e3edf1 52%, #c4d3db 100%);
         box-shadow: inset 0 2px 7px rgba(255, 255, 255, 0.72);
       }
       .steer-wheel {
-        width: 142px;
-        height: 142px;
-        border: 15px solid #1b232c;
+        width: 202px;
+        height: 202px;
+        border: 20px solid #1b232c;
         border-radius: 50%;
         background: transparent;
         box-shadow:
@@ -1425,9 +1425,9 @@
       }
       .steer-wheel::before,
       .steer-wheel::after {
-        width: 46px;
-        height: 13px;
-        margin-top: -6px;
+        width: 66px;
+        height: 17px;
+        margin-top: -8px;
         border-radius: 7px;
         background: linear-gradient(180deg, #3c4856 0%, #1b232c 100%);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
@@ -1443,9 +1443,9 @@
         transform-origin: left center;
       }
       .wheel-hub {
-        width: 54px;
-        height: 36px;
-        border-radius: 13px;
+        width: 76px;
+        height: 50px;
+        border-radius: 17px;
         background: linear-gradient(158deg, #2e3946 0%, #141b22 100%);
         color: rgba(255, 255, 255, 0.74);
         font-size: 8px;
@@ -1462,11 +1462,11 @@
         justify-content: flex-end;
       }
       @media (max-width: 760px) {
-        .steer-pad { width: 132px; height: 132px; }
-        .steer-wheel { width: 108px; height: 108px; border-width: 12px; }
+        .steer-pad { width: 176px; height: 176px; }
+        .steer-wheel { width: 150px; height: 150px; border-width: 16px; }
         .steer-wheel::before,
-        .steer-wheel::after { width: 34px; height: 11px; }
-        .wheel-hub { width: 44px; height: 30px; }
+        .steer-wheel::after { width: 48px; height: 14px; }
+        .wheel-hub { width: 58px; height: 38px; }
         .intro-cta { justify-content: stretch; }
         .intro-cta button { flex: 1 1 45%; }
       }
@@ -1549,6 +1549,25 @@
         cursor: pointer; color: var(--navy-800);
       }
       .steer-mode-toggle.active { background: var(--blue-soft); color: var(--blue); border-color: var(--blue); }
+
+      /* === Free driving: drop the exam HUD chrome === */
+      #app[data-phase-code="5"] .coach-side,
+      #app[data-phase-code="5"] .event-toast,
+      #app[data-phase-code="5"] #status-text,
+      #app[data-phase-code="5"] .metric:nth-of-type(2),
+      #app[data-phase-code="5"] .metric:nth-of-type(3),
+      #app[data-phase-code="5"] #control-seatbelt,
+      #app[data-phase-code="5"] #control-ignition,
+      #app[data-phase-code="5"] #control-wiper {
+        display: none !important;
+      }
+      #app[data-phase-code="5"] .top-status {
+        grid-template-columns: minmax(200px, 1.4fr) repeat(3, minmax(78px, 0.6fr));
+      }
+      #app[data-phase-code="5"] .coach-panel {
+        grid-template-columns: minmax(0, 1fr);
+        width: min(560px, calc(100% - 200px));
+      }
 
       /* === Tutorial Overlay === */
       .tutorial-overlay {
@@ -1741,6 +1760,9 @@
               <span class="lever-label">주차브레이크</span>
             </div>
 
+            <button type="button" class="control-button" id="open-menu" aria-label="시험 모드와 시험장 선택 열기">
+              <span class="control-icon" aria-hidden="true">☰</span><span class="control-label">시험 모드</span>
+            </button>
             <button type="button" class="control-button" id="control-retry" data-latch="retry" aria-label="시험 다시 시작">
               <span class="control-icon" aria-hidden="true">↻</span><span class="control-label">다시 시작</span>
             </button>
@@ -1777,6 +1799,7 @@
       <section
         class="modal-layer"
         id="intro-modal"
+        hidden
         role="dialog"
         aria-modal="true"
         aria-labelledby="intro-title"
@@ -2672,6 +2695,10 @@
         document.querySelectorAll("[data-latch]").forEach(bindLatchButton);
         byId("control-audio").addEventListener("click", function() {
           window.__examSpeak(lastInstruction || (ui.instruction && ui.instruction.textContent));
+        });
+        byId("open-menu").addEventListener("click", function() {
+          introModal.hidden = false;
+          byId("free-drive-button").focus({ preventScroll: true });
         });
         byId("result-close").addEventListener("click", function() {
           resultModal.hidden = true;
