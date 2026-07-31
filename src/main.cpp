@@ -141,6 +141,7 @@ enum class ExamPhase {
     Running = 2,
     Finished = 3,
     Disqualified = 4,
+    FreeDrive = 5,
 };
 
 enum class ObstacleType {
@@ -187,6 +188,7 @@ struct InputFrame {
     float throttle = 0.0f;
     float brake = 0.0f;
     bool startPressed = false;
+    bool freeDrivePressed = false;
     bool retryPressed = false;
     bool gearDrivePressed = false;
     bool gearReversePressed = false;
@@ -560,6 +562,33 @@ class DobongExamSimulator {
         lastSpoken_.clear();
     }
 
+    // Free driving: no scoring, no exam gating. Car is ready to move at once.
+    void BeginFreeDrive() {
+        ResetExam();
+        phase_ = ExamPhase::FreeDrive;
+        seatbelt_ = true;
+        ignition_ = true;
+        parkingBrake_ = false;
+        gear_ = TransmissionGear::Drive;
+        eventText_ = "자유 주행 · 채점 없음 · 가속 페달을 밟아 출발하세요.";
+        eventTimer_ = 5.0f;
+        Speak("자유 주행을 시작합니다. 가속 페달을 밟아 출발하세요.");
+    }
+
+    void UpdateFreeDrive(float dt, const InputFrame& input) {
+        if (input.retryPressed) {
+            BeginFreeDrive();
+            return;
+        }
+        const CarState previous = car_;
+        UpdateVehicle(dt, input);
+        if (DetectCollision() != CollisionKind::None) {
+            car_ = previous;
+            car_.speed = 0.0f;
+            collisionFlash_ = 0.3f;
+        }
+    }
+
     void BeginPrecheck() {
         phase_ = ExamPhase::Precheck;
         precheckStep_ = 0;
@@ -652,6 +681,7 @@ class DobongExamSimulator {
         }
 
         input.startPressed = IsKeyPressed(KEY_ENTER);
+        input.freeDrivePressed = IsKeyPressed(KEY_F);
         input.retryPressed = IsKeyPressed(KEY_R);
         input.gearDrivePressed = IsKeyPressed(KEY_ONE);
         input.gearReversePressed = IsKeyPressed(KEY_TWO);
@@ -669,6 +699,8 @@ class DobongExamSimulator {
         input.throttle = std::max(input.throttle, WebThrottleInput());
         input.brake = std::max(input.brake, WebBrakeInput());
         input.startPressed = input.startPressed || WebConsumePressed("startPressed");
+        input.freeDrivePressed =
+            input.freeDrivePressed || WebConsumePressed("freeDrivePressed");
         input.retryPressed = input.retryPressed || WebConsumePressed("retryPressed");
         input.gearDrivePressed =
             input.gearDrivePressed || WebConsumePressed("gearDrivePressed");
@@ -726,6 +758,11 @@ class DobongExamSimulator {
     }
 
     void Update(float physicsDt, float clockDt, const InputFrame& input) {
+        if (input.freeDrivePressed) {
+            BeginFreeDrive();
+            return;
+        }
+
         if (input.retryPressed &&
             (phase_ == ExamPhase::Finished || phase_ == ExamPhase::Disqualified)) {
             ResetExam();
@@ -738,6 +775,11 @@ class DobongExamSimulator {
         }
 
         HandleToggleInputs(input);
+
+        if (phase_ == ExamPhase::FreeDrive) {
+            UpdateFreeDrive(physicsDt, input);
+            return;
+        }
 
         if (phase_ == ExamPhase::Precheck) {
             UpdatePrecheck(clockDt, input);
@@ -1335,6 +1377,8 @@ class DobongExamSimulator {
         switch (phase_) {
             case ExamPhase::Briefing:
                 return "도봉 2종 보통 자동 기능시험";
+            case ExamPhase::FreeDrive:
+                return "자유 주행";
             case ExamPhase::Precheck:
                 return "출발 전 기본조작";
             case ExamPhase::Running:
@@ -1359,6 +1403,9 @@ class DobongExamSimulator {
     }
 
     std::string InstructionText() const {
+        if (phase_ == ExamPhase::FreeDrive) {
+            return "핸들을 돌리고 가속·브레이크로 자유롭게 주행하세요. R로 후진할 수 있습니다.";
+        }
         if (phase_ == ExamPhase::Briefing) {
             return "도봉운전면허시험장 재구성 코스에서 실전 순서로 연습합니다.";
         }
@@ -1411,6 +1458,9 @@ class DobongExamSimulator {
     }
 
     std::string StatusText() const {
+        if (phase_ == ExamPhase::FreeDrive) {
+            return "자유 주행 모드 · 감점·실격 없음 · 다시 시작으로 위치 초기화";
+        }
         if (phase_ == ExamPhase::Briefing) {
             return "100점 시작 · 80점 이상 합격 · 공개 법정 규격 기반";
         }
@@ -1458,10 +1508,12 @@ class DobongExamSimulator {
         const std::string instruction = InstructionText();
         const std::string status = StatusText();
         const std::string event = eventTimer_ > 0.0f ? eventText_ : "";
+        const bool freeDrive = phase_ == ExamPhase::FreeDrive;
         const int displayStep =
-            phase_ == ExamPhase::Precheck ? std::min(precheckStep_ + 1, 5)
-                                         : std::min(courseStep_ + 1, 9);
-        const int displayTotal = phase_ == ExamPhase::Precheck ? 5 : 9;
+            freeDrive ? 0
+                      : (phase_ == ExamPhase::Precheck ? std::min(precheckStep_ + 1, 5)
+                                                       : std::min(courseStep_ + 1, 9));
+        const int displayTotal = freeDrive ? 0 : (phase_ == ExamPhase::Precheck ? 5 : 9);
 
         WebUpdateExam(
             phaseTitle.c_str(), instruction.c_str(), status.c_str(), event.c_str(),
@@ -1945,24 +1997,29 @@ class DobongExamSimulator {
                                static_cast<int>(width), static_cast<int>(height * 0.24f),
                                Fade({41, 47, 47, 255}, 0.15f), {24, 28, 29, 255});
 
-        DrawTriangle({width * 0.33f, height}, {width * 0.5f, height * 0.765f},
-                     {width * 0.67f, height}, {47, 88, 117, 255});
-        DrawTriangle({width * 0.38f, height}, {width * 0.5f, height * 0.79f},
-                     {width * 0.62f, height}, Fade({91, 135, 157, 255}, 0.55f));
+        // Dashboard shroud (neutral, no arrow-like wedge).
+        DrawTriangle({width * 0.30f, height}, {width * 0.5f, height * 0.77f},
+                     {width * 0.70f, height}, {44, 50, 56, 255});
+        DrawTriangle({width * 0.36f, height}, {width * 0.5f, height * 0.80f},
+                     {width * 0.64f, height}, Fade({86, 96, 106, 255}, 0.45f));
 
-        const Vector2 wheelCenter{width * 0.5f, height * 0.89f};
-        const float wheelOuter = std::min(width, height) * 0.15f;
-        DrawRing(wheelCenter, wheelOuter * 0.74f, wheelOuter, 190.0f, 350.0f, 64,
-                 {20, 23, 24, 255});
-        const float rotation = car_.steering * 58.0f;
-        for (const float angleDegrees : {215.0f, 270.0f, 325.0f}) {
+        // Cockpit steering wheel: full rim, three spokes, airbag hub.
+        const Vector2 wheelCenter{width * 0.5f, height * 1.0f};
+        const float wheelOuter = std::min(width, height) * 0.22f;
+        const float rotation = car_.steering * 150.0f;
+        DrawRing(wheelCenter, wheelOuter * 0.80f, wheelOuter, 0.0f, 360.0f, 96,
+                 {20, 25, 30, 255});
+        DrawRing(wheelCenter, wheelOuter * 0.80f, wheelOuter * 0.85f, 0.0f, 360.0f, 96,
+                 Fade({214, 226, 232, 255}, 0.16f));
+        for (const float angleDegrees : {180.0f, 0.0f, 92.0f}) {
             const float angle = (angleDegrees + rotation) * DEG2RAD;
             const Vector2 direction{std::cos(angle), std::sin(angle)};
-            DrawLineEx(VAdd(wheelCenter, VScale(direction, 18.0f)),
-                       VAdd(wheelCenter, VScale(direction, wheelOuter * 0.78f)),
-                       14.0f, {28, 31, 32, 255});
+            DrawLineEx(VAdd(wheelCenter, VScale(direction, wheelOuter * 0.26f)),
+                       VAdd(wheelCenter, VScale(direction, wheelOuter * 0.84f)),
+                       std::max(9.0f, wheelOuter * 0.11f), {35, 42, 50, 255});
         }
-        DrawCircleV(wheelCenter, 27.0f, {24, 28, 29, 255});
+        DrawCircleV(wheelCenter, wheelOuter * 0.30f, {33, 40, 48, 255});
+        DrawCircleV(wheelCenter, wheelOuter * 0.30f - 3.0f, {19, 24, 30, 255});
 
         const Rectangle cluster{width * 0.39f, height * 0.73f, width * 0.22f,
                                 height * 0.075f};

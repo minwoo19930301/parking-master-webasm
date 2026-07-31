@@ -1402,20 +1402,73 @@
         }
       }
 
-      /* === Cockpit 720° Wheel === */
+      /* === Cockpit 720° Wheel (realistic rim, spokes, airbag hub) === */
       .steer-pad {
-        width: 148px;
-        height: 148px;
+        width: 170px;
+        height: 170px;
+        border: 1px solid rgba(13, 56, 86, 0.13);
+        background:
+          radial-gradient(circle at 38% 26%, #fbfdfe 0%, #e3edf1 52%, #c4d3db 100%);
+        box-shadow: inset 0 2px 7px rgba(255, 255, 255, 0.72);
       }
       .steer-wheel {
-        width: 118px;
-        height: 118px;
-        border-width: 12px;
+        width: 142px;
+        height: 142px;
+        border: 15px solid #1b232c;
+        border-radius: 50%;
+        background: transparent;
+        box-shadow:
+          0 9px 20px rgba(4, 14, 22, 0.36),
+          inset 0 0 0 2px rgba(255, 255, 255, 0.11),
+          0 0 0 2px rgba(9, 17, 24, 0.5);
         transition: none;
       }
+      .steer-wheel::before,
+      .steer-wheel::after {
+        width: 46px;
+        height: 13px;
+        margin-top: -6px;
+        border-radius: 7px;
+        background: linear-gradient(180deg, #3c4856 0%, #1b232c 100%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      }
+      .steer-wheel::before {
+        left: -3px;
+        transform: rotate(0deg);
+        transform-origin: right center;
+      }
+      .steer-wheel::after {
+        right: -3px;
+        transform: rotate(0deg);
+        transform-origin: left center;
+      }
+      .wheel-hub {
+        width: 54px;
+        height: 36px;
+        border-radius: 13px;
+        background: linear-gradient(158deg, #2e3946 0%, #141b22 100%);
+        color: rgba(255, 255, 255, 0.74);
+        font-size: 8px;
+        letter-spacing: 0.04em;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.16),
+          0 2px 7px rgba(0, 0, 0, 0.34);
+      }
+      .intro-cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        justify-content: flex-end;
+      }
       @media (max-width: 760px) {
-        .steer-pad { width: 120px; height: 120px; }
-        .steer-wheel { width: 94px; height: 94px; border-width: 10px; }
+        .steer-pad { width: 132px; height: 132px; }
+        .steer-wheel { width: 108px; height: 108px; border-width: 12px; }
+        .steer-wheel::before,
+        .steer-wheel::after { width: 34px; height: 11px; }
+        .wheel-hub { width: 44px; height: 30px; }
+        .intro-cta { justify-content: stretch; }
+        .intro-cta button { flex: 1 1 45%; }
       }
 
       /* === Turn Signal Lever === */
@@ -1784,15 +1837,34 @@
                   모바일은 터치로 핸들과 페달을 조작할 수 있습니다.
                 </p>
               </div>
-              <button
-                type="button"
-                class="primary-button"
-                id="start-button"
-                data-latch="start"
-                aria-label="도봉 기능시험 연습 시작"
-              >
-                도봉 시험 시작
-              </button>
+              <div class="intro-cta">
+                <button
+                  type="button"
+                  class="primary-button"
+                  id="free-drive-button"
+                  data-latch="freeDrive"
+                  aria-label="채점 없이 바로 자유 주행 시작"
+                >
+                  바로 운전 시작
+                </button>
+                <button
+                  type="button"
+                  class="secondary-button"
+                  id="start-button"
+                  data-latch="start"
+                  aria-label="도봉 기능시험 채점 모드 시작"
+                >
+                  기능시험 모드
+                </button>
+                <button
+                  type="button"
+                  class="secondary-button"
+                  id="tutorial-open"
+                  aria-label="조작 안내 튜토리얼 보기"
+                >
+                  조작 안내
+                </button>
+              </div>
             </div>
             <p class="disclaimer">
               본 서비스는 공개된 법령·시험 기준과 공개 자료를 바탕으로 도봉운전면허시험장
@@ -1853,7 +1925,7 @@
 
       <!-- Tutorial Overlay -->
       <div class="tutorial-spotlight" id="tutorial-spotlight" hidden aria-hidden="true"></div>
-      <section class="tutorial-overlay" id="tutorial-overlay" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+      <section class="tutorial-overlay" id="tutorial-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
         <div class="tutorial-card">
           <header class="tutorial-header">
             <h2 id="tutorial-title">조작 안내 튜토리얼</h2>
@@ -1901,6 +1973,7 @@
           throttle: false,
           brake: false,
           startPressed: false,
+          freeDrivePressed: false,
           retryPressed: false,
           gearDrivePressed: false,
           gearReversePressed: false,
@@ -1932,9 +2005,9 @@
         let tiltAlpha = 0;
 
         // Tutorial state
-        let tutorialActive = true;
+        let tutorialActive = false;
         let tutorialStep = 0;
-        let inputLocked = true;
+        let inputLocked = false;
         const tutorialSteps = [
           { title: "조향 모드 선택", desc: "터치 휠(원형 드래그)과 기울기(틸트) 두 가지 모드로 조향할 수 있습니다. 상단 버튼으로 전환합니다. 720도(좌우 ±360°) lock-to-lock으로 실차와 동일합니다.", target: "steer-pad" },
           { title: "브레이크 / 가속 페달", desc: "화면 오른쪽 아래의 BRAKE와 GAS 버튼을 누르는 동안 제동/가속됩니다. 기울기 모드에서도 페달은 화면 터치로 조작합니다.", target: "control-brake" },
@@ -2353,7 +2426,7 @@
           if (!(key in inputState)) return;
           inputState[key] = true;
           pulseButton(button);
-          if (button.dataset.latch === "start") {
+          if (button.dataset.latch === "start" || button.dataset.latch === "freeDrive") {
             introModal.hidden = true;
             canvas.focus({ preventScroll: true });
           }
@@ -2443,6 +2516,14 @@
           if (tutorialStep > 0) { tutorialStep--; updateTutorial(); }
         });
         byId("tutorial-skip").addEventListener("click", endTutorial);
+        byId("tutorial-open").addEventListener("click", function() {
+          tutorialActive = true;
+          inputLocked = true;
+          tutorialStep = 0;
+          tutorialOverlay.hidden = false;
+          updateTutorial();
+          byId("tutorial-next").focus({ preventScroll: true });
+        });
 
         tutorialOverlay.addEventListener("keydown", function(event) {
           if (event.key === "ArrowRight") {
@@ -2601,11 +2682,8 @@
         window.addEventListener("contextmenu", function(event) { event.preventDefault(); });
         resizeCanvas();
 
-        // Init tutorial
-        if (tutorialActive) {
-          updateTutorial();
-          window.setTimeout(function() { byId("tutorial-next").focus({ preventScroll: true }); }, 0);
-        }
+        // Tutorial is opt-in: driving is available immediately.
+        if (tutorialActive) updateTutorial();
 
         var buildVersion = "__BUILD_VERSION__";
         var contextOptions = {
