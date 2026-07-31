@@ -107,8 +107,8 @@ inline void WebSpeak(const char*) {}
 namespace {
 
 constexpr float kPi = 3.14159265358979323846f;
-constexpr float kWorldHalfWidth = 58.0f;
-constexpr float kWorldHalfHeight = 48.0f;
+constexpr float kWorldHalfWidth = 78.0f;
+constexpr float kWorldHalfHeight = 72.0f;
 constexpr float kCarLength = 4.45f;
 constexpr float kCarWidth = 1.82f;
 constexpr float kHillUpStartX = -37.0f;
@@ -190,6 +190,7 @@ struct InputFrame {
     bool retryPressed = false;
     bool gearDrivePressed = false;
     bool gearReversePressed = false;
+    bool gearParkPressed = false;
     bool seatbeltPressed = false;
     bool ignitionPressed = false;
     bool headlightPressed = false;
@@ -405,16 +406,38 @@ class DobongExamSimulator {
         }
 
         parkingZone_ = {{-12.0f, -20.0f}, {3.0f, 1.62f}, -kPi * 0.5f};
+        // T-shape perpendicular parking: entry corridor and slot
+        parkingEntryZone_ = {{-12.0f, -14.0f}, {4.0f, 2.8f}, -kPi * 0.5f};
+        parkingConfirmLine_ = {{-12.0f, -22.4f}, {2.9f, 0.12f}, 0.0f};
         finishZone_ = {{27.0f, 30.0f}, {3.3f, 2.6f}, 0.0f};
 
         for (const auto& point : driving_test_data::dobong_v1::kRoute) {
             route_.push_back({point.x, point.y});
         }
 
-        AddBuilding({-3.0f, 43.0f}, {18.0f, 5.0f}, 6.4f, {224, 228, 221, 255});
+        // --- Dobong/Nowon Procedural Apartment Complex (copyright-safe, no real branding) ---
+        // Multiple slab-type apartment blocks (15–25 floors, ~2.8m/floor)
+        // Positioned beyond course boundaries to provide Dobong atmosphere
+        AddBuilding({-3.0f, 52.0f}, {22.0f, 5.5f}, 50.4f, {218, 222, 217, 255});  // 18F
+        AddBuilding({-3.0f, 64.0f}, {20.0f, 5.0f}, 56.0f, {222, 225, 219, 255});  // 20F
+        AddBuilding({25.0f, 58.0f}, {18.0f, 5.0f}, 67.2f, {215, 219, 213, 255});  // 24F
+        AddBuilding({50.0f, 55.0f}, {16.0f, 5.5f}, 42.0f, {220, 223, 216, 255});  // 15F
+        AddBuilding({-35.0f, 55.0f}, {19.0f, 5.0f}, 58.8f, {214, 218, 212, 255}); // 21F
+        AddBuilding({-50.0f, 52.0f}, {14.0f, 5.0f}, 44.8f, {221, 224, 218, 255}); // 16F
+        // Behind the west barrier
+        AddBuilding({-65.0f, 20.0f}, {6.0f, 18.0f}, 53.2f, {216, 220, 214, 255}); // 19F
+        AddBuilding({-65.0f, -10.0f}, {6.0f, 16.0f}, 70.0f, {213, 217, 211, 255}); // 25F
+        // South side
+        AddBuilding({-30.0f, -52.0f}, {18.0f, 5.5f}, 47.6f, {219, 222, 216, 255}); // 17F
+        AddBuilding({10.0f, -52.0f}, {20.0f, 5.5f}, 61.6f, {216, 220, 214, 255});  // 22F
+        AddBuilding({45.0f, -50.0f}, {15.0f, 5.0f}, 56.0f, {218, 221, 215, 255});  // 20F
+
+        // East-side buildings (closer, original)
         AddBuilding({51.5f, 27.0f}, {4.2f, 7.0f}, 21.0f, {215, 219, 211, 255});
         AddBuilding({51.5f, 3.0f}, {4.2f, 7.0f}, 24.0f, {220, 223, 215, 255});
         AddBuilding({51.5f, -22.0f}, {4.2f, 7.0f}, 19.0f, {211, 216, 208, 255});
+
+        // West barrier
         obstacles_.push_back({{{-55.0f, 0.0f}, {1.0f, 43.0f}, 0.0f}, 5.0f,
                               {116, 128, 127, 255}, ObstacleType::Barrier});
 
@@ -516,6 +539,7 @@ class DobongExamSimulator {
         parkingTimer_ = 0.0f;
         parkingComplete_ = false;
         parkingOvertimePenalty_ = false;
+        parkingEnteredReverse_ = false;
         accelerationStarted_ = false;
         accelerationMaxKph_ = 0.0f;
         speedPenaltyLatch_ = false;
@@ -650,6 +674,8 @@ class DobongExamSimulator {
             input.gearDrivePressed || WebConsumePressed("gearDrivePressed");
         input.gearReversePressed =
             input.gearReversePressed || WebConsumePressed("gearReversePressed");
+        input.gearParkPressed =
+            input.gearParkPressed || WebConsumePressed("gearParkPressed");
         input.seatbeltPressed =
             input.seatbeltPressed || WebConsumePressed("seatbeltPressed");
         input.ignitionPressed =
@@ -850,6 +876,9 @@ class DobongExamSimulator {
         }
         if (input.gearReversePressed && input.brake > 0.0f && std::fabs(car_.speed) < 0.5f) {
             gear_ = TransmissionGear::Reverse;
+        }
+        if (input.gearParkPressed && input.brake > 0.0f && std::fabs(car_.speed) < 0.5f) {
+            gear_ = TransmissionGear::Park;
         }
 
         const float targetSteering = input.steer * 0.66f;
@@ -1107,9 +1136,19 @@ class DobongExamSimulator {
             parkingOvertimePenalty_ = true;
         }
 
+        // Track whether car entered the parking slot in reverse
+        if (!parkingEnteredReverse_ && PointInsideRect(car_.position, parkingEntryZone_)) {
+            parkingEnteredReverse_ = (gear_ == TransmissionGear::Reverse);
+        }
+
         if (!parkingComplete_ && IsFullyInside(parkingZone_) &&
             TouchesParkingConfirmationLine() &&
             std::fabs(car_.speed) < 0.22f && parkingBrake_) {
+            // Penalize if not entered in reverse
+            if (!parkingEnteredReverse_) {
+                ApplyPenalty(dobong_exam::Penalty::PerpendicularParking,
+                             "직각주차를 후진으로 진입하지 않았습니다.");
+            }
             parkingComplete_ = true;
             eventText_ = "직각주차 확인선 접촉 · 주차브레이크 확인";
             eventTimer_ = 5.0f;
@@ -1264,8 +1303,7 @@ class DobongExamSimulator {
     }
 
     bool TouchesParkingConfirmationLine() const {
-        const OrientedRect confirmationLine{{-12.0f, -22.4f}, {2.9f, 0.12f}, 0.0f};
-        return Intersects(CarRect(), confirmationLine);
+        return Intersects(CarRect(), parkingConfirmLine_);
     }
 
     float GroundHeightAt(Vector2 position) const {
@@ -1445,15 +1483,20 @@ class DobongExamSimulator {
             std::sin(sceneTime_ * (6.0f + speedRatio * 8.0f)) * 0.009f * speedRatio;
         const float glance = car_.steering * 1.05f;
 
+        // Driver seat offset: ~0.50m left of vehicle center (left-hand drive Korea)
+        // Provides bonnet-left sensation matching real driver perspective
+        constexpr float kDriverLateralOffset = -0.50f;
+        constexpr float kDriverLongitudinalOffset = 0.42f;
+
         const Vector3 desiredPosition = {
-            car_.position.x + forward.x * 0.42f - side.x * 0.25f,
+            car_.position.x + forward.x * kDriverLongitudinalOffset + side.x * kDriverLateralOffset,
             groundY + 1.28f + vibration,
-            car_.position.y + forward.y * 0.42f - side.y * 0.25f,
+            car_.position.y + forward.y * kDriverLongitudinalOffset + side.y * kDriverLateralOffset,
         };
         const Vector3 desiredTarget = {
-            car_.position.x + forward.x * 15.0f + side.x * glance,
+            car_.position.x + forward.x * 15.0f + side.x * (glance + kDriverLateralOffset),
             groundY + 0.82f,
-            car_.position.y + forward.y * 15.0f + side.y * glance,
+            car_.position.y + forward.y * 15.0f + side.y * (glance + kDriverLateralOffset),
         };
         const float blend = 1.0f - std::exp(-dt * 8.0f);
         camera_.position = LerpVector3(camera_.position, desiredPosition, blend);
@@ -1493,6 +1536,26 @@ class DobongExamSimulator {
                                Fade(kSkyHorizon, 0.9f), Fade(kGrass, 0.1f));
 
         const float headingShift = car_.heading / (2.0f * kPi) * width;
+
+        // Suraksan/Dobongsan-style rocky ridgeline (far layer, jagged peaks)
+        {
+            const float baseY = height * 0.44f;
+            const Color ridge{95, 112, 118, 255};
+            for (int i = -3; i < 10; ++i) {
+                const float x = i * width * 0.16f - std::fmod(headingShift * 0.1f, width * 0.32f);
+                const float peak = 72.0f + ((i * 7 + 13) % 5) * 22.0f;
+                DrawTriangle({x - width * 0.02f, baseY},
+                             {x + width * 0.08f, baseY - peak},
+                             {x + width * 0.18f, baseY}, Fade(ridge, 0.58f));
+                // Secondary sub-peak for rocky appearance
+                const float subPeak = peak * 0.6f + ((i * 3 + 7) % 4) * 8.0f;
+                DrawTriangle({x + width * 0.04f, baseY},
+                             {x + width * 0.12f, baseY - subPeak},
+                             {x + width * 0.22f, baseY}, Fade(ridge, 0.42f));
+            }
+        }
+
+        // Nearer mountain layers (Dobong ridgeline character)
         for (int layer = 0; layer < 2; ++layer) {
             const float baseY = height * (0.48f + layer * 0.07f);
             const Color mountain =
@@ -1609,10 +1672,21 @@ class DobongExamSimulator {
                           0.018f, Fade(kLaneWhite, 0.9f), 0.055f);
         }
 
+        // T-shape perpendicular parking: entry corridor outline
+        DrawOutline(parkingEntryZone_, Fade(kCourseBlue, 0.6f), 0.10f);
+        // Parking slot outline (clear boundary)
         DrawOutline(parkingZone_, kSafetyYellow, 0.15f);
-        const Vector2 confirmationStart{-14.9f, -22.4f};
-        const Vector2 confirmationEnd{-9.1f, -22.4f};
-        DrawLineBox(confirmationStart, confirmationEnd, 0.22f, kSafetyYellow, 0.06f);
+        // T-shape entry guide arrows
+        DrawArrow({-12.0f, -16.0f}, -kPi * 0.5f, Fade(kCourseBlue, 0.45f));
+
+        // Confirmation line (yellow, prominent) — same geometry used by scoring.
+        DrawGroundBox(parkingConfirmLine_.center,
+                      {parkingConfirmLine_.half.x * 2.0f,
+                       parkingConfirmLine_.half.y * 2.0f},
+                      parkingConfirmLine_.angle, 0.02f, kSafetyYellow, 0.06f);
+        // Confirmation text indicator on ground
+        DrawGroundBox({-12.0f, -22.7f}, {2.5f, 0.4f}, 0.0f, 0.015f,
+                      Fade(kSafetyYellow, 0.5f), 0.058f);
 
         const Vector2 target = GuidanceTarget();
         const Vector2 toTarget = VSub(target, car_.position);
@@ -1659,17 +1733,47 @@ class DobongExamSimulator {
                                   obstacle.footprint.half.y * 2.08f},
                                  obstacle.footprint.angle, roof);
 
+                // Procedural windows/balconies for slab-type apartments (판상형).
+                // Sparse facade rows preserve the Nowon skyline without thousands of
+                // WebGL1 draw calls (the world is also rendered into three mirrors).
                 if (obstacle.height > 10.0f) {
-                    for (int floor = 1; floor < static_cast<int>(obstacle.height / 2.5f);
-                         ++floor) {
-                        for (const float side : {-1.0f, 1.0f}) {
-                            DrawCube({obstacle.footprint.center.x + side *
-                                         (obstacle.footprint.half.x + 0.03f),
-                                      floor * 2.5f,
-                                      obstacle.footprint.center.y},
-                                     0.08f, 0.8f, 7.5f, {92, 124, 137, 255});
+                    const int floors = static_cast<int>(obstacle.height / 2.8f);
+                    const int floorStep = floors >= 20 ? 4 : 3;
+                    const float halfX = obstacle.footprint.half.x;
+                    const float halfY = obstacle.footprint.half.y;
+                    const int windowCount = std::clamp(
+                        static_cast<int>(halfX / 3.2f), 3, 5);
+                    const float facadeSpan = std::max(0.1f, halfX * 2.0f - 3.0f);
+                    const Color windowColor{92, 124, 137, 255};
+                    const Color balconyColor{185, 190, 182, 255};
+
+                    rlPushMatrix();
+                    rlTranslatef(obstacle.footprint.center.x, 0.0f,
+                                 obstacle.footprint.center.y);
+                    rlRotatef(obstacle.footprint.angle * RAD2DEG, 0.0f, 1.0f, 0.0f);
+                    int facadeRow = 0;
+                    for (int floor = 2; floor <= floors; floor += floorStep, ++facadeRow) {
+                        const float floorY = floor * 2.8f - 1.0f;
+                        for (int w = 0; w < windowCount; ++w) {
+                            const float wx = windowCount == 1
+                                                 ? 0.0f
+                                                 : -halfX + 1.5f +
+                                                       w * facadeSpan / (windowCount - 1);
+                            for (const float side : {-1.0f, 1.0f}) {
+                                DrawCube({wx, floorY, side * (halfY + 0.02f)},
+                                         1.1f, 1.45f, 0.06f, windowColor);
+                            }
+                        }
+                        if (facadeRow % 2 == 1) {
+                            for (const float side : {-1.0f, 1.0f}) {
+                                DrawCube({0.0f, floorY - 0.9f,
+                                          side * (halfY + 0.13f)},
+                                         halfX * 1.85f, 0.08f, 0.24f,
+                                         balconyColor);
+                            }
                         }
                     }
+                    rlPopMatrix();
                 }
             } else if (obstacle.type == ObstacleType::Barrier) {
                 DrawOrientedCube(obstacle.footprint.center, obstacle.height * 0.5f,
@@ -1701,10 +1805,12 @@ class DobongExamSimulator {
             DrawTree(trees[i], 0.85f + static_cast<float>(i % 3) * 0.12f);
         }
 
-        // Course control booth and observation canopy.
+        // Course control booth and observation canopy (관제동).
         DrawCube({19.0f, 1.3f, -2.0f}, 4.5f, 2.6f, 3.6f, {225, 229, 221, 255});
         DrawCube({19.0f, 2.75f, -2.0f}, 5.0f, 0.3f, 4.1f, {54, 121, 93, 255});
         DrawCube({16.7f, 1.45f, -2.0f}, 0.08f, 1.0f, 2.5f, {78, 119, 135, 255});
+        // Control booth signage strip
+        DrawCube({19.0f, 2.4f, -3.82f}, 3.6f, 0.4f, 0.05f, {42, 88, 128, 255});
 
         DrawTrafficSignal();
     }
@@ -1963,8 +2069,10 @@ class DobongExamSimulator {
     std::vector<Obstacle> obstacles_{};
     std::vector<Vector2> route_{};
     OrientedRect parkingZone_{};
+    OrientedRect parkingEntryZone_{};
+    OrientedRect parkingConfirmLine_{};
     OrientedRect finishZone_{};
-
+    bool parkingEnteredReverse_ = false;
     RenderTexture2D mirrorRear_{};
     RenderTexture2D mirrorLeft_{};
     RenderTexture2D mirrorRight_{};

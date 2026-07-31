@@ -1402,6 +1402,145 @@
         }
       }
 
+      /* === Cockpit 720° Wheel === */
+      .steer-pad {
+        width: 148px;
+        height: 148px;
+      }
+      .steer-wheel {
+        width: 118px;
+        height: 118px;
+        border-width: 12px;
+        transition: none;
+      }
+      @media (max-width: 760px) {
+        .steer-pad { width: 120px; height: 120px; }
+        .steer-wheel { width: 94px; height: 94px; border-width: 10px; }
+      }
+
+      /* === Turn Signal Lever === */
+      .lever-group { display: flex; flex-direction: column; gap: 3px; align-items: center; }
+      .lever-track {
+        position: relative; width: 36px; height: 72px;
+        border-radius: 18px; background: #e2e8eb;
+        border: 1px solid var(--line); cursor: pointer; touch-action: none;
+      }
+      .lever-knob {
+        position: absolute; left: 50%; width: 28px; height: 24px;
+        border-radius: 12px; background: var(--navy-900);
+        transform: translate(-50%, 0); transition: top 120ms ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,.25);
+      }
+      .lever-track[data-pos="up"] .lever-knob { top: 2px; }
+      .lever-track[data-pos="mid"] .lever-knob { top: 24px; }
+      .lever-track[data-pos="down"] .lever-knob { top: 46px; }
+      .lever-label { font-size: 8px; font-weight: 700; color: var(--muted); text-align: center; }
+
+      /* === Gear Gate Lever === */
+      .gear-gate {
+        display: flex; flex-direction: column; gap: 2px; align-items: center;
+        padding: 4px 6px; border-radius: 10px; background: #1a2a34;
+      }
+      .gear-gate-slot {
+        display: flex; flex-direction: column; gap: 1px; position: relative;
+        width: 34px; padding: 3px 0;
+      }
+      .gear-gate-pos {
+        display: grid; place-items: center; min-height: 28px;
+        font-size: 11px; font-weight: 800; color: rgba(255,255,255,.4);
+        border-radius: 4px; cursor: pointer;
+      }
+      .gear-gate-pos.active { color: #4bd27d; background: rgba(75,210,125,.12); }
+      .gear-gate-label { font-size: 7px; color: rgba(255,255,255,.5); font-weight: 700; }
+
+      /* === Parking Brake Lever === */
+      .pbrake-lever {
+        position: relative; width: 32px; height: 56px;
+        border-radius: 8px; background: #2a3a42; cursor: pointer;
+        border: 1px solid rgba(255,255,255,.1);
+      }
+      .pbrake-handle {
+        position: absolute; left: 50%; width: 22px; height: 20px;
+        background: #8b4513; border-radius: 6px 6px 3px 3px;
+        transform: translate(-50%, 0); transition: top 100ms ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,.3);
+      }
+      .pbrake-lever[data-engaged="true"] .pbrake-handle { top: 4px; }
+      .pbrake-lever[data-engaged="false"] .pbrake-handle { top: 32px; }
+      .pbrake-indicator {
+        position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
+        font-size: 7px; font-weight: 800; color: rgba(255,255,255,.5);
+      }
+      .pbrake-lever[data-engaged="true"] .pbrake-indicator { color: #ff6b6b; }
+
+      /* === Hazard Physical Switch === */
+      .hazard-switch {
+        position: relative; width: 40px; height: 40px;
+        border-radius: 50%; background: #c0392b; cursor: pointer;
+        border: 3px solid #922b21; display: grid; place-items: center;
+        box-shadow: 0 3px 8px rgba(0,0,0,.3);
+        transition: transform 80ms ease, box-shadow 80ms ease;
+      }
+      .hazard-switch[aria-pressed="true"] {
+        transform: scale(.92); box-shadow: inset 0 2px 6px rgba(0,0,0,.4);
+        background: #e74c3c; animation: hazard-blink 600ms ease-in-out infinite alternate;
+      }
+      .hazard-switch-icon { font-size: 16px; color: #fff; font-weight: 900; }
+      @keyframes hazard-blink { to { opacity: .6; } }
+
+      /* === Tilt Mode Toggle === */
+      .steer-mode-toggle {
+        position: absolute; top: 4px; right: 4px; z-index: 5;
+        padding: 3px 7px; border-radius: 6px; border: 1px solid var(--line);
+        background: rgba(255,255,255,.85); font-size: 8px; font-weight: 750;
+        cursor: pointer; color: var(--navy-800);
+      }
+      .steer-mode-toggle.active { background: var(--blue-soft); color: var(--blue); border-color: var(--blue); }
+
+      /* === Tutorial Overlay === */
+      .tutorial-overlay {
+        position: fixed; inset: 0; z-index: 100;
+        background: transparent;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 16px; opacity: 1; transition: opacity 300ms ease;
+      }
+      .tutorial-overlay.no-spotlight {
+        background: rgba(6,25,40,.72);
+        backdrop-filter: blur(6px);
+      }
+      .tutorial-overlay[hidden] { display: none !important; }
+      .tutorial-card {
+        position: relative; z-index: 102;
+        width: min(520px, 100%); max-height: 80dvh; overflow-y: auto;
+        background: var(--paper-strong); border-radius: 16px;
+        box-shadow: 0 24px 60px rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.8);
+      }
+      .tutorial-header {
+        padding: 18px 20px 14px; background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
+        color: #fff; border-radius: 16px 16px 0 0;
+      }
+      .tutorial-header h2 { margin: 0 0 4px; font-size: 18px; }
+      .tutorial-header p { margin: 0; font-size: 11px; opacity: .75; }
+      .tutorial-body { padding: 16px 20px; }
+      .tutorial-step-title { font-size: 14px; font-weight: 800; color: var(--navy-900); margin: 0 0 6px; }
+      .tutorial-step-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0 0 14px; }
+      .tutorial-progress { font-size: 10px; color: var(--muted); margin-bottom: 10px; }
+      .tutorial-actions { display: flex; gap: 8px; justify-content: flex-end; }
+      .tutorial-actions button {
+        padding: 8px 16px; border-radius: 7px; font-weight: 750; font-size: 12px; cursor: pointer;
+      }
+      .tutorial-btn-prev { border: 1px solid var(--line); background: #fff; color: var(--navy-800); }
+      .tutorial-btn-next { border: 1px solid var(--green); background: var(--green); color: #fff; }
+      .tutorial-btn-skip { border: 1px solid var(--line); background: transparent; color: var(--muted); font-size: 11px; }
+      .tutorial-spotlight {
+        position: fixed; z-index: 101; border: 2px solid rgba(255,255,255,.96); border-radius: 12px;
+        background: transparent;
+        box-shadow: 0 0 0 9999px rgba(6,25,40,.72), 0 0 0 5px rgba(242,163,38,.58);
+        pointer-events: none;
+        transition: all 300ms ease;
+      }
+      .tutorial-spotlight[hidden] { display: none !important; }
+
       @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
@@ -1411,6 +1550,7 @@
           animation-iteration-count: 1 !important;
           transition-duration: 0.01ms !important;
         }
+        .tutorial-overlay, .tutorial-spotlight { transition-duration: 0.01ms !important; }
       }
     </style>
   </head>
@@ -1487,12 +1627,13 @@
 
         <footer class="control-deck" aria-label="차량 조작 장치">
           <section class="control-card steer-card" aria-label="조향 장치">
+            <button class="steer-mode-toggle" id="steer-mode-btn" type="button" aria-label="조향 모드 전환: 터치 휠">터치</button>
             <div
               class="steer-pad"
               id="steer-pad"
               role="slider"
               tabindex="0"
-              aria-label="핸들 조향, 좌우로 드래그"
+              aria-label="핸들 조향, 720도 누적 회전"
               aria-valuemin="-100"
               aria-valuemax="100"
               aria-valuenow="0"
@@ -1502,164 +1643,74 @@
               </div>
             </div>
             <div class="steer-help" aria-hidden="true">
-              <span class="control-kicker">STEERING</span>
+              <span class="control-kicker">720° WHEEL</span>
               <strong>핸들</strong>
-              <span>좌우로 드래그</span>
+              <span>원형 드래그</span>
             </div>
           </section>
 
           <section class="control-card switch-card" aria-label="차량 기능 스위치">
-            <button
-              type="button"
-              class="control-button"
-              id="control-seatbelt"
-              data-latch="seatbelt"
-              aria-label="안전벨트 착용 또는 해제"
-              aria-pressed="false"
-            >
-              <span class="control-icon" aria-hidden="true">╱</span>
-              <span class="control-label">안전벨트</span>
+            <button type="button" class="control-button" id="control-seatbelt" data-latch="seatbelt" aria-label="안전벨트 착용 또는 해제" aria-pressed="false">
+              <span class="control-icon" aria-hidden="true">╱</span><span class="control-label">안전벨트</span>
             </button>
-            <button
-              type="button"
-              class="control-button"
-              id="control-ignition"
-              data-latch="ignition"
-              aria-label="시동 켜기 또는 끄기"
-              aria-pressed="false"
-            >
-              <span class="control-icon" aria-hidden="true">⏻</span>
-              <span class="control-label">시동</span>
+            <button type="button" class="control-button" id="control-ignition" data-latch="ignition" aria-label="시동 켜기 또는 끄기" aria-pressed="false">
+              <span class="control-icon" aria-hidden="true">⏻</span><span class="control-label">시동</span>
             </button>
-            <button
-              type="button"
-              class="control-button"
-              id="control-headlight"
-              data-latch="headlight"
-              aria-label="전조등 켜기 또는 끄기"
-              aria-pressed="false"
-            >
-              <span class="control-icon" aria-hidden="true">◉</span>
-              <span class="control-label">전조등</span>
+            <button type="button" class="control-button" id="control-headlight" data-latch="headlight" aria-label="전조등 켜기 또는 끄기" aria-pressed="false">
+              <span class="control-icon" aria-hidden="true">◉</span><span class="control-label">전조등</span>
             </button>
-            <button
-              type="button"
-              class="control-button"
-              id="control-wiper"
-              data-latch="wiper"
-              aria-label="와이퍼 작동 또는 정지"
-              aria-pressed="false"
-            >
-              <span class="control-icon" aria-hidden="true">⌒</span>
-              <span class="control-label">와이퍼</span>
+            <button type="button" class="control-button" id="control-wiper" data-latch="wiper" aria-label="와이퍼 작동 또는 정지" aria-pressed="false">
+              <span class="control-icon" aria-hidden="true">⌒</span><span class="control-label">와이퍼</span>
             </button>
-            <button
-              type="button"
-              class="control-button"
-              id="control-left-signal"
-              data-latch="leftSignal"
-              aria-label="좌측 방향지시등"
-              aria-pressed="false"
-            >
-              <span class="control-icon" aria-hidden="true">←</span>
-              <span class="control-label">좌측 지시등</span>
+
+            <!-- Turn Signal 3-position Lever -->
+            <div class="lever-group" aria-label="방향지시등 3단 레버">
+              <div class="lever-track" id="signal-lever" data-pos="mid" role="slider" tabindex="0" aria-label="방향지시등 레버: 위=좌회전, 중립, 아래=우회전" aria-valuemin="-1" aria-valuemax="1" aria-valuenow="0">
+                <div class="lever-knob"></div>
+              </div>
+              <span class="lever-label">지시등</span>
+            </div>
+
+            <!-- Hazard Physical Switch -->
+            <div class="lever-group" aria-label="비상점멸등">
+              <button type="button" class="hazard-switch" id="control-hazard" aria-label="비상 점멸등" aria-pressed="false">
+                <span class="hazard-switch-icon" aria-hidden="true">△</span>
+              </button>
+              <span class="lever-label">비상등</span>
+            </div>
+
+            <!-- Parking Brake Lever -->
+            <div class="lever-group" aria-label="주차브레이크 레버">
+              <div class="pbrake-lever" id="control-parking-brake" data-engaged="true" role="switch" tabindex="0" aria-label="주차 브레이크 당김/해제" aria-checked="true">
+                <div class="pbrake-handle"></div>
+                <span class="pbrake-indicator">P</span>
+              </div>
+              <span class="lever-label">주차브레이크</span>
+            </div>
+
+            <button type="button" class="control-button" id="control-retry" data-latch="retry" aria-label="시험 다시 시작">
+              <span class="control-icon" aria-hidden="true">↻</span><span class="control-label">다시 시작</span>
             </button>
-            <button
-              type="button"
-              class="control-button"
-              id="control-right-signal"
-              data-latch="rightSignal"
-              aria-label="우측 방향지시등"
-              aria-pressed="false"
-            >
-              <span class="control-icon" aria-hidden="true">→</span>
-              <span class="control-label">우측 지시등</span>
-            </button>
-            <button
-              type="button"
-              class="control-button warning"
-              id="control-hazard"
-              data-latch="hazard"
-              aria-label="비상 점멸등"
-              aria-pressed="false"
-            >
-              <span class="control-icon" aria-hidden="true">△</span>
-              <span class="control-label">비상등</span>
-            </button>
-            <button
-              type="button"
-              class="control-button"
-              id="control-parking-brake"
-              data-latch="parkingBrake"
-              aria-label="주차 브레이크 작동 또는 해제"
-              aria-pressed="false"
-            >
-              <span class="control-icon" aria-hidden="true">Ⓟ</span>
-              <span class="control-label">주차 브레이크</span>
-            </button>
-            <button
-              type="button"
-              class="control-button"
-              id="control-retry"
-              data-latch="retry"
-              aria-label="시험 다시 시작"
-            >
-              <span class="control-icon" aria-hidden="true">↻</span>
-              <span class="control-label">다시 시작</span>
-            </button>
-            <button
-              type="button"
-              class="control-button"
-              id="control-audio"
-              aria-label="음성 안내 다시 듣기"
-            >
-              <span class="control-icon" aria-hidden="true">◖</span>
-              <span class="control-label">안내 듣기</span>
+            <button type="button" class="control-button" id="control-audio" aria-label="음성 안내 다시 듣기">
+              <span class="control-icon" aria-hidden="true">◖</span><span class="control-label">안내 듣기</span>
             </button>
           </section>
 
           <section class="control-card drive-card" aria-label="변속 및 페달">
-            <div class="gear-stack" aria-label="기어 선택">
-              <button
-                type="button"
-                class="control-button gear-button"
-                id="control-gear-drive"
-                data-latch="gearDrive"
-                aria-label="주행 기어 D"
-                aria-pressed="false"
-              >
-                <span class="control-icon">D</span>
-              </button>
-              <button
-                type="button"
-                class="control-button gear-button"
-                id="control-gear-reverse"
-                data-latch="gearReverse"
-                aria-label="후진 기어 R"
-                aria-pressed="false"
-              >
-                <span class="control-icon">R</span>
-              </button>
+            <!-- Gear Gate Lever (P/D/R) -->
+            <div class="gear-gate" aria-label="기어 게이트 레버">
+              <div class="gear-gate-slot" id="gear-gate">
+                <div class="gear-gate-pos" data-gear="P" id="control-gear-park" role="radio" tabindex="0" aria-label="P 주차" aria-checked="true">P</div>
+                <div class="gear-gate-pos" data-gear="D" id="control-gear-drive" role="radio" tabindex="0" aria-label="D 전진" aria-checked="false">D</div>
+                <div class="gear-gate-pos" data-gear="R" id="control-gear-reverse" role="radio" tabindex="0" aria-label="R 후진" aria-checked="false">R</div>
+              </div>
+              <span class="gear-gate-label">GEAR</span>
             </div>
-            <button
-              type="button"
-              class="control-button pedal brake"
-              id="control-brake"
-              data-hold="brake"
-              aria-label="브레이크, 누르는 동안 제동"
-            >
-              <span class="control-icon" aria-hidden="true">BRAKE</span>
-              <span class="control-label">브레이크</span>
+            <button type="button" class="control-button pedal brake" id="control-brake" data-hold="brake" aria-label="브레이크, 누르는 동안 제동">
+              <span class="control-icon" aria-hidden="true">BRAKE</span><span class="control-label">브레이크</span>
             </button>
-            <button
-              type="button"
-              class="control-button pedal accelerator"
-              id="control-throttle"
-              data-hold="throttle"
-              aria-label="가속 페달, 누르는 동안 가속"
-            >
-              <span class="control-icon" aria-hidden="true">GAS</span>
-              <span class="control-label">가속 페달</span>
+            <button type="button" class="control-button pedal accelerator" id="control-throttle" data-hold="throttle" aria-label="가속 페달, 누르는 동안 가속">
+              <span class="control-icon" aria-hidden="true">GAS</span><span class="control-label">가속 페달</span>
             </button>
           </section>
         </footer>
@@ -1799,6 +1850,27 @@
           </div>
         </div>
       </section>
+
+      <!-- Tutorial Overlay -->
+      <div class="tutorial-spotlight" id="tutorial-spotlight" hidden aria-hidden="true"></div>
+      <section class="tutorial-overlay" id="tutorial-overlay" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+        <div class="tutorial-card">
+          <header class="tutorial-header">
+            <h2 id="tutorial-title">조작 안내 튜토리얼</h2>
+            <p>시험 시작 전 각 조작 장치를 확인합니다. 순서대로 진행해 주세요.</p>
+          </header>
+          <div class="tutorial-body">
+            <p class="tutorial-progress" id="tutorial-progress">1 / 8</p>
+            <h3 class="tutorial-step-title" id="tutorial-step-title">조향 모드</h3>
+            <p class="tutorial-step-desc" id="tutorial-step-desc">터치 휠 또는 기울기(틸트) 모드를 선택할 수 있습니다. 720도 lock-to-lock 원형 드래그로 조향합니다.</p>
+            <div class="tutorial-actions">
+              <button type="button" class="tutorial-btn-skip" id="tutorial-skip" aria-label="튜토리얼 건너뛰기">건너뛰기</button>
+              <button type="button" class="tutorial-btn-prev" id="tutorial-prev" aria-label="이전 단계" disabled>이전</button>
+              <button type="button" class="tutorial-btn-next" id="tutorial-next" aria-label="다음 단계">다음</button>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <script>
@@ -1816,6 +1888,13 @@
         const resultCard = byId("result-card");
         const steeringPad = byId("steer-pad");
         const steeringWheel = byId("steer-wheel");
+        const steerModeBtn = byId("steer-mode-btn");
+        const signalLever = byId("signal-lever");
+        const gearGate = byId("gear-gate");
+        const pBrakeLever = byId("control-parking-brake");
+        const hazardSwitch = byId("control-hazard");
+        const tutorialOverlay = byId("tutorial-overlay");
+        const tutorialSpotlight = byId("tutorial-spotlight");
 
         const inputState = (window.__examInput = {
           steerValue: 0,
@@ -1825,6 +1904,7 @@
           retryPressed: false,
           gearDrivePressed: false,
           gearReversePressed: false,
+          gearParkPressed: false,
           seatbeltPressed: false,
           ignitionPressed: false,
           headlightPressed: false,
@@ -1834,6 +1914,37 @@
           hazardPressed: false,
           parkingBrakePressed: false
         });
+
+        // Track C++ signal state for correct neutral toggle-off
+        var currentSignalState = "off"; // "left", "right", or "off"
+
+        // Steering state: 720° cumulative (±360°)
+        let steerMode = "touch-wheel"; // or "tilt"
+        let cumulativeAngleDeg = 0;
+        const MAX_STEER_DEG = 360;
+        let steerPointerId = null;
+        let lastPointerAngle = null;
+        let steerReturnRaf = null;
+
+        // Tilt mode state
+        let tiltCalibration = null;
+        let tiltPermissionGranted = false;
+        let tiltAlpha = 0;
+
+        // Tutorial state
+        let tutorialActive = true;
+        let tutorialStep = 0;
+        let inputLocked = true;
+        const tutorialSteps = [
+          { title: "조향 모드 선택", desc: "터치 휠(원형 드래그)과 기울기(틸트) 두 가지 모드로 조향할 수 있습니다. 상단 버튼으로 전환합니다. 720도(좌우 ±360°) lock-to-lock으로 실차와 동일합니다.", target: "steer-pad" },
+          { title: "브레이크 / 가속 페달", desc: "화면 오른쪽 아래의 BRAKE와 GAS 버튼을 누르는 동안 제동/가속됩니다. 기울기 모드에서도 페달은 화면 터치로 조작합니다.", target: "control-brake" },
+          { title: "기어 게이트 레버", desc: "P(주차)/D(전진)/R(후진)를 터치해 전환합니다. 정지+브레이크 상태에서만 변속됩니다.", target: "gear-gate" },
+          { title: "방향지시등 3단 레버", desc: "레버를 위로 밀면 좌회전, 아래로 밀면 우회전, 가운데는 중립입니다. 터치 또는 드래그로 조작합니다.", target: "signal-lever" },
+          { title: "비상점멸등 스위치", desc: "빨간색 원형 스위치를 눌러 비상등을 켜고 끕니다. 돌발상황에서 정지 후 3초 이내에 켜야 합니다.", target: "control-hazard" },
+          { title: "주차브레이크 레버", desc: "위로 당기면 체결, 아래로 내리면 해제됩니다. 출발 전 해제하고 주차 시 체결합니다.", target: "control-parking-brake" },
+          { title: "시험 진행 순서", desc: "기본조작 → 출발 → 경사로 → 돌발 → 우회전 → 신호교차로 → T자 직각주차 → 가속구간 → 종료. 100점에서 감점, 80점 이상 합격입니다.", target: null },
+          { title: "준비 완료!", desc: "모든 조작을 확인했습니다. '시험 시작'을 누르면 기본조작 단계부터 진행됩니다. 행운을 빕니다!", target: "start-button" }
+        ];
 
         const ui = {
           phaseTitle: byId("phase-title"),
@@ -1859,15 +1970,15 @@
         const stateButtons = {
           seatbelt: byId("control-seatbelt"),
           ignition: byId("control-ignition"),
-          parkingBrake: byId("control-parking-brake"),
+          parkingBrake: pBrakeLever,
           headlights: byId("control-headlight"),
           wiper: byId("control-wiper"),
-          leftSignal: byId("control-left-signal"),
-          rightSignal: byId("control-right-signal"),
-          hazard: byId("control-hazard")
+          leftSignal: signalLever,
+          rightSignal: signalLever,
+          hazard: hazardSwitch
         };
 
-        let lastInstruction = ui.instruction.textContent.trim();
+        let lastInstruction = "";
         let lastFinished = false;
         let lastSpokenText = "";
         let lastSpokenAt = 0;
@@ -1914,98 +2025,334 @@
           const number = Number(value);
           const clamped = Math.max(-1, Math.min(1, Number.isFinite(number) ? number : 0));
           inputState.steerValue = clamped;
-          steeringWheel.style.transform = `rotate(${clamped * 132}deg)`;
+          // Display full 720° rotation on wheel visual
+          steeringWheel.style.transform = "rotate(" + (clamped * 360) + "deg)";
           steeringPad.setAttribute("aria-valuenow", String(Math.round(clamped * 100)));
         }
 
         function resizeCanvas() {
-          canvas.style.width = `${window.innerWidth}px`;
-          canvas.style.height = `${window.innerHeight}px`;
+          canvas.style.width = window.innerWidth + "px";
+          canvas.style.height = window.innerHeight + "px";
+        }
+
+        // === 720° Cumulative Circular Drag Steering ===
+        function getAngleFromCenter(cx, cy, px, py) {
+          return Math.atan2(py - cy, px - cx) * (180 / Math.PI);
+        }
+
+        function normalizeAngleDelta(delta) {
+          while (delta > 180) delta -= 360;
+          while (delta < -180) delta += 360;
+          return delta;
+        }
+
+        function startSteerReturn() {
+          if (steerReturnRaf) return;
+          function step() {
+            if (steerPointerId !== null) { steerReturnRaf = null; return; }
+            cumulativeAngleDeg *= 0.88;
+            if (Math.abs(cumulativeAngleDeg) < 0.5) cumulativeAngleDeg = 0;
+            setSteerValue(cumulativeAngleDeg / MAX_STEER_DEG);
+            if (Math.abs(cumulativeAngleDeg) > 0.5) {
+              steerReturnRaf = requestAnimationFrame(step);
+            } else {
+              steerReturnRaf = null;
+            }
+          }
+          steerReturnRaf = requestAnimationFrame(step);
         }
 
         function bindSteering() {
-          let pointerId = null;
-
-          const updateFromPointer = (event) => {
-            const rect = steeringPad.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const radius = Math.max(1, rect.width * 0.38);
-            setSteerValue((event.clientX - centerX) / radius);
+          var updateFromPointer = function(event) {
+            var rect = steeringPad.getBoundingClientRect();
+            var cx = rect.left + rect.width / 2;
+            var cy = rect.top + rect.height / 2;
+            var angle = getAngleFromCenter(cx, cy, event.clientX, event.clientY);
+            if (lastPointerAngle !== null) {
+              var delta = normalizeAngleDelta(angle - lastPointerAngle);
+              cumulativeAngleDeg = Math.max(-MAX_STEER_DEG, Math.min(MAX_STEER_DEG, cumulativeAngleDeg + delta));
+              setSteerValue(cumulativeAngleDeg / MAX_STEER_DEG);
+            }
+            lastPointerAngle = angle;
           };
 
-          const release = (event) => {
-            if (pointerId === null) return;
-            if (event && event.pointerId !== undefined && event.pointerId !== pointerId) return;
-            pointerId = null;
+          var release = function(event) {
+            if (steerPointerId === null) return;
+            if (event && event.pointerId !== undefined && event.pointerId !== steerPointerId) return;
+            steerPointerId = null;
+            lastPointerAngle = null;
             steeringPad.classList.remove("active");
-            setSteerValue(0);
+            startSteerReturn();
           };
 
-          steeringPad.addEventListener("pointerdown", (event) => {
+          steeringPad.addEventListener("pointerdown", function(event) {
+            if (inputLocked) return;
             event.preventDefault();
-            pointerId = event.pointerId;
+            steerPointerId = event.pointerId;
             steeringPad.classList.add("active");
-            steeringPad.setPointerCapture?.(event.pointerId);
-            updateFromPointer(event);
+            steeringPad.setPointerCapture && steeringPad.setPointerCapture(event.pointerId);
+            var rect = steeringPad.getBoundingClientRect();
+            lastPointerAngle = getAngleFromCenter(rect.left + rect.width/2, rect.top + rect.height/2, event.clientX, event.clientY);
           });
-          steeringPad.addEventListener("pointermove", (event) => {
-            if (event.pointerId !== pointerId) return;
+          steeringPad.addEventListener("pointermove", function(event) {
+            if (event.pointerId !== steerPointerId) return;
             updateFromPointer(event);
           });
           steeringPad.addEventListener("pointerup", release);
           steeringPad.addEventListener("pointercancel", release);
           steeringPad.addEventListener("lostpointercapture", release);
-          steeringPad.addEventListener("keydown", (event) => {
+          steeringPad.addEventListener("keydown", function(event) {
+            if (inputLocked) return;
             if (!["ArrowLeft", "ArrowRight", "Home"].includes(event.key)) return;
             event.preventDefault();
             if (event.key === "Home") {
-              setSteerValue(0);
+              cumulativeAngleDeg = 0;
             } else {
-              setSteerValue(inputState.steerValue + (event.key === "ArrowLeft" ? -0.12 : 0.12));
+              cumulativeAngleDeg = Math.max(-MAX_STEER_DEG, Math.min(MAX_STEER_DEG, cumulativeAngleDeg + (event.key === "ArrowLeft" ? -18 : 18)));
             }
+            setSteerValue(cumulativeAngleDeg / MAX_STEER_DEG);
           });
-          steeringPad.addEventListener("keyup", (event) => {
-            if (event.key === "ArrowLeft" || event.key === "ArrowRight") setSteerValue(0);
+          steeringPad.addEventListener("keyup", function(event) {
+            if (event.key === "ArrowLeft" || event.key === "ArrowRight") startSteerReturn();
           });
         }
 
-        function bindHoldButton(button) {
-          const key = button.dataset.hold;
+        // === Tilt (DeviceOrientation) Steering ===
+        let tiltListenerAttached = false;
 
-          const press = (event) => {
+        function screenOrientationAngle() {
+          const raw = screen.orientation && Number.isFinite(screen.orientation.angle)
+            ? screen.orientation.angle
+            : Number(window.orientation || 0);
+          return ((raw % 360) + 360) % 360;
+        }
+
+        function lateralTilt(event) {
+          const gamma = Number(event.gamma || 0);
+          const beta = Number(event.beta || 0);
+          const orientation = screenOrientationAngle();
+          if (orientation === 90) return beta;
+          if (orientation === 270) return -beta;
+          if (orientation === 180) return -gamma;
+          return gamma;
+        }
+
+        function handleTilt(event) {
+          if (steerMode !== "tilt" || inputLocked) return;
+          const lateral = lateralTilt(event);
+          if (tiltCalibration === null) {
+            tiltCalibration = lateral;
+            tiltAlpha = 0;
+            return;
+          }
+
+          const raw = lateral - tiltCalibration;
+          const deadzone = 3;
+          const maxAngle = 35;
+          let adjusted = 0;
+          if (Math.abs(raw) > deadzone) {
+            adjusted = (raw - Math.sign(raw) * deadzone) / (maxAngle - deadzone);
+          }
+          tiltAlpha = tiltAlpha * 0.72 + adjusted * 0.28;
+          const clamped = Math.max(-1, Math.min(1, tiltAlpha));
+          cumulativeAngleDeg = clamped * MAX_STEER_DEG;
+          setSteerValue(clamped);
+        }
+
+        function attachTiltListener() {
+          if (tiltListenerAttached) return;
+          window.addEventListener("deviceorientation", handleTilt, { passive: true });
+          tiltListenerAttached = true;
+        }
+
+        function detachTiltListener() {
+          if (!tiltListenerAttached) return;
+          window.removeEventListener("deviceorientation", handleTilt);
+          tiltListenerAttached = false;
+        }
+
+        function setSteerMode(mode) {
+          steerMode = mode;
+          const isTilt = mode === "tilt";
+          steerModeBtn.textContent = isTilt ? "기울기" : "터치";
+          steerModeBtn.classList.toggle("active", isTilt);
+          steerModeBtn.setAttribute(
+            "aria-label",
+            isTilt
+              ? "조향 모드 전환: 현재 기울기, 누르면 터치 휠"
+              : "조향 모드 전환: 현재 터치 휠, 누르면 기울기"
+          );
+          steeringPad.dataset.mode = mode;
+          tiltCalibration = null;
+          tiltAlpha = 0;
+          cumulativeAngleDeg = 0;
+          setSteerValue(0);
+          if (isTilt) attachTiltListener();
+          else detachTiltListener();
+        }
+
+        function fallbackToTouch(message) {
+          setSteerMode("touch-wheel");
+          if (message) setText(ui.eventText, message);
+        }
+
+        async function requestTiltPermission() {
+          if (!("DeviceOrientationEvent" in window)) {
+            fallbackToTouch("이 기기에서는 기울기 조향을 지원하지 않아 터치 휠을 사용합니다.");
+            return;
+          }
+          try {
+            if (typeof DeviceOrientationEvent.requestPermission === "function" && !tiltPermissionGranted) {
+              const state = await DeviceOrientationEvent.requestPermission();
+              if (state !== "granted") {
+                fallbackToTouch("기울기 센서 권한이 없어 터치 휠을 사용합니다.");
+                return;
+              }
+            }
+            tiltPermissionGranted = true;
+            setSteerMode("tilt");
+            setText(ui.eventText, "휴대폰을 편하게 잡은 현재 각도를 조향 중립으로 맞췄습니다.");
+          } catch (_error) {
+            fallbackToTouch("기울기 센서를 시작하지 못해 터치 휠을 사용합니다.");
+          }
+        }
+
+        steerModeBtn.addEventListener("click", function() {
+          if (inputLocked) return;
+          if (steerMode === "touch-wheel") requestTiltPermission();
+          else setSteerMode("touch-wheel");
+        });
+
+        const recalibrateTilt = function() {
+          if (steerMode !== "tilt") return;
+          tiltCalibration = null;
+          tiltAlpha = 0;
+          cumulativeAngleDeg = 0;
+          setSteerValue(0);
+        };
+        window.addEventListener("orientationchange", recalibrateTilt);
+        if (screen.orientation && typeof screen.orientation.addEventListener === "function") {
+          screen.orientation.addEventListener("change", recalibrateTilt);
+        }
+
+        // === Turn Signal 3-Position Lever ===
+        function setSignalLever(pos) {
+          signalLever.dataset.pos = pos;
+          signalLever.setAttribute("aria-valuenow", pos === "up" ? "-1" : pos === "down" ? "1" : "0");
+          if (pos === "up") { inputState.leftSignalPressed = true; }
+          else if (pos === "down") { inputState.rightSignalPressed = true; }
+          else {
+            // Return to neutral: toggle off only the currently active signal
+            if (currentSignalState === "left") inputState.leftSignalPressed = true;
+            else if (currentSignalState === "right") inputState.rightSignalPressed = true;
+            // If already off, send nothing to avoid spurious toggles
+          }
+        }
+
+        signalLever.addEventListener("pointerdown", function(event) {
+          if (inputLocked) return;
+          event.preventDefault();
+          var rect = signalLever.getBoundingClientRect();
+          var y = event.clientY - rect.top;
+          var third = rect.height / 3;
+          if (y < third) setSignalLever("up");
+          else if (y > third * 2) setSignalLever("down");
+          else setSignalLever("mid");
+        });
+        signalLever.addEventListener("keydown", function(event) {
+          if (inputLocked) return;
+          if (event.key === "ArrowUp") { event.preventDefault(); setSignalLever("up"); }
+          else if (event.key === "ArrowDown") { event.preventDefault(); setSignalLever("down"); }
+          else if (event.key === "Home" || event.key === "Escape") { event.preventDefault(); setSignalLever("mid"); }
+        });
+
+        // === Gear Gate Lever (P/D/R) ===
+        gearGate.addEventListener("pointerdown", function(event) {
+          if (inputLocked) return;
+          var target = event.target.closest("[data-gear]");
+          if (!target) return;
+          event.preventDefault();
+          var gear = target.dataset.gear;
+          if (gear === "D") inputState.gearDrivePressed = true;
+          else if (gear === "R") inputState.gearReversePressed = true;
+          else if (gear === "P") inputState.gearParkPressed = true;
+        });
+        gearGate.addEventListener("keydown", function(event) {
+          if (inputLocked) return;
+          var target = event.target.closest("[data-gear]");
+          if (!target || (event.key !== " " && event.key !== "Enter")) return;
+          event.preventDefault();
+          var gear = target.dataset.gear;
+          if (gear === "D") inputState.gearDrivePressed = true;
+          else if (gear === "R") inputState.gearReversePressed = true;
+          else if (gear === "P") inputState.gearParkPressed = true;
+        });
+
+        // === Parking Brake Lever ===
+        pBrakeLever.addEventListener("pointerdown", function(event) {
+          if (inputLocked) return;
+          event.preventDefault();
+          inputState.parkingBrakePressed = true;
+        });
+        pBrakeLever.addEventListener("keydown", function(event) {
+          if (inputLocked) return;
+          if (event.key === " " || event.key === "Enter") {
+            event.preventDefault();
+            inputState.parkingBrakePressed = true;
+          }
+        });
+
+        // === Hazard Switch ===
+        hazardSwitch.addEventListener("pointerdown", function(event) {
+          if (inputLocked) return;
+          event.preventDefault();
+          inputState.hazardPressed = true;
+        });
+        hazardSwitch.addEventListener("keydown", function(event) {
+          if (inputLocked) return;
+          if (event.key === " " || event.key === "Enter") {
+            event.preventDefault();
+            inputState.hazardPressed = true;
+          }
+        });
+
+        function bindHoldButton(button) {
+          var key = button.dataset.hold;
+          var press = function(event) {
+            if (inputLocked) return;
             event.preventDefault();
             inputState[key] = true;
             button.classList.add("held");
-            if (event.pointerId !== undefined) button.setPointerCapture?.(event.pointerId);
+            if (event.pointerId !== undefined) button.setPointerCapture && button.setPointerCapture(event.pointerId);
           };
-          const release = () => {
+          var release = function() {
             inputState[key] = false;
             button.classList.remove("held");
           };
-
           button.addEventListener("pointerdown", press);
           button.addEventListener("pointerup", release);
           button.addEventListener("pointercancel", release);
           button.addEventListener("lostpointercapture", release);
-          button.addEventListener("keydown", (event) => {
+          button.addEventListener("keydown", function(event) {
             if ((event.key === " " || event.key === "Enter") && !event.repeat) press(event);
           });
-          button.addEventListener("keyup", (event) => {
+          button.addEventListener("keyup", function(event) {
             if (event.key === " " || event.key === "Enter") release();
           });
         }
 
         function pulseButton(button) {
+          if (!button || !button.classList) return;
           button.classList.add("pressed");
-          window.setTimeout(() => button.classList.remove("pressed"), 130);
+          window.setTimeout(function() { button.classList.remove("pressed"); }, 130);
         }
 
         function fireLatch(button) {
-          const key = `${button.dataset.latch}Pressed`;
+          if (inputLocked) return;
+          var key = button.dataset.latch + "Pressed";
           if (!(key in inputState)) return;
           inputState[key] = true;
           pulseButton(button);
-
           if (button.dataset.latch === "start") {
             introModal.hidden = true;
             canvas.focus({ preventScroll: true });
@@ -2018,11 +2365,11 @@
         }
 
         function bindLatchButton(button) {
-          button.addEventListener("pointerdown", (event) => {
+          button.addEventListener("pointerdown", function(event) {
             event.preventDefault();
             fireLatch(button);
           });
-          button.addEventListener("keydown", (event) => {
+          button.addEventListener("keydown", function(event) {
             if ((event.key === " " || event.key === "Enter") && !event.repeat) {
               event.preventDefault();
               fireLatch(button);
@@ -2034,59 +2381,128 @@
           inputState.throttle = false;
           inputState.brake = false;
           setSteerValue(0);
+          cumulativeAngleDeg = 0;
           steeringPad.classList.remove("active");
-          document.querySelectorAll("[data-hold].held").forEach((button) => {
+          document.querySelectorAll("[data-hold].held").forEach(function(button) {
             button.classList.remove("held");
           });
         }
 
-        function setLoading(label, message, isError = false) {
+        function setLoading(label, message, isError) {
           loading.classList.remove("is-hidden");
-          loading.classList.toggle("error", isError);
+          loading.classList.toggle("error", !!isError);
           setText(loadingLabel, label);
           setText(loadingMessage, message);
         }
 
-        window.__examSpeak = (text) => {
-          const spokenText = String(text ?? "").trim();
-          if (!spokenText || !("speechSynthesis" in window)) return false;
+        // === Tutorial ===
+        function updateTutorial() {
+          if (!tutorialActive) {
+            tutorialSpotlight.hidden = true;
+            return;
+          }
+          const step = tutorialSteps[tutorialStep];
+          byId("tutorial-progress").textContent = (tutorialStep + 1) + " / " + tutorialSteps.length;
+          byId("tutorial-step-title").textContent = step.title;
+          byId("tutorial-step-desc").textContent = step.desc;
+          byId("tutorial-prev").disabled = tutorialStep === 0;
+          byId("tutorial-next").textContent = tutorialStep === tutorialSteps.length - 1 ? "완료" : "다음";
 
-          const now = Date.now();
+          const target = step.target ? byId(step.target) : null;
+          tutorialOverlay.classList.toggle("no-spotlight", !target);
+          if (target) {
+            const rect = target.getBoundingClientRect();
+            tutorialSpotlight.hidden = false;
+            tutorialSpotlight.style.left = (rect.left - 6) + "px";
+            tutorialSpotlight.style.top = (rect.top - 6) + "px";
+            tutorialSpotlight.style.width = (rect.width + 12) + "px";
+            tutorialSpotlight.style.height = (rect.height + 12) + "px";
+          } else {
+            tutorialSpotlight.hidden = true;
+          }
+        }
+
+        function endTutorial() {
+          tutorialActive = false;
+          inputLocked = false;
+          tutorialOverlay.hidden = true;
+          tutorialSpotlight.hidden = true;
+          tutorialOverlay.classList.remove("no-spotlight");
+          window.setTimeout(function() { byId("start-button").focus({ preventScroll: true }); }, 0);
+        }
+
+        byId("tutorial-next").addEventListener("click", function() {
+          if (tutorialStep >= tutorialSteps.length - 1) {
+            endTutorial();
+          } else {
+            tutorialStep++;
+            updateTutorial();
+          }
+        });
+        byId("tutorial-prev").addEventListener("click", function() {
+          if (tutorialStep > 0) { tutorialStep--; updateTutorial(); }
+        });
+        byId("tutorial-skip").addEventListener("click", endTutorial);
+
+        tutorialOverlay.addEventListener("keydown", function(event) {
+          if (event.key === "ArrowRight") {
+            event.preventDefault();
+            byId("tutorial-next").click();
+          } else if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            byId("tutorial-prev").click();
+          } else if (event.key === "Escape") {
+            event.preventDefault();
+            endTutorial();
+          } else if (event.key === "Tab") {
+            const focusable = Array.from(
+              tutorialOverlay.querySelectorAll("button:not([disabled])")
+            );
+            if (!focusable.length) return;
+            const current = focusable.indexOf(document.activeElement);
+            const next = event.shiftKey
+              ? (current <= 0 ? focusable.length - 1 : current - 1)
+              : (current >= focusable.length - 1 ? 0 : current + 1);
+            event.preventDefault();
+            focusable[next].focus();
+          }
+        });
+
+        window.__examSpeak = function(text) {
+          var spokenText = String(text || "").trim();
+          if (!spokenText || !("speechSynthesis" in window)) return false;
+          var now = Date.now();
           if (spokenText === lastSpokenText && now - lastSpokenAt < 4500) return false;
           lastSpokenText = spokenText;
           lastSpokenAt = now;
-
           window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(spokenText);
+          var utterance = new SpeechSynthesisUtterance(spokenText);
           utterance.lang = "ko-KR";
           utterance.rate = 0.94;
           utterance.pitch = 1;
-          const koreanVoice = window.speechSynthesis
-            .getVoices()
-            .find((voice) => voice.lang && voice.lang.toLowerCase().startsWith("ko"));
+          var koreanVoice = window.speechSynthesis.getVoices().find(function(voice) {
+            return voice.lang && voice.lang.toLowerCase().startsWith("ko");
+          });
           if (koreanVoice) utterance.voice = koreanVoice;
           window.speechSynthesis.speak(utterance);
           return true;
         };
 
-        window.__examUpdate = (payload) => {
+        window.__examUpdate = function(payload) {
           if (!payload || typeof payload !== "object" || Array.isArray(payload)) return;
 
           setText(ui.phaseTitle, payload.phaseTitle);
           setText(ui.instruction, payload.instruction);
           setText(ui.status, payload.status);
           if (payload.eventText !== undefined && payload.eventText !== null) {
-            setText(
-              ui.eventText,
-              String(payload.eventText).trim() || "현재 감점 또는 특이사항이 없습니다."
-            );
+            setText(ui.eventText, String(payload.eventText).trim() || "현재 감점 또는 특이사항이 없습니다.");
           }
           setText(ui.score, payload.score);
           setText(ui.step, payload.step);
           setText(ui.stepTotal, payload.stepTotal);
           if (payload.elapsed !== undefined) setText(ui.elapsed, formatElapsed(payload.elapsed));
           if (payload.speedKph !== undefined) {
-            const speed = Number(payload.speedKph);
+            var speed = Number(payload.speedKph);
             setText(ui.speedKph, Number.isFinite(speed) ? Math.max(0, speed).toFixed(speed < 10 ? 1 : 0) : payload.speedKph);
           }
           setText(ui.gear, payload.gear);
@@ -2095,25 +2511,53 @@
             app.dataset.phaseCode = String(payload.phaseCode);
           }
 
-          Object.entries(stateButtons).forEach(([key, button]) => {
-            if (payload[key] !== undefined) setButtonState(button, payload[key]);
-          });
+          // Update individual state indicators
+          if (payload.seatbelt !== undefined) setButtonState(byId("control-seatbelt"), payload.seatbelt);
+          if (payload.ignition !== undefined) setButtonState(byId("control-ignition"), payload.ignition);
+          if (payload.headlights !== undefined) setButtonState(byId("control-headlight"), payload.headlights);
+          if (payload.wiper !== undefined) setButtonState(byId("control-wiper"), payload.wiper);
 
+          // Parking brake lever state
+          if (payload.parkingBrake !== undefined) {
+            var engaged = Boolean(payload.parkingBrake);
+            pBrakeLever.dataset.engaged = String(engaged);
+            pBrakeLever.setAttribute("aria-checked", String(engaged));
+          }
+
+          // Signal lever position sync
+          if (payload.leftSignal !== undefined || payload.rightSignal !== undefined) {
+            var left = Boolean(payload.leftSignal);
+            var right = Boolean(payload.rightSignal);
+            if (left) { signalLever.dataset.pos = "up"; currentSignalState = "left"; }
+            else if (right) { signalLever.dataset.pos = "down"; currentSignalState = "right"; }
+            else { signalLever.dataset.pos = "mid"; currentSignalState = "off"; }
+          }
+
+          // Hazard switch
+          if (payload.hazard !== undefined) {
+            var haz = Boolean(payload.hazard);
+            hazardSwitch.setAttribute("aria-pressed", String(haz));
+          }
+
+          // Gear gate
           if (payload.gear !== undefined) {
-            const gear = String(payload.gear).toUpperCase();
-            setButtonState(byId("control-gear-drive"), gear === "D");
-            setButtonState(byId("control-gear-reverse"), gear === "R");
+            var gear = String(payload.gear).toUpperCase();
+            gearGate.querySelectorAll("[data-gear]").forEach(function(el) {
+              var active = el.dataset.gear === gear;
+              el.classList.toggle("active", active);
+              el.setAttribute("aria-checked", String(active));
+            });
           }
 
           if (payload.trafficLight !== undefined) updateTrafficLight(payload.trafficLight);
           if (payload.emergency !== undefined) {
-            const emergency = Boolean(payload.emergency);
+            var emergency = Boolean(payload.emergency);
             ui.emergency.classList.toggle("active", emergency);
             ui.emergency.setAttribute("aria-label", emergency ? "돌발 상황 발생" : "돌발 상황 없음");
           }
 
           if (typeof payload.instruction === "string") {
-            const currentInstruction = payload.instruction.trim();
+            var currentInstruction = payload.instruction.trim();
             if (currentInstruction && currentInstruction !== lastInstruction) {
               lastInstruction = currentInstruction;
               window.__examSpeak(currentInstruction);
@@ -2121,23 +2565,18 @@
           }
 
           if (payload.finished !== undefined) {
-            const finished = Boolean(payload.finished);
+            var finished = Boolean(payload.finished);
             if (finished) {
-              const passed = Boolean(payload.passed);
+              var passed = Boolean(payload.passed);
               resultCard.classList.toggle("failed", !passed);
               setText(ui.resultTitle, passed ? "기능시험 합격" : "기능시험 종료");
               setText(ui.resultSeal, passed ? "✓" : "!");
-              setText(
-                ui.resultDetail,
-                passed
-                  ? "도봉 기능시험 연습을 완료했습니다."
-                  : "채점 기준을 확인하고 다시 연습해 보세요."
-              );
+              setText(ui.resultDetail, passed ? "도봉 기능시험 연습을 완료했습니다." : "채점 기준을 확인하고 다시 연습해 보세요.");
               if (payload.score !== undefined) setText(ui.resultScore, payload.score);
               if (payload.elapsed !== undefined) setText(ui.resultTime, formatElapsed(payload.elapsed));
               resultModal.hidden = false;
               if (!lastFinished) {
-                window.setTimeout(() => byId("result-retry").focus({ preventScroll: true }), 30);
+                window.setTimeout(function() { byId("result-retry").focus({ preventScroll: true }); }, 30);
               }
             } else {
               resultModal.hidden = true;
@@ -2146,23 +2585,30 @@
           }
         };
 
+        // === Bind all controls ===
         bindSteering();
         document.querySelectorAll("[data-hold]").forEach(bindHoldButton);
         document.querySelectorAll("[data-latch]").forEach(bindLatchButton);
-        byId("control-audio").addEventListener("click", () => {
-          window.__examSpeak(lastInstruction || ui.instruction.textContent);
+        byId("control-audio").addEventListener("click", function() {
+          window.__examSpeak(lastInstruction || (ui.instruction && ui.instruction.textContent));
         });
-        byId("result-close").addEventListener("click", () => {
+        byId("result-close").addEventListener("click", function() {
           resultModal.hidden = true;
           canvas.focus({ preventScroll: true });
         });
-        window.addEventListener("resize", resizeCanvas);
+        window.addEventListener("resize", function() { resizeCanvas(); updateTutorial(); });
         window.addEventListener("blur", releaseAllHolds);
-        window.addEventListener("contextmenu", (event) => event.preventDefault());
+        window.addEventListener("contextmenu", function(event) { event.preventDefault(); });
         resizeCanvas();
 
-        const buildVersion = "__BUILD_VERSION__";
-        const contextOptions = {
+        // Init tutorial
+        if (tutorialActive) {
+          updateTutorial();
+          window.setTimeout(function() { byId("tutorial-next").focus({ preventScroll: true }); }, 0);
+        }
+
+        var buildVersion = "__BUILD_VERSION__";
+        var contextOptions = {
           alpha: false,
           antialias: true,
           depth: true,
@@ -2170,45 +2616,45 @@
           preserveDrawingBuffer: false,
           stencil: false
         };
-        const preinitializedWebGLContext =
+        var preinitializedWebGLContext =
           canvas.getContext("webgl", contextOptions) ||
           canvas.getContext("experimental-webgl", contextOptions);
-        const webGLReady = Boolean(preinitializedWebGLContext);
+        var webGLReady = Boolean(preinitializedWebGLContext);
 
         if (!webGLReady) {
           setLoading("WebGL 오류", "이 브라우저에서 3차원 그래픽을 시작할 수 없습니다.", true);
         }
 
         window.Module = {
-          canvas,
-          preinitializedWebGLContext,
-          locateFile(path, prefix) {
-            if (path.endsWith(".wasm")) return `${prefix}${path}?v=${buildVersion}`;
-            return `${prefix}${path}`;
+          canvas: canvas,
+          preinitializedWebGLContext: preinitializedWebGLContext,
+          locateFile: function(path, prefix) {
+            if (path.endsWith(".wasm")) return prefix + path + "?v=" + buildVersion;
+            return prefix + path;
           },
-          onAbort(reason) {
+          onAbort: function(reason) {
             setLoading("실행 오류", String(reason || "시뮬레이터를 시작하지 못했습니다."), true);
           },
-          setStatus(text) {
+          setStatus: function(text) {
             if (!webGLReady) return;
             if (!text) {
               setLoading("준비 완료", "도봉 기능시험 연습을 시작할 수 있습니다.");
-              window.setTimeout(() => loading.classList.add("is-hidden"), 900);
+              window.setTimeout(function() { loading.classList.add("is-hidden"); }, 900);
               return;
             }
             setLoading("불러오는 중", String(text));
           },
-          monitorRunDependencies(left) {
+          monitorRunDependencies: function(left) {
             if (!webGLReady) return;
             if (left > 0) {
-              setLoading("준비 중", `필수 파일 ${left}개를 불러오고 있습니다.`);
+              setLoading("준비 중", "필수 파일 " + left + "개를 불러오고 있습니다.");
             } else {
               setLoading("준비 완료", "도봉 기능시험 연습을 시작할 수 있습니다.");
             }
           }
         };
 
-        window.addEventListener("error", (event) => {
+        window.addEventListener("error", function(event) {
           if (!event.message) return;
           setLoading("스크립트 오류", event.message, true);
         });
