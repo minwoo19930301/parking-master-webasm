@@ -1589,6 +1589,28 @@
         align-self: center;
       }
 
+      .hud-chips {
+        position: absolute;
+        top: calc(var(--safe-top) + 4px);
+        right: var(--safe-right);
+        z-index: 3;
+        display: flex;
+        gap: 6px;
+        pointer-events: auto;
+      }
+      .hud-chip {
+        padding: 5px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 999px;
+        background: rgba(9, 43, 67, 0.72);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 750;
+        cursor: pointer;
+        backdrop-filter: blur(8px);
+      }
+      .hud-chip:hover { background: rgba(9, 43, 67, 0.9); }
+
       /* === Free driving: drop the exam HUD chrome === */
       #app[data-phase-code="5"] .coach-side,
       #app[data-phase-code="5"] .event-toast,
@@ -1677,6 +1699,11 @@
 
       <div id="sim-ui">
         <div id="steer-zone" aria-hidden="true"></div>
+        <div class="hud-chips">
+          <button type="button" class="hud-chip" id="exam-toggle" data-latch="start" aria-label="기능시험 채점 모드로 전환">시험 모드</button>
+          <button type="button" class="hud-chip" id="free-toggle" data-latch="freeDrive" aria-label="자유 주행으로 전환">자유 주행</button>
+          <button type="button" class="hud-chip" id="reset-chip" data-latch="retry" aria-label="위치 처음으로 되돌리기">처음으로</button>
+        </div>
         <div class="top-stack">
           <header class="top-status" aria-label="시험 진행 정보">
             <div class="center-ident">
