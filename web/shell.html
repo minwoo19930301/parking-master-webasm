@@ -1561,7 +1561,11 @@
       .drive-card {
         grid-column: 2;
         justify-self: end;
+        display: flex !important;
+        flex-direction: row !important;
         flex-wrap: nowrap !important;
+        align-items: center;
+        gap: 8px;
       }
       @media (max-height: 520px) {
         .drive-card .pedal {
