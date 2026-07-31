@@ -1550,6 +1550,41 @@
       }
       .steer-mode-toggle.active { background: var(--blue-soft); color: var(--blue); border-color: var(--blue); }
 
+      /* === Minimal cockpit: no button rows, wheel is grabbed on screen === */
+      .switch-card,
+      .steer-card {
+        display: none !important;
+      }
+      .control-deck {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+      .drive-card {
+        grid-column: 2;
+        justify-self: end;
+        flex-wrap: nowrap !important;
+      }
+      @media (max-height: 520px) {
+        .drive-card .pedal {
+          min-width: 84px;
+          min-height: 84px;
+        }
+      }
+      #steer-zone {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: auto;
+        cursor: grab;
+        touch-action: none;
+      }
+      #steer-zone.steering {
+        cursor: grabbing;
+      }
+      .drive-card .steer-mode-toggle {
+        position: static;
+        align-self: center;
+      }
+
       /* === Free driving: drop the exam HUD chrome === */
       #app[data-phase-code="5"] .coach-side,
       #app[data-phase-code="5"] .event-toast,
@@ -1637,6 +1672,7 @@
       <div class="scene-shade" aria-hidden="true"></div>
 
       <div id="sim-ui">
+        <div id="steer-zone" aria-hidden="true"></div>
         <div class="top-stack">
           <header class="top-status" aria-label="시험 진행 정보">
             <div class="center-ident">
@@ -1990,6 +2026,7 @@
         const hazardSwitch = byId("control-hazard");
         const tutorialOverlay = byId("tutorial-overlay");
         const tutorialSpotlight = byId("tutorial-spotlight");
+        const steerZone = byId("steer-zone");
 
         const inputState = (window.__examInput = {
           steerValue: 0,
@@ -2180,6 +2217,48 @@
             steeringPad.classList.remove("active");
             startSteerReturn();
           };
+
+          const pivotOf = function(element) {
+            const rect = element.getBoundingClientRect();
+            return element === steerZone
+              ? { x: rect.left + rect.width * 0.30, y: rect.top + rect.height * 1.02 }
+              : { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+          };
+
+          const grab = function(element) {
+            element.addEventListener("pointerdown", function(event) {
+              if (inputLocked || steerMode !== "touch-wheel") return;
+              event.preventDefault();
+              steerPointerId = event.pointerId;
+              element.classList.add("steering");
+              if (element.setPointerCapture) element.setPointerCapture(event.pointerId);
+              const pivot = pivotOf(element);
+              lastPointerAngle = getAngleFromCenter(pivot.x, pivot.y, event.clientX, event.clientY);
+            });
+            element.addEventListener("pointermove", function(event) {
+              if (event.pointerId !== steerPointerId) return;
+              const pivot = pivotOf(element);
+              const angle = getAngleFromCenter(pivot.x, pivot.y, event.clientX, event.clientY);
+              if (lastPointerAngle !== null) {
+                const delta = normalizeAngleDelta(angle - lastPointerAngle);
+                cumulativeAngleDeg = Math.max(-MAX_STEER_DEG, Math.min(MAX_STEER_DEG, cumulativeAngleDeg + delta));
+                setSteerValue(cumulativeAngleDeg / MAX_STEER_DEG);
+              }
+              lastPointerAngle = angle;
+            });
+            const stop = function(event) {
+              if (steerPointerId === null) return;
+              if (event && event.pointerId !== undefined && event.pointerId !== steerPointerId) return;
+              steerPointerId = null;
+              lastPointerAngle = null;
+              element.classList.remove("steering");
+              startSteerReturn();
+            };
+            element.addEventListener("pointerup", stop);
+            element.addEventListener("pointercancel", stop);
+            element.addEventListener("lostpointercapture", stop);
+          };
+          grab(steerZone);
 
           steeringPad.addEventListener("pointerdown", function(event) {
             if (inputLocked) return;
@@ -2691,6 +2770,7 @@
 
         // === Bind all controls ===
         bindSteering();
+        byId("gear-gate").closest(".drive-card").prepend(steerModeBtn);
         document.querySelectorAll("[data-hold]").forEach(bindHoldButton);
         document.querySelectorAll("[data-latch]").forEach(bindLatchButton);
         byId("control-audio").addEventListener("click", function() {

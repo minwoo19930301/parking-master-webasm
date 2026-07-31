@@ -111,8 +111,6 @@ constexpr float kWorldHalfWidth = 78.0f;
 constexpr float kWorldHalfHeight = 72.0f;
 constexpr float kCarLength = 4.45f;
 constexpr float kCarWidth = 1.82f;
-constexpr float kPadHalfX = 46.0f;
-constexpr float kPadHalfY = 34.0f;
 constexpr float kHillUpStartX = -37.0f;
 constexpr float kHillTopStartX = -29.0f;
 constexpr float kHillTopEndX = -25.0f;
@@ -568,7 +566,7 @@ class DobongExamSimulator {
     void BeginFreeDrive() {
         ResetExam();
         phase_ = ExamPhase::FreeDrive;
-        car_.position = {-22.0f, 6.0f};
+        car_.position = {-44.0f, 30.0f};
         car_.heading = 0.0f;
         seatbelt_ = true;
         ignition_ = true;
@@ -1343,8 +1341,8 @@ class DobongExamSimulator {
                     return CollisionKind::SolidObstacle;
                 }
             }
-            if (std::fabs(car_.position.x) > kPadHalfX ||
-                std::fabs(car_.position.y) > kPadHalfY) {
+            if (std::fabs(car_.position.x) > kWorldHalfWidth - 4.0f ||
+                std::fabs(car_.position.y) > kWorldHalfHeight - 4.0f) {
                 return CollisionKind::SolidObstacle;
             }
             return CollisionKind::None;
@@ -1767,7 +1765,6 @@ class DobongExamSimulator {
         DrawGroundBox({-12.0f, -22.7f}, {2.5f, 0.4f}, 0.0f, 0.015f,
                       Fade(kSafetyYellow, 0.5f), 0.058f);
 
-        if (phase_ == ExamPhase::FreeDrive) return;
         const Vector2 target = GuidanceTarget();
         const Vector2 toTarget = VSub(target, car_.position);
         if (Vector2Length(toTarget) > 2.5f) {
@@ -1926,26 +1923,6 @@ class DobongExamSimulator {
                       {kWorldHalfWidth * 2.0f, kWorldHalfHeight * 2.0f}, kGrass);
         }
 
-        if (phase_ == ExamPhase::FreeDrive) {
-            DrawGroundBox({0.0f, 0.0f}, {kPadHalfX * 2.0f, kPadHalfY * 2.0f}, 0.0f,
-                          0.03f, kAsphalt);
-            for (float x = -kPadHalfX + 10.0f; x < kPadHalfX; x += 10.0f) {
-                DrawGroundBox({x, 0.0f}, {0.16f, kPadHalfY * 2.0f - 2.0f}, 0.0f, 0.016f,
-                              Fade(kLaneWhite, 0.32f), 0.038f);
-            }
-            for (float y = -kPadHalfY + 10.0f; y < kPadHalfY; y += 10.0f) {
-                DrawGroundBox({0.0f, y}, {kPadHalfX * 2.0f - 2.0f, 0.16f}, 0.0f, 0.016f,
-                              Fade(kLaneWhite, 0.32f), 0.038f);
-            }
-            DrawGroundBox({0.0f, -kPadHalfY}, {kPadHalfX * 2.0f, 0.4f}, 0.0f, 0.02f,
-                          kSafetyYellow, 0.04f);
-            DrawGroundBox({0.0f, kPadHalfY}, {kPadHalfX * 2.0f, 0.4f}, 0.0f, 0.02f,
-                          kSafetyYellow, 0.04f);
-            DrawGroundBox({-kPadHalfX, 0.0f}, {0.4f, kPadHalfY * 2.0f}, 0.0f, 0.02f,
-                          kSafetyYellow, 0.04f);
-            DrawGroundBox({kPadHalfX, 0.0f}, {0.4f, kPadHalfY * 2.0f}, 0.0f, 0.02f,
-                          kSafetyYellow, 0.04f);
-        }
         for (const RoadSurface& road : roads_) DrawRoad(road);
         DrawHillSurface();
         DrawCourseMarkings();
