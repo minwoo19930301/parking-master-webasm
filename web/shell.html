@@ -1928,6 +1928,9 @@
                 </p>
               </div>
               <div class="intro-cta">
+                <button type="button" class="primary-button" id="resume-drive-button" hidden>
+                  이어서 운전
+                </button>
                 <button
                   type="button"
                   class="primary-button"
@@ -2099,6 +2102,9 @@
         let tutorialActive = false;
         let tutorialStep = 0;
         let inputLocked = false;
+        window.__examIsPaused = function() {
+          return inputLocked || !introModal.hidden || document.hidden;
+        };
         const tutorialSteps = [
           { title: "조향 모드 선택", desc: "터치 휠(원형 드래그)과 기울기(틸트) 두 가지 모드로 조향할 수 있습니다. 상단 버튼으로 전환합니다. 720도(좌우 ±360°) lock-to-lock으로 실차와 동일합니다.", target: "steer-pad" },
           { title: "브레이크 / 가속 페달", desc: "화면 오른쪽 아래의 BRAKE와 GAS 버튼을 누르는 동안 제동/가속됩니다. 기울기 모드에서도 페달은 화면 터치로 조작합니다.", target: "control-brake" },
@@ -2557,6 +2563,7 @@
           if (inputLocked) return;
           var key = button.dataset.latch + "Pressed";
           if (!(key in inputState)) return;
+          if (["start", "freeDrive", "retry"].includes(button.dataset.latch)) releaseAllHolds();
           inputState[key] = true;
           pulseButton(button);
           if (button.dataset.latch === "start" || button.dataset.latch === "freeDrive") {
@@ -2584,8 +2591,16 @@
         }
 
         function releaseAllHolds() {
+          window.__examResetClock = true;
+          for (const key of Object.keys(inputState)) {
+            if (key.endsWith("Pressed")) inputState[key] = false;
+          }
           inputState.throttle = false;
           inputState.brake = false;
+          steerPointerId = null;
+          lastPointerAngle = null;
+          if (steerReturnRaf !== null) cancelAnimationFrame(steerReturnRaf);
+          steerReturnRaf = null;
           setSteerValue(0);
           cumulativeAngleDeg = 0;
           steeringPad.classList.remove("active");
@@ -2629,6 +2644,7 @@
         }
 
         function endTutorial() {
+          releaseAllHolds();
           tutorialActive = false;
           inputLocked = false;
           tutorialOverlay.hidden = true;
@@ -2650,6 +2666,7 @@
         });
         byId("tutorial-skip").addEventListener("click", endTutorial);
         byId("tutorial-open").addEventListener("click", function() {
+          releaseAllHolds();
           tutorialActive = true;
           inputLocked = true;
           tutorialStep = 0;
@@ -2809,8 +2826,15 @@
           window.__examSpeak(lastInstruction || (ui.instruction && ui.instruction.textContent));
         });
         byId("open-menu").addEventListener("click", function() {
+          releaseAllHolds();
           introModal.hidden = false;
-          byId("free-drive-button").focus({ preventScroll: true });
+          byId("resume-drive-button").hidden = false;
+          byId("resume-drive-button").focus({ preventScroll: true });
+        });
+        byId("resume-drive-button").addEventListener("click", function() {
+          releaseAllHolds();
+          introModal.hidden = true;
+          canvas.focus({ preventScroll: true });
         });
         byId("result-close").addEventListener("click", function() {
           resultModal.hidden = true;
@@ -2818,6 +2842,16 @@
         });
         window.addEventListener("resize", function() { resizeCanvas(); updateTutorial(); });
         window.addEventListener("blur", releaseAllHolds);
+        window.addEventListener("focus", releaseAllHolds);
+        document.addEventListener("visibilitychange", releaseAllHolds);
+        // GLFW sees Enter even when it activates a DOM button. Route the web
+        // exam shortcut here so Resume/gear/pedal buttons cannot restart it.
+        window.addEventListener("keydown", function(event) {
+          if (event.key === "Enter" && !event.repeat && !window.__examIsPaused() &&
+              (event.target === canvas || event.target === document.body)) {
+            inputState.startPressed = true;
+          }
+        });
         window.addEventListener("contextmenu", function(event) { event.preventDefault(); });
         resizeCanvas();
 

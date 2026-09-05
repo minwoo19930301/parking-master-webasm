@@ -1,5 +1,6 @@
 #include "exam_rules.h"
 #include "course_data.h"
+#include "vehicle_physics.h"
 
 #include "raylib.h"
 #include "raymath.h"
@@ -12,6 +13,16 @@
 EM_JS(float, WebSteerInput, (), {
     const input = window.__examInput || {};
     return typeof input.steerValue === "number" ? input.steerValue : 0;
+});
+
+EM_JS(int, WebIsPaused, (), {
+    return window.__examIsPaused?.() ? 1 : 0;
+});
+
+EM_JS(int, WebConsumeClockReset, (), {
+    const reset = window.__examResetClock;
+    window.__examResetClock = false;
+    return reset ? 1 : 0;
 });
 
 EM_JS(float, WebThrottleInput, (), {
@@ -88,6 +99,8 @@ EM_JS(void, WebSpeak, (const char* message), {
 });
 #else
 inline float WebSteerInput() { return 0.0f; }
+inline int WebIsPaused() { return 0; }
+inline int WebConsumeClockReset() { return 0; }
 inline float WebThrottleInput() { return 0.0f; }
 inline float WebBrakeInput() { return 0.0f; }
 inline int WebConsumePressed(const char*) { return 0; }
@@ -368,10 +381,15 @@ class DobongExamSimulator {
         SyncCanvasSize();
         const double now = GetTime();
         const float clockDt =
-            lastWallClock_ < 0.0
+            WebConsumeClockReset() || lastWallClock_ < 0.0
                 ? 0.0f
                 : std::max(0.0f, static_cast<float>(now - lastWallClock_));
         lastWallClock_ = now;
+        if (WebIsPaused()) {
+            PushWebState();
+            Draw();
+            return;
+        }
         const float physicsDt = std::min(clockDt, 1.0f / 20.0f);
         sceneTime_ += physicsDt;
         eventTimer_ = std::max(0.0f, eventTimer_ - clockDt);
@@ -578,11 +596,6 @@ class DobongExamSimulator {
     }
 
     void UpdateFreeDrive(float dt, const InputFrame& input) {
-        if (input.startPressed) {
-            ResetExam();
-            BeginPrecheck();
-            return;
-        }
         if (input.retryPressed) {
             BeginFreeDrive();
             return;
@@ -687,11 +700,14 @@ class DobongExamSimulator {
             input.brake = 1.0f;
         }
 
+#if !defined(PLATFORM_WEB)
         input.startPressed = IsKeyPressed(KEY_ENTER);
+#endif
         input.freeDrivePressed = IsKeyPressed(KEY_F);
         input.retryPressed = IsKeyPressed(KEY_R);
         input.gearDrivePressed = IsKeyPressed(KEY_ONE);
         input.gearReversePressed = IsKeyPressed(KEY_TWO);
+        input.gearParkPressed = IsKeyPressed(KEY_ZERO);
         input.seatbeltPressed = IsKeyPressed(KEY_K);
         input.ignitionPressed = IsKeyPressed(KEY_I);
         input.headlightPressed = IsKeyPressed(KEY_L);
@@ -770,6 +786,14 @@ class DobongExamSimulator {
             return;
         }
 
+        // Starting a scored exam is distinct from closing the menu to resume.
+        // It must work during a previous exam as well as in free drive.
+        if (input.startPressed) {
+            ResetExam();
+            BeginPrecheck();
+            return;
+        }
+
         if (input.retryPressed &&
             (phase_ == ExamPhase::Finished || phase_ == ExamPhase::Disqualified)) {
             ResetExam();
@@ -777,7 +801,6 @@ class DobongExamSimulator {
         }
 
         if (phase_ == ExamPhase::Briefing) {
-            if (input.startPressed) BeginPrecheck();
             return;
         }
 
@@ -943,25 +966,8 @@ class DobongExamSimulator {
             return;
         }
 
-        float desiredSpeed = car_.speed;
-        const float direction = gear_ == TransmissionGear::Drive ? 1.0f : -1.0f;
-        const float creep = gear_ == TransmissionGear::Drive ? 1.05f : -0.85f;
-
-        if (input.brake > 0.0f) {
-            const float brakeDelta = 8.8f * dt;
-            if (desiredSpeed > brakeDelta) {
-                desiredSpeed -= brakeDelta;
-            } else if (desiredSpeed < -brakeDelta) {
-                desiredSpeed += brakeDelta;
-            } else {
-                desiredSpeed = 0.0f;
-            }
-        } else {
-            desiredSpeed = LerpFloat(desiredSpeed, creep, dt * 1.25f);
-            if (input.throttle > 0.0f) {
-                desiredSpeed += direction * 4.1f * dt;
-            }
-        }
+        float desiredSpeed = driving_physics::UpdateSpeed(
+            car_.speed, dt, gear_ == TransmissionGear::Reverse, input.throttle, input.brake);
 
         if (car_.position.y > 25.5f && car_.position.y < 34.5f &&
             car_.position.x > kHillUpStartX &&

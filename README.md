@@ -136,12 +136,22 @@ npm run preview
 
 로컬 미리보기: `http://127.0.0.1:4173`
 
+메뉴·조작 안내를 열면 차량과 시험 시간이 함께 멈춥니다. 메뉴의 **이어서 운전**은
+현재 시험을 초기화하지 않고 재개합니다. 탭을 숨긴 시간은 시험 시간에 포함하지 않습니다.
+
+`npm test`는 기존 채점 규칙, 20/30/60/120Hz 차량 가속·제동·후진,
+실제 웹 셸 핸들러의 메뉴·튜토리얼·탭 전환 입력 해제를 검사합니다.
+웹 셸 검사는 Node의 DOM 대역을 사용하므로 실제 GPU·기울기 센서 검증과는 구분됩니다.
+차량이나 셸 소스 수정 후에는 `npm run build:web`으로 세 배포 번들도 갱신해야 합니다.
+
 ## 구조
 
 - `src/main.cpp` — 차량 물리, 시험 상태 머신, 코스, 채점, 3D 렌더링, 미러
 - `src/course_data.h` — 전국 공식 시험장 카탈로그와 도봉 코스 팩 좌표
 - `src/exam_rules.h` — 법정 기준에서 분리한 점수·시간·속도 규칙
+- `src/vehicle_physics.h` — 전진·후진 가속, 크리프, 제동
 - `tests/exam_rules_test.cpp` — 핵심 규칙 회귀 테스트
+- `tests/vehicle_physics_test.cpp`, `tests/shell_input_test.mjs` — 차량 물리와 입력·일시정지 회귀 테스트
 - `web/shell.html` — 한국어 시험 UI, 터치 조작, 전국 시험장 카탈로그
 - `scripts/build-web.sh` — Emscripten 웹 번들 생성
 - `index.html`, `index.js`, `index.wasm` — 정적 배포 번들
