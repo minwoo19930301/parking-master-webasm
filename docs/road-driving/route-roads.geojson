@@ -1,0 +1,2294 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "schema_version": 1,
+    "retrieved": "2026-09-06",
+    "origin_wgs84": [
+      127.0585674,
+      37.6564809
+    ],
+    "game_transform": "x=(lon-lon0)*pi/180*6378137*cos(lat0)+52; z=-(lat-lat0)*pi/180*6378137-60",
+    "official_route_effective_from": "2022-06-20",
+    "official_map_published": "2023-04-10",
+    "official_map_url": "https://www.koroad.or.kr/main/board/9/87988/board_view.do",
+    "official_change_notice": "https://www.koroad.or.kr/main/board/9/69255/board_view.do",
+    "current_official_video_index_verified": true,
+    "current_operation_or_closure_verified": false,
+    "video_review": "Original official YouTube storyboards at 5-second sampling visually inspected for route order and turn signs; not full-resolution continuous playback or audio transcription. Time windows are rough evidence locators, NOT turn timing instructions.",
+    "geometry_basis": "OSM directed road/carriageway centrelines selected by official map and video turn topology. Exact U-turn arcs and stop/merge stations absent; no lane offsets invented.",
+    "license": "OSM-derived geometry: OpenStreetMap contributors, ODbL 1.0, https://www.openstreetmap.org/copyright. Official video/PDF remain copyrighted source references and are not bundled as game textures.",
+    "lane_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified.",
+    "width_policy": "No physical pavement width supplied where absent. OSM tag lanes is source data, not validated road survey; rendering lane widths and traffic offsets must be marked estimates."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "way/218778495",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/218778495",
+        "tags": {
+          "highway": "primary",
+          "maxspeed": "50",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          2111825353,
+          7569368443,
+          2111825354,
+          7569368471,
+          4156274093,
+          7569368465,
+          3835706782,
+          3835756897,
+          5519783606
+        ],
+        "game_xz": [
+          [
+            291.767,
+            505.57
+          ],
+          [
+            295.134,
+            522.591
+          ],
+          [
+            332.598,
+            687.711
+          ],
+          [
+            352.894,
+            757.909
+          ],
+          [
+            360.156,
+            776.733
+          ],
+          [
+            367.427,
+            793.42
+          ],
+          [
+            416.375,
+            906.854
+          ],
+          [
+            461.876,
+            1021.09
+          ],
+          [
+            466.336,
+            1031.532
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.061288,
+            37.6514003
+          ],
+          [
+            127.0613262,
+            37.6512474
+          ],
+          [
+            127.0617513,
+            37.6497641
+          ],
+          [
+            127.0619816,
+            37.6491335
+          ],
+          [
+            127.062064,
+            37.6489644
+          ],
+          [
+            127.0621465,
+            37.6488145
+          ],
+          [
+            127.0627019,
+            37.6477955
+          ],
+          [
+            127.0632182,
+            37.6467693
+          ],
+          [
+            127.0632688,
+            37.6466755
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/470096416",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/470096416",
+        "tags": {
+          "highway": "primary",
+          "lanes": "6",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          5965553951,
+          1837571112,
+          7569368426,
+          2111825353
+        ],
+        "game_xz": [
+          [
+            239.03,
+            240.229
+          ],
+          [
+            246.486,
+            272.945
+          ],
+          [
+            287.89,
+            481.558
+          ],
+          [
+            291.767,
+            505.57
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0606896,
+            37.6537839
+          ],
+          [
+            127.0607742,
+            37.65349
+          ],
+          [
+            127.061244,
+            37.651616
+          ],
+          [
+            127.061288,
+            37.6514003
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/519932779",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/519932779",
+        "tags": {
+          "highway": "secondary",
+          "name": "노원로",
+          "name:en": "Nowon-ro",
+          "name:ko": "노원로",
+          "name:ko-Latn": "Nowon-ro"
+        },
+        "osm_node_ids": [
+          436831758,
+          3839415406,
+          4011504805,
+          4011504802,
+          436831756,
+          3839415408
+        ],
+        "game_xz": [
+          [
+            611.856,
+            -330.406
+          ],
+          [
+            650.052,
+            -279.366
+          ],
+          [
+            654.379,
+            -273.589
+          ],
+          [
+            670.701,
+            -251.77
+          ],
+          [
+            672.666,
+            -249.143
+          ],
+          [
+            704.499,
+            -206.463
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.06492,
+            37.65891
+          ],
+          [
+            127.0653534,
+            37.6584515
+          ],
+          [
+            127.0654025,
+            37.6583996
+          ],
+          [
+            127.0655877,
+            37.6582036
+          ],
+          [
+            127.06561,
+            37.65818
+          ],
+          [
+            127.0659712,
+            37.6577966
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/520018144",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/520018144",
+        "tags": {
+          "highway": "primary",
+          "lanes": "8",
+          "maxspeed": "50",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          9410070134,
+          13566334158,
+          6468489289,
+          8499201871,
+          5097717943,
+          436844708
+        ],
+        "game_xz": [
+          [
+            -22.215,
+            -969.425
+          ],
+          [
+            -19.491,
+            -953.996
+          ],
+          [
+            -17.024,
+            -939.146
+          ],
+          [
+            43.372,
+            -654.379
+          ],
+          [
+            52.828,
+            -608.415
+          ],
+          [
+            58.204,
+            -581.543
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0577253,
+            37.6646504
+          ],
+          [
+            127.0577562,
+            37.6645118
+          ],
+          [
+            127.0577842,
+            37.6643784
+          ],
+          [
+            127.0584695,
+            37.6618203
+          ],
+          [
+            127.0585768,
+            37.6614074
+          ],
+          [
+            127.0586378,
+            37.661166
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/520023265",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/520023265",
+        "tags": {
+          "highway": "primary",
+          "lanes": "8",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          2111825358,
+          7558511480,
+          7558511508,
+          13566334182
+        ],
+        "game_xz": [
+          [
+            -154.939,
+            -1617.872
+          ],
+          [
+            -150.876,
+            -1597.868
+          ],
+          [
+            -87.634,
+            -1286.607
+          ],
+          [
+            -83.209,
+            -1265.323
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0562193,
+            37.6704755
+          ],
+          [
+            127.0562654,
+            37.6702958
+          ],
+          [
+            127.056983,
+            37.6674997
+          ],
+          [
+            127.0570332,
+            37.6673085
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/520033841",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/520033841",
+        "tags": {
+          "highway": "primary",
+          "lanes": "6",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          5965553946,
+          10598556476,
+          2111825356
+        ],
+        "game_xz": [
+          [
+            215.006,
+            135.544
+          ],
+          [
+            220.822,
+            158.086
+          ],
+          [
+            226.031,
+            183.6
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.060417,
+            37.6547243
+          ],
+          [
+            127.060483,
+            37.6545218
+          ],
+          [
+            127.0605421,
+            37.6542926
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/520033847",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/520033847",
+        "tags": {
+          "bicycle": "designated",
+          "cycleway": "track",
+          "highway": "primary",
+          "lanes": "8",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          436844708,
+          5178974626,
+          6641403208,
+          3839421324,
+          5208863473,
+          3839415409,
+          6603754559,
+          3839480726,
+          5208863472,
+          13566334142,
+          5965557118,
+          3835707014
+        ],
+        "game_xz": [
+          [
+            58.204,
+            -581.543
+          ],
+          [
+            63.025,
+            -559.056
+          ],
+          [
+            71.644,
+            -516.599
+          ],
+          [
+            98.101,
+            -394.927
+          ],
+          [
+            109.858,
+            -341.594
+          ],
+          [
+            121.288,
+            -287.459
+          ],
+          [
+            130.383,
+            -246.338
+          ],
+          [
+            135.38,
+            -225.02
+          ],
+          [
+            147.48,
+            -169.271
+          ],
+          [
+            182.495,
+            -15.806
+          ],
+          [
+            188.681,
+            12.547
+          ],
+          [
+            194.718,
+            36.77
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0586378,
+            37.661166
+          ],
+          [
+            127.0586925,
+            37.660964
+          ],
+          [
+            127.0587903,
+            37.6605826
+          ],
+          [
+            127.0590905,
+            37.6594896
+          ],
+          [
+            127.0592239,
+            37.6590105
+          ],
+          [
+            127.0593536,
+            37.6585242
+          ],
+          [
+            127.0594568,
+            37.6581548
+          ],
+          [
+            127.0595135,
+            37.6579633
+          ],
+          [
+            127.0596508,
+            37.6574625
+          ],
+          [
+            127.0600481,
+            37.6560839
+          ],
+          [
+            127.0601183,
+            37.6558292
+          ],
+          [
+            127.0601868,
+            37.6556116
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/520307298",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/520307298",
+        "tags": {
+          "highway": "secondary",
+          "name": "노원로",
+          "name:en": "Nowon-ro",
+          "name:ko": "노원로",
+          "name:ko-Latn": "Nowon-ro",
+          "network": "서울시 심야버스",
+          "public_transport:version": "1"
+        },
+        "osm_node_ids": [
+          3839415408,
+          436831753,
+          8499829492,
+          436831749,
+          436831747
+        ],
+        "game_xz": [
+          [
+            704.499,
+            -206.463
+          ],
+          [
+            715.85,
+            -191.257
+          ],
+          [
+            717.763,
+            -188.619
+          ],
+          [
+            744.933,
+            -151.182
+          ],
+          [
+            761.343,
+            -125.734
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0659712,
+            37.6577966
+          ],
+          [
+            127.0661,
+            37.65766
+          ],
+          [
+            127.0661217,
+            37.6576363
+          ],
+          [
+            127.06643,
+            37.6573
+          ],
+          [
+            127.0666162,
+            37.6570714
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/575184336",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/575184336",
+        "tags": {
+          "bridge": "yes",
+          "bridge:name": "당현1교",
+          "bridge:structure": "beam",
+          "highway": "primary",
+          "layer": "1",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt"
+        },
+        "osm_node_ids": [
+          5519783606,
+          5519783607
+        ],
+        "game_xz": [
+          [
+            466.336,
+            1031.532
+          ],
+          [
+            480.322,
+            1068.724
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0632688,
+            37.6466755
+          ],
+          [
+            127.0634275,
+            37.6463414
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/575184341",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/575184341",
+        "tags": {
+          "highway": "primary",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          5519783607,
+          7569402358,
+          3835756882
+        ],
+        "game_xz": [
+          [
+            480.322,
+            1068.724
+          ],
+          [
+            498.318,
+            1119.118
+          ],
+          [
+            514.261,
+            1162.333
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0634275,
+            37.6463414
+          ],
+          [
+            127.0636317,
+            37.6458887
+          ],
+          [
+            127.0638126,
+            37.6455005
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/631747997",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/631747997",
+        "tags": {
+          "highway": "primary",
+          "lanes": "6",
+          "maxspeed": "50",
+          "maxspeed:type": "sign",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          3835707014,
+          13566334141,
+          5965553946
+        ],
+        "game_xz": [
+          [
+            194.718,
+            36.77
+          ],
+          [
+            209.639,
+            104.719
+          ],
+          [
+            215.006,
+            135.544
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0601868,
+            37.6556116
+          ],
+          [
+            127.0603561,
+            37.6550012
+          ],
+          [
+            127.060417,
+            37.6547243
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/631748004",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/631748004",
+        "tags": {
+          "highway": "primary",
+          "lanes": "6",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          2111825356,
+          5178974621,
+          5965553951
+        ],
+        "game_xz": [
+          [
+            226.031,
+            183.6
+          ],
+          [
+            231.662,
+            206.666
+          ],
+          [
+            239.03,
+            240.229
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0605421,
+            37.6542926
+          ],
+          [
+            127.060606,
+            37.6540854
+          ],
+          [
+            127.0606896,
+            37.6537839
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/706753554",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/706753554",
+        "tags": {
+          "highway": "primary_link",
+          "lanes": "1",
+          "oneway": "yes",
+          "surface": "asphalt"
+        },
+        "osm_node_ids": [
+          13566334148,
+          6641403209,
+          6641403210,
+          6641403211,
+          6641403212,
+          6641403213,
+          6641403214,
+          6641403215,
+          6641403216
+        ],
+        "game_xz": [
+          [
+            84.238,
+            -523.234
+          ],
+          [
+            85.648,
+            -546.644
+          ],
+          [
+            89.429,
+            -554.203
+          ],
+          [
+            91.244,
+            -556.763
+          ],
+          [
+            94.981,
+            -560.47
+          ],
+          [
+            99.705,
+            -564.021
+          ],
+          [
+            105.618,
+            -568.385
+          ],
+          [
+            112.828,
+            -570.867
+          ],
+          [
+            130.242,
+            -574.062
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0589332,
+            37.6606422
+          ],
+          [
+            127.0589492,
+            37.6608525
+          ],
+          [
+            127.0589921,
+            37.6609204
+          ],
+          [
+            127.0590127,
+            37.6609434
+          ],
+          [
+            127.0590551,
+            37.6609767
+          ],
+          [
+            127.0591087,
+            37.6610086
+          ],
+          [
+            127.0591758,
+            37.6610478
+          ],
+          [
+            127.0592576,
+            37.6610701
+          ],
+          [
+            127.0594552,
+            37.6610988
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/706753555",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/706753555",
+        "tags": {
+          "bicycle": "designated",
+          "cycleway": "track",
+          "highway": "secondary",
+          "lanes": "6",
+          "name": "노원로",
+          "name:en": "Nowon-ro",
+          "name:ko": "노원로",
+          "name:ko-Latn": "Nowon-ro",
+          "oneway": "no",
+          "surface": "asphalt"
+        },
+        "osm_node_ids": [
+          6641403216,
+          3988407858,
+          436831787,
+          436852432,
+          436831784,
+          436831781,
+          436831776,
+          436831774,
+          436831772,
+          8555606240,
+          436831768,
+          436831766,
+          436831762,
+          3839409061,
+          11640424351,
+          436831761,
+          11640424345,
+          3839415403,
+          436831758
+        ],
+        "game_xz": [
+          [
+            130.242,
+            -574.062
+          ],
+          [
+            168.773,
+            -570.055
+          ],
+          [
+            306.943,
+            -553.257
+          ],
+          [
+            326.588,
+            -550.44
+          ],
+          [
+            344.734,
+            -546.923
+          ],
+          [
+            373.023,
+            -539.687
+          ],
+          [
+            390.649,
+            -534.121
+          ],
+          [
+            413.563,
+            -524.102
+          ],
+          [
+            432.071,
+            -516.31
+          ],
+          [
+            459.329,
+            -499.879
+          ],
+          [
+            470.848,
+            -492.933
+          ],
+          [
+            501.694,
+            -469.556
+          ],
+          [
+            506.981,
+            -462.876
+          ],
+          [
+            508.673,
+            -460.984
+          ],
+          [
+            531.843,
+            -435.102
+          ],
+          [
+            552.809,
+            -411.669
+          ],
+          [
+            553.629,
+            -410.545
+          ],
+          [
+            588.387,
+            -362.711
+          ],
+          [
+            611.856,
+            -330.406
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0594552,
+            37.6610988
+          ],
+          [
+            127.0598924,
+            37.6610628
+          ],
+          [
+            127.0614602,
+            37.6609119
+          ],
+          [
+            127.0616831,
+            37.6608866
+          ],
+          [
+            127.061889,
+            37.660855
+          ],
+          [
+            127.06221,
+            37.66079
+          ],
+          [
+            127.06241,
+            37.66074
+          ],
+          [
+            127.06267,
+            37.66065
+          ],
+          [
+            127.06288,
+            37.66058
+          ],
+          [
+            127.0631893,
+            37.6604324
+          ],
+          [
+            127.06332,
+            37.66037
+          ],
+          [
+            127.06367,
+            37.66016
+          ],
+          [
+            127.06373,
+            37.6601
+          ],
+          [
+            127.0637492,
+            37.660083
+          ],
+          [
+            127.0640121,
+            37.6598505
+          ],
+          [
+            127.06425,
+            37.65964
+          ],
+          [
+            127.0642593,
+            37.6596299
+          ],
+          [
+            127.0646537,
+            37.6592002
+          ],
+          [
+            127.06492,
+            37.65891
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/796660391",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/796660391",
+        "tags": {
+          "bicycle": "designated",
+          "cycleway": "track",
+          "highway": "secondary",
+          "lanes": "6",
+          "name": "노원로",
+          "name:en": "Nowon-ro",
+          "name:ko": "노원로",
+          "name:ko-Latn": "Nowon-ro",
+          "oneway": "no",
+          "surface": "asphalt"
+        },
+        "osm_node_ids": [
+          4655160524,
+          8499201861,
+          5097717942,
+          436844708,
+          13566334156,
+          5178974627,
+          6641403216
+        ],
+        "game_xz": [
+          [
+            -47.358,
+            -590.215
+          ],
+          [
+            3.555,
+            -586.118
+          ],
+          [
+            37.485,
+            -583.391
+          ],
+          [
+            58.204,
+            -581.543
+          ],
+          [
+            72.869,
+            -580.029
+          ],
+          [
+            90.09,
+            -578.248
+          ],
+          [
+            130.242,
+            -574.062
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.05744,
+            37.6612439
+          ],
+          [
+            127.0580177,
+            37.6612071
+          ],
+          [
+            127.0584027,
+            37.6611826
+          ],
+          [
+            127.0586378,
+            37.661166
+          ],
+          [
+            127.0588042,
+            37.6611524
+          ],
+          [
+            127.0589996,
+            37.6611364
+          ],
+          [
+            127.0594552,
+            37.6610988
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/911080724",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/911080724",
+        "tags": {
+          "highway": "service",
+          "service": "driveway"
+        },
+        "osm_node_ids": [
+          8459790625,
+          6641406389,
+          5072308072,
+          3839480726,
+          13566334151
+        ],
+        "game_xz": [
+          [
+            25.587,
+            -188.084
+          ],
+          [
+            121.782,
+            -217.038
+          ],
+          [
+            123.192,
+            -217.473
+          ],
+          [
+            135.38,
+            -225.02
+          ],
+          [
+            148.256,
+            -228.126
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0582677,
+            37.6576315
+          ],
+          [
+            127.0593592,
+            37.6578916
+          ],
+          [
+            127.0593752,
+            37.6578955
+          ],
+          [
+            127.0595135,
+            37.6579633
+          ],
+          [
+            127.0596596,
+            37.6579912
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779805",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/1478779805",
+        "tags": {
+          "bridge": "yes",
+          "bridge:name": "당현1교",
+          "bridge:structure": "beam",
+          "highway": "primary",
+          "layer": "1",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt"
+        },
+        "osm_node_ids": [
+          13566334120,
+          13566334121
+        ],
+        "game_xz": [
+          [
+            492.405,
+            1060.82
+          ],
+          [
+            476.744,
+            1022.482
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0635646,
+            37.6464124
+          ],
+          [
+            127.0633869,
+            37.6467568
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779806",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/1478779806",
+        "tags": {
+          "highway": "primary",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          13566334123,
+          13566334122,
+          3835756888,
+          13566334120
+        ],
+        "game_xz": [
+          [
+            531.173,
+            1156.433
+          ],
+          [
+            512.798,
+            1113.241
+          ],
+          [
+            494.59,
+            1066.442
+          ],
+          [
+            492.405,
+            1060.82
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0640045,
+            37.6455535
+          ],
+          [
+            127.063796,
+            37.6459415
+          ],
+          [
+            127.0635894,
+            37.6463619
+          ],
+          [
+            127.0635646,
+            37.6464124
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779808",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/1478779808",
+        "tags": {
+          "highway": "primary",
+          "maxspeed": "50",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          13566334121,
+          13566334135,
+          13566334134,
+          13566334133,
+          13566334132,
+          13566334131,
+          13566334130,
+          13566334129,
+          13566334128
+        ],
+        "game_xz": [
+          [
+            476.744,
+            1022.482
+          ],
+          [
+            471.853,
+            1009.714
+          ],
+          [
+            428.475,
+            904.327
+          ],
+          [
+            379.237,
+            790.448
+          ],
+          [
+            371.913,
+            773.571
+          ],
+          [
+            363.823,
+            754.703
+          ],
+          [
+            344.707,
+            685.184
+          ],
+          [
+            307.481,
+            519.796
+          ],
+          [
+            304.123,
+            502.097
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0633869,
+            37.6467568
+          ],
+          [
+            127.0633314,
+            37.6468715
+          ],
+          [
+            127.0628392,
+            37.6478182
+          ],
+          [
+            127.0622805,
+            37.6488412
+          ],
+          [
+            127.0621974,
+            37.6489928
+          ],
+          [
+            127.0621056,
+            37.6491623
+          ],
+          [
+            127.0618887,
+            37.6497868
+          ],
+          [
+            127.0614663,
+            37.6512725
+          ],
+          [
+            127.0614282,
+            37.6514315
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779809",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/1478779809",
+        "tags": {
+          "highway": "primary",
+          "lanes": "6",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          13566334128,
+          13566334138,
+          13566334137,
+          13566334136,
+          13566334140,
+          13566334139
+        ],
+        "game_xz": [
+          [
+            304.123,
+            502.097
+          ],
+          [
+            300.325,
+            478.942
+          ],
+          [
+            255.819,
+            269.561
+          ],
+          [
+            249.562,
+            237.924
+          ],
+          [
+            241.833,
+            203.772
+          ],
+          [
+            236.933,
+            180.606
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0614282,
+            37.6514315
+          ],
+          [
+            127.0613851,
+            37.6516395
+          ],
+          [
+            127.0608801,
+            37.6535204
+          ],
+          [
+            127.0608091,
+            37.6538046
+          ],
+          [
+            127.0607214,
+            37.6541114
+          ],
+          [
+            127.0606658,
+            37.6543195
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779810",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/1478779810",
+        "tags": {
+          "highway": "primary",
+          "lanes": "6",
+          "maxspeed": "50",
+          "maxspeed:type": "sign",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          13566334143,
+          13566334144,
+          13821643825
+        ],
+        "game_xz": [
+          [
+            226.762,
+            132.204
+          ],
+          [
+            221.386,
+            101.369
+          ],
+          [
+            209.304,
+            33.386
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0605504,
+            37.6547543
+          ],
+          [
+            127.0604894,
+            37.6550313
+          ],
+          [
+            127.0603523,
+            37.655642
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779811",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/1478779811",
+        "tags": {
+          "highway": "primary",
+          "lanes": "6",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          13566334139,
+          13566334146,
+          13566334143
+        ],
+        "game_xz": [
+          [
+            236.933,
+            180.606
+          ],
+          [
+            230.904,
+            156.038
+          ],
+          [
+            226.762,
+            132.204
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0606658,
+            37.6543195
+          ],
+          [
+            127.0605974,
+            37.6545402
+          ],
+          [
+            127.0605504,
+            37.6547543
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779812",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/1478779812",
+        "tags": {
+          "bicycle": "designated",
+          "cycleway": "track",
+          "highway": "primary",
+          "lanes": "8",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          13821643825,
+          13566334149,
+          3839409062,
+          13566334150,
+          13566334151,
+          13566334152,
+          13566334147,
+          13566334153,
+          13566334154,
+          13566334148,
+          13566334155,
+          13566334156
+        ],
+        "game_xz": [
+          [
+            209.304,
+            33.386
+          ],
+          [
+            200.834,
+            9.085
+          ],
+          [
+            195.3,
+            -18.021
+          ],
+          [
+            160.083,
+            -175.906
+          ],
+          [
+            148.256,
+            -228.126
+          ],
+          [
+            143.62,
+            -248.631
+          ],
+          [
+            135.75,
+            -285.667
+          ],
+          [
+            122.451,
+            -348.228
+          ],
+          [
+            110.695,
+            -401.573
+          ],
+          [
+            84.238,
+            -523.234
+          ],
+          [
+            75.769,
+            -562.184
+          ],
+          [
+            72.869,
+            -580.029
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0603523,
+            37.655642
+          ],
+          [
+            127.0602562,
+            37.6558603
+          ],
+          [
+            127.0601934,
+            37.6561038
+          ],
+          [
+            127.0597938,
+            37.6575221
+          ],
+          [
+            127.0596596,
+            37.6579912
+          ],
+          [
+            127.059607,
+            37.6581754
+          ],
+          [
+            127.0595177,
+            37.6585081
+          ],
+          [
+            127.0593668,
+            37.6590701
+          ],
+          [
+            127.0592334,
+            37.6595493
+          ],
+          [
+            127.0589332,
+            37.6606422
+          ],
+          [
+            127.0588371,
+            37.6609921
+          ],
+          [
+            127.0588042,
+            37.6611524
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779813",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/1478779813",
+        "tags": {
+          "highway": "primary",
+          "lanes": "8",
+          "maxspeed": "50",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          13566334182,
+          13566405247,
+          9410070134
+        ],
+        "game_xz": [
+          [
+            -83.209,
+            -1265.323
+          ],
+          [
+            -79.614,
+            -1247.857
+          ],
+          [
+            -22.215,
+            -969.425
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0570332,
+            37.6673085
+          ],
+          [
+            127.057074,
+            37.6671516
+          ],
+          [
+            127.0577253,
+            37.6646504
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779817",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/1478779817",
+        "tags": {
+          "highway": "primary",
+          "lanes": "8",
+          "maxspeed": "50",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          13566334156,
+          13566334159,
+          13566334160,
+          13566334161,
+          13566334162,
+          9410070135
+        ],
+        "game_xz": [
+          [
+            72.869,
+            -580.029
+          ],
+          [
+            66.506,
+            -610.275
+          ],
+          [
+            56.274,
+            -655.76
+          ],
+          [
+            -3.954,
+            -942.251
+          ],
+          [
+            -5.902,
+            -956.923
+          ],
+          [
+            -9.585,
+            -972.274
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0588042,
+            37.6611524
+          ],
+          [
+            127.058732,
+            37.6614241
+          ],
+          [
+            127.0586159,
+            37.6618327
+          ],
+          [
+            127.0579325,
+            37.6644063
+          ],
+          [
+            127.0579104,
+            37.6645381
+          ],
+          [
+            127.0578686,
+            37.664676
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779823",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/1478779823",
+        "tags": {
+          "highway": "primary",
+          "lanes": "8",
+          "maxspeed": "50",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          9410070135,
+          13566405248,
+          13566334184
+        ],
+        "game_xz": [
+          [
+            -9.585,
+            -972.274
+          ],
+          [
+            -66.782,
+            -1250.395
+          ],
+          [
+            -70.404,
+            -1268.006
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0578686,
+            37.664676
+          ],
+          [
+            127.0572196,
+            37.6671744
+          ],
+          [
+            127.0571785,
+            37.6673326
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779824",
+      "properties": {
+        "source_url": "https://www.openstreetmap.org/way/1478779824",
+        "tags": {
+          "highway": "primary",
+          "lanes": "8",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "osm_node_ids": [
+          13566334184,
+          13566334185,
+          13566334186,
+          13566334187
+        ],
+        "game_xz": [
+          [
+            -70.404,
+            -1268.006
+          ],
+          [
+            -75.066,
+            -1288.9
+          ],
+          [
+            -140.67,
+            -1600.628
+          ],
+          [
+            -144.918,
+            -1619.152
+          ]
+        ],
+        "width_m": null,
+        "width_verified": false,
+        "lanes_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0571785,
+            37.6673326
+          ],
+          [
+            127.0571256,
+            37.6675203
+          ],
+          [
+            127.0563812,
+            37.6703206
+          ],
+          [
+            127.056333,
+            37.670487
+          ]
+        ]
+      }
+    }
+  ]
+}

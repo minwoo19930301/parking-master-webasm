@@ -66,6 +66,44 @@ test('menu pauses driving; resume preserves the session and clears queued input'
   assert.equal(window.__examResetClock, true);
 });
 
+test('all four road buttons start independently and clear stale input on switching',()=>{
+  const {window,elements,fire}=shell();
+  for(const [id,key] of [['road-a','roadAPressed'],['road-b','roadBPressed'],['road-c','roadCPressed'],['road-d','roadDPressed']]){
+    fire('open-menu','click');window.__examInput.cameraPressed=true;
+    fire(id,'pointerdown');assert.equal(window.__examInput[key],true);
+    assert.equal(window.__examInput.cameraPressed,false);
+    assert.equal(window.__examIsPaused(),false);assert.equal(elements.get('intro-modal').hidden,true);
+    assert.equal(window.__examInput.startPressed,false);
+  }
+});
+
+test('camera toggle uses one-shot input and keyboard respects focus and pause', () => {
+  const {window,document,elements,fire}=shell();
+  const key=(target,repeat=false)=>{
+    const event=Object.assign(new Event('keydown',{cancelable:true}),{code:'KeyT',repeat});
+    Object.defineProperty(event,'target',{value:target});
+    window.dispatchEvent(event);
+  };
+  key(elements.get('camera-toggle'));
+  assert.equal(window.__examInput.cameraPressed,false);
+  key(elements.get('canvas'),true);
+  assert.equal(window.__examInput.cameraPressed,false);
+  key(elements.get('canvas'));
+  assert.equal(window.__examInput.cameraPressed,true);
+  assert.equal(window.__examInput.startPressed,false);
+  assert.equal(window.__examInput.freeDrivePressed,false);
+  fire('open-menu','click');
+  key(document.body);
+  assert.equal(window.__examInput.cameraPressed,false);
+  fire('resume-drive-button','click');
+  fire('camera-toggle','pointerdown');
+  assert.equal(window.__examInput.cameraPressed,true);
+  window.__examCameraState(true);
+  assert.equal(elements.get('camera-toggle').textContent,'시점: 3인칭 · T');
+  window.__examCameraState(false);
+  assert.equal(elements.get('camera-toggle').textContent,'시점: 운전석 · T');
+});
+
 test('tutorial releases held controls and keeps the menu paused after dismissal', () => {
   const {window, fire} = shell();
   fire('open-menu','click');
@@ -125,4 +163,67 @@ test('Enter starts an exam only from the driving surface, not DOM controls', () 
   fire('resume-drive-button', 'click');
   enter(document.body);
   assert.equal(window.__examInput.startPressed, true);
+});
+
+test('keyboard pedals keep independent keys, respect dialogs, and release on blur', () => {
+  const {window, document, elements, fire} = shell();
+  const key = (type, code, target = document.body) => {
+    const event = Object.assign(new Event(type, {cancelable:true}), {code});
+    Object.defineProperty(event, 'target', {value:target});
+    window.dispatchEvent(event);
+  };
+  key('keydown','KeyW');
+  key('keydown','ArrowUp');
+  assert.equal(window.__examPedalInput('throttle'),true);
+  assert.equal(elements.get('keyboard-throttle').dataset.held,'true');
+  key('keyup','KeyW');
+  assert.equal(window.__examPedalInput('throttle'),true);
+  key('keydown','Space');
+  assert.equal(window.__examPedalInput('brake'),true);
+  window.dispatchEvent(new Event('blur'));
+  assert.equal(window.__examPedalInput('throttle'),false);
+  assert.equal(window.__examPedalInput('brake'),false);
+  fire('open-menu','click');
+  key('keydown','KeyW');
+  assert.equal(window.__examPedalInput('throttle'),false);
+  fire('resume-drive-button','click');
+  key('keydown','Space',{tagName:'BUTTON'});
+  key('keydown','KeyW',{tagName:'INPUT'});
+  assert.equal(window.__examPedalInput('brake'),false);
+  assert.equal(window.__examPedalInput('throttle'),false);
+  key('keydown','KeyS');
+  assert.equal(window.__examPedalInput('brake'),true);
+  key('keyup','KeyS');
+  assert.equal(window.__examPedalInput('brake'),false);
+});
+
+test('keyboard control activation never bubbles into a pedal; wheel focus still permits pedals', () => {
+  const {window,elements}=shell();
+  const gear=elements.get('gear-gate');
+  gear.dataset.gear='D';
+  const event=Object.assign(new Event('keydown',{cancelable:true}),{key:' ',code:'Space'});
+  Object.defineProperty(event,'target',{value:gear});
+  gear.dispatchEvent(event);
+  assert.equal(event.defaultPrevented,true);
+  assert.equal(window.__examInput.gearDrivePressed,true);
+  window.dispatchEvent(event);
+  assert.equal(window.__examPedalInput('brake'),false);
+  const unhandled=Object.assign(new Event('keydown',{cancelable:true}),{key:'w',code:'KeyW'});
+  Object.defineProperty(unhandled,'target',{value:gear});
+  window.dispatchEvent(unhandled);
+  assert.equal(window.__examPedalInput('throttle'),false);
+  const driving=Object.assign(new Event('keydown',{cancelable:true}),{key:'w',code:'KeyW'});
+  Object.defineProperty(driving,'target',{value:elements.get('steer-zone')});
+  window.dispatchEvent(driving);
+  assert.equal(window.__examPedalInput('throttle'),true);
+});
+
+test('steering hit region follows the rendered wheel bounds', () => {
+  const {window,elements}=shell();
+  window.__examWheelBounds(400,700,160,1440,900);
+  const style=elements.get('steer-zone').style;
+  assert.equal(parseFloat(style.left),240/1440*100);
+  assert.equal(parseFloat(style.top),540/900*100);
+  assert.equal(parseFloat(style.width),320/1440*100);
+  assert.equal(parseFloat(style.height),320/900*100);
 });

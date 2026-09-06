@@ -59,10 +59,10 @@ struct RoutePoint {
 namespace dobong_v1 {
 
 inline constexpr const char* kPackId = "dobong-class-2-auto-2026-07";
-inline constexpr const char* kDisplayName = "도봉운전면허시험장 제2종 보통(자동)";
+inline constexpr const char* kDisplayName = "기능시험 규칙 연습 · 가상 배치";
 inline constexpr const char* kRevision = "2026-07-30 reference build";
 inline constexpr const char* kAccuracyNote =
-    "공개 법정 규격과 시험장 항공 배치를 바탕으로 재구성한 연습용 코스";
+    "기존 가상 배치의 규칙 연습용 코스. 실제 도봉 지형과 별개이며 측량 자료가 아님";
 
 inline constexpr std::array<RoadSpec, 11> kRoads = {{
     {-18.0f, 30.0f, 32.0f, 4.0f, 0.0f, false, true},

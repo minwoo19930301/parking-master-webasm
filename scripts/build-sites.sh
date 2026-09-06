@@ -24,6 +24,9 @@ if [[ -f "$ROOT_DIR/index.data" ]]; then
 fi
 
 cp "$ROOT_DIR/sites/_headers" "$CLIENT_DIR/_headers"
+mkdir -p "$CLIENT_DIR/docs"
+cp -R "$ROOT_DIR/docs/dobong" "$CLIENT_DIR/docs/"
+cp -R "$ROOT_DIR/docs/road-driving" "$CLIENT_DIR/docs/"
 cp "$ROOT_DIR/sites/worker.js" "$SERVER_DIR/index.js"
 cp "$ROOT_DIR/sites/wrangler.json" "$SERVER_DIR/wrangler.json"
 

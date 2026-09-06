@@ -1,0 +1,500 @@
+{
+  "recorded_context_feature_count": 54,
+  "note": "Five selected existing buildings audited without modifying original 54-feature GeoJSON; all five have no height or building:levels tags.",
+  "features": [
+    {
+      "roof": "green/teal broad roof in 2026 aerial",
+      "walls": "pale outer wall strips visible obliquely; full facade/number of storeys not established",
+      "shape": "OSM notched polygon; roof section unknown",
+      "confidence": "B: footprint matched to aerial; color observational, not calibrated",
+      "id": "way/380676074",
+      "osm_source": "https://www.openstreetmap.org/way/380676074",
+      "tags": {
+        "amenity": "driving_school",
+        "building": "yes"
+      },
+      "height_m": null,
+      "roof_curvature": null,
+      "pillar_count": null,
+      "game_ring_xz": [
+        [
+          -38.448,
+          -217.461
+        ],
+        [
+          25.208,
+          -236.453
+        ],
+        [
+          33.872,
+          -207.42
+        ],
+        [
+          -17.782,
+          -192.025
+        ],
+        [
+          -19.861,
+          -199.005
+        ],
+        [
+          -31.874,
+          -195.42
+        ],
+        [
+          -38.448,
+          -217.461
+        ]
+      ],
+      "source_pixels_z19": [
+        [
+          244.7,
+          -332.9
+        ],
+        [
+          514,
+          -413.2
+        ],
+        [
+          550.6,
+          -290.4
+        ],
+        [
+          332.1,
+          -225.3
+        ],
+        [
+          323.3,
+          -254.8
+        ],
+        [
+          272.5,
+          -239.6
+        ],
+        [
+          244.7,
+          -332.9
+        ]
+      ],
+      "footprint_edges": [
+        {
+          "length_m": 66.43,
+          "bearing_degrees_true": 73.4
+        },
+        {
+          "length_m": 30.3,
+          "bearing_degrees_true": 163.4
+        },
+        {
+          "length_m": 53.9,
+          "bearing_degrees_true": 253.4
+        },
+        {
+          "length_m": 7.28,
+          "bearing_degrees_true": 343.4
+        },
+        {
+          "length_m": 12.54,
+          "bearing_degrees_true": 253.4
+        },
+        {
+          "length_m": 23,
+          "bearing_degrees_true": 343.4
+        }
+      ],
+      "source_image_basename": "esri-campus-north-up.png"
+    },
+    {
+      "roof": "large green roof south-west of ordinary course",
+      "walls": "unknown",
+      "shape": "broad quadrilateral roof; actual roof section unknown",
+      "confidence": "B: footprint matched; OSM disused is contributor tag, not verified operational status",
+      "id": "way/887784323",
+      "osm_source": "https://www.openstreetmap.org/way/887784323",
+      "tags": {
+        "building": "disused"
+      },
+      "height_m": null,
+      "roof_curvature": null,
+      "pillar_count": null,
+      "game_ring_xz": [
+        [
+          -69.69,
+          72.303
+        ],
+        [
+          -34.068,
+          63.398
+        ],
+        [
+          -38.836,
+          43.995
+        ],
+        [
+          -75.727,
+          56.718
+        ],
+        [
+          -69.69,
+          72.303
+        ]
+      ],
+      "source_pixels_z19": [
+        [
+          112.5,
+          892.9
+        ],
+        [
+          263.2,
+          855.3
+        ],
+        [
+          243.1,
+          773.2
+        ],
+        [
+          87,
+          827
+        ],
+        [
+          112.5,
+          892.9
+        ]
+      ],
+      "footprint_edges": [
+        {
+          "length_m": 36.72,
+          "bearing_degrees_true": 76
+        },
+        {
+          "length_m": 19.98,
+          "bearing_degrees_true": 346.2
+        },
+        {
+          "length_m": 39.02,
+          "bearing_degrees_true": 251
+        },
+        {
+          "length_m": 16.71,
+          "bearing_degrees_true": 158.8
+        }
+      ],
+      "source_image_basename": "esri-west-course-capture-2025-03-22-north-up.png"
+    },
+    {
+      "roof": "dark grey/brown narrow roof, pale southern end; not a green barrel canopy",
+      "walls": "unknown; trees obscure portions",
+      "shape": "thin long building, small west-side footprint protrusion",
+      "confidence": "B/C: footprint matched, roof partly tree/oblique occluded",
+      "id": "way/911080722",
+      "osm_source": "https://www.openstreetmap.org/way/911080722",
+      "tags": {
+        "building": "yes"
+      },
+      "height_m": null,
+      "roof_curvature": null,
+      "pillar_count": null,
+      "game_ring_xz": [
+        [
+          39.591,
+          -38.204
+        ],
+        [
+          44.412,
+          -39.206
+        ],
+        [
+          50.828,
+          -8.448
+        ],
+        [
+          46.263,
+          -7.491
+        ],
+        [
+          43.584,
+          -20.337
+        ],
+        [
+          40.411,
+          -19.68
+        ],
+        [
+          38.851,
+          -21.862
+        ],
+        [
+          39.159,
+          -23.888
+        ],
+        [
+          42.429,
+          -24.578
+        ],
+        [
+          39.591,
+          -38.204
+        ]
+      ],
+      "source_pixels_z19": [
+        [
+          574.8,
+          425.4
+        ],
+        [
+          595.2,
+          421.2
+        ],
+        [
+          622.4,
+          551.3
+        ],
+        [
+          603.1,
+          555.4
+        ],
+        [
+          591.7,
+          501
+        ],
+        [
+          578.3,
+          503.8
+        ],
+        [
+          571.7,
+          494.6
+        ],
+        [
+          573,
+          486
+        ],
+        [
+          586.8,
+          483.1
+        ],
+        [
+          574.8,
+          425.4
+        ]
+      ],
+      "footprint_edges": [
+        {
+          "length_m": 4.92,
+          "bearing_degrees_true": 78.3
+        },
+        {
+          "length_m": 31.42,
+          "bearing_degrees_true": 168.2
+        },
+        {
+          "length_m": 4.66,
+          "bearing_degrees_true": 258.2
+        },
+        {
+          "length_m": 13.12,
+          "bearing_degrees_true": 348.2
+        },
+        {
+          "length_m": 3.24,
+          "bearing_degrees_true": 258.3
+        },
+        {
+          "length_m": 2.68,
+          "bearing_degrees_true": 324.4
+        },
+        {
+          "length_m": 2.05,
+          "bearing_degrees_true": 8.7
+        },
+        {
+          "length_m": 3.34,
+          "bearing_degrees_true": 78.1
+        },
+        {
+          "length_m": 13.92,
+          "bearing_degrees_true": 348.2
+        }
+      ],
+      "source_image_basename": "esri-west-course-capture-2025-03-22-north-up.png"
+    },
+    {
+      "roof": "dark grey/blue roof bounded by pale edges; green neighboring canopy west is separate",
+      "walls": "unknown",
+      "shape": "OSM angular/notched footprint; roof section unknown",
+      "confidence": "B: footprint matched; do not replace this with adjacent green canopy",
+      "id": "way/911080726",
+      "osm_source": "https://www.openstreetmap.org/way/911080726",
+      "tags": {
+        "building": "yes"
+      },
+      "height_m": null,
+      "roof_curvature": null,
+      "pillar_count": null,
+      "game_ring_xz": [
+        [
+          12.659,
+          -96.168
+        ],
+        [
+          26.151,
+          -99.351
+        ],
+        [
+          26.751,
+          -96.813
+        ],
+        [
+          21.851,
+          -95.656
+        ],
+        [
+          24.248,
+          -85.492
+        ],
+        [
+          15.655,
+          -83.466
+        ],
+        [
+          12.659,
+          -96.168
+        ]
+      ],
+      "source_pixels_z19": [
+        [
+          460.9,
+          180.2
+        ],
+        [
+          518,
+          166.8
+        ],
+        [
+          520.5,
+          177.5
+        ],
+        [
+          499.8,
+          182.4
+        ],
+        [
+          509.9,
+          225.4
+        ],
+        [
+          473.6,
+          234
+        ],
+        [
+          460.9,
+          180.2
+        ]
+      ],
+      "footprint_edges": [
+        {
+          "length_m": 13.86,
+          "bearing_degrees_true": 76.7
+        },
+        {
+          "length_m": 2.61,
+          "bearing_degrees_true": 166.7
+        },
+        {
+          "length_m": 5.03,
+          "bearing_degrees_true": 256.7
+        },
+        {
+          "length_m": 10.44,
+          "bearing_degrees_true": 166.7
+        },
+        {
+          "length_m": 8.83,
+          "bearing_degrees_true": 256.7
+        },
+        {
+          "length_m": 13.05,
+          "bearing_degrees_true": 346.7
+        }
+      ],
+      "source_image_basename": "esri-west-course-capture-2025-03-22-north-up.png"
+    },
+    {
+      "roof": "green rectangular roof with darker central rectangular patch",
+      "walls": "pale border/southern edge visible; all sides and window layout unknown",
+      "shape": "OSM quadrilateral footprint; roof section unconfirmed, no demonstrated barrel vault",
+      "confidence": "B: good footprint/roof proximity; roof-to-footprint parallax unresolved",
+      "id": "way/1226934249",
+      "osm_source": "https://www.openstreetmap.org/way/1226934249",
+      "tags": {
+        "building": "yes"
+      },
+      "height_m": null,
+      "roof_curvature": null,
+      "pillar_count": null,
+      "game_ring_xz": [
+        [
+          47.814,
+          5.356
+        ],
+        [
+          51.41,
+          15.007
+        ],
+        [
+          60.487,
+          13.304
+        ],
+        [
+          57.464,
+          3.274
+        ],
+        [
+          47.814,
+          5.356
+        ]
+      ],
+      "source_pixels_z19": [
+        [
+          609.6,
+          609.7
+        ],
+        [
+          624.8,
+          650.6
+        ],
+        [
+          663.2,
+          643.3
+        ],
+        [
+          650.4,
+          600.9
+        ],
+        [
+          609.6,
+          609.7
+        ]
+      ],
+      "footprint_edges": [
+        {
+          "length_m": 10.3,
+          "bearing_degrees_true": 159.6
+        },
+        {
+          "length_m": 9.24,
+          "bearing_degrees_true": 79.4
+        },
+        {
+          "length_m": 10.48,
+          "bearing_degrees_true": 343.2
+        },
+        {
+          "length_m": 9.87,
+          "bearing_degrees_true": 257.8
+        }
+      ],
+      "source_image_basename": "esri-west-course-capture-2025-03-22-north-up.png"
+    }
+  ]
+}

@@ -1,0 +1,2652 @@
+{
+  "type": "FeatureCollection",
+  "name": "Dobong ordinary field OBSERVATION trace — not surveyed, not route/scoring data",
+  "metadata": {
+    "schema_version": 2,
+    "warning": "Canonical manual trace of actual 2025-03-22 aerial, AFTER documented 2022/2023 works. Not surveyed/scoring geometry. Official2023 schematic only cross-checks topology; none of its pixels are projected into this trace.",
+    "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+    "source_capture_date": "2025-03-22",
+    "wayback_release_date": "2025-12-18",
+    "source_metadata": "esri-wayback-2025-12-18-audit.json",
+    "source_resolution_m": 0.34,
+    "source_accuracy_m": 8.47,
+    "pixel_pick_error_m_estimate": 2,
+    "tile_grid": {
+      "zoom": 19,
+      "x0": 447184,
+      "y0": 202865,
+      "tile_size": 256,
+      "image_width": 1024,
+      "image_height_without_footer": 1024
+    },
+    "origin": {
+      "lon": 127.0585674,
+      "lat": 37.6564809,
+      "role": "OSM campus centroid, not surveyed datum"
+    },
+    "historical_sources": [
+      "course-observed-2021-pixels.json",
+      "course-observed-2021.geojson"
+    ],
+    "official_topology_source": "official-2023-course-topology.json",
+    "known_prior_works": [
+      "2022-06 ramp-bottom widening, board69273",
+      "2023-06 post-acceleration left-turn widening, board88325"
+    ],
+    "grade_legend": {
+      "B1": "Directly visible in post-works2025 aerial and broadly corroborated in exposed2026 portions; still8.47m source accuracy, not sub-meter",
+      "B2": "Directly visible in2025 aerial;2026 shadow prevents full detail comparison",
+      "C": "Observed plan marking/pavement with uncertain operational meaning, or an explicitly identified partly obscured closure",
+      "U": "Exact current/surveyed feature unavailable; geometry remains null"
+    },
+    "coordinate_reference": "WGS84 lon/lat (GeoJSON); local properties are meters east/north from origin",
+    "transform": "Web Mercator XYZ tile inverse; local E=R*cos(lat0)*(lon-lon0), N=R*(lat-lat0), angles in radians",
+    "licensing_note": "Geometry observations only. Source Esri/Vantor/Maxar imagery remains copyrighted. No imagery should be placed in public repository."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "ordinary-course-outer-curb-observed",
+      "properties": {
+        "id": "ordinary-course-outer-curb-observed",
+        "kind": "outer_paved_envelope",
+        "grade": "B1",
+        "description": "Post-works2025 visible outer road/curb envelope, including broader north-east and south-west corner pavement. Contains inner islands, parking lawns and staging; NOT all drivable. SE curved edge is partly shadowed but high-contrast curb segments remain visible; confidence there lower than exposed west/north.",
+        "current_check": "2026 exposed west/north perimeter broadly corresponds; south/east shadow prevents precise independent check.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            219,
+            443
+          ],
+          [
+            219,
+            427
+          ],
+          [
+            224,
+            412
+          ],
+          [
+            235,
+            399
+          ],
+          [
+            254,
+            389
+          ],
+          [
+            452,
+            337
+          ],
+          [
+            497,
+            326
+          ],
+          [
+            509,
+            367
+          ],
+          [
+            517,
+            392
+          ],
+          [
+            594,
+            699
+          ],
+          [
+            603,
+            716
+          ],
+          [
+            604,
+            732
+          ],
+          [
+            600,
+            748
+          ],
+          [
+            590,
+            762
+          ],
+          [
+            576,
+            775
+          ],
+          [
+            557,
+            784
+          ],
+          [
+            327,
+            837
+          ],
+          [
+            318,
+            806
+          ],
+          [
+            226,
+            467
+          ],
+          [
+            219,
+            443
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -96.52298144,
+            -25.94529595
+          ],
+          [
+            -96.52298144,
+            -22.16314356
+          ],
+          [
+            -95.34106226,
+            -18.61737727
+          ],
+          [
+            -92.74084006,
+            -15.54438105
+          ],
+          [
+            -88.24954717,
+            -13.18053858
+          ],
+          [
+            -41.4455476,
+            -0.88856864
+          ],
+          [
+            -30.80827497,
+            1.71165343
+          ],
+          [
+            -27.97166893,
+            -7.98008753
+          ],
+          [
+            -26.08059824,
+            -13.88969125
+          ],
+          [
+            -7.87904285,
+            -86.45996951
+          ],
+          [
+            -5.75158833,
+            -90.47853774
+          ],
+          [
+            -5.51520449,
+            -94.26072138
+          ],
+          [
+            -6.46073984,
+            -98.04290676
+          ],
+          [
+            -8.8245782,
+            -101.35232039
+          ],
+          [
+            -12.1339519,
+            -104.42534851
+          ],
+          [
+            -16.62524479,
+            -106.55283019
+          ],
+          [
+            -70.99352713,
+            -119.08134451
+          ],
+          [
+            -73.12098165,
+            -111.75334326
+          ],
+          [
+            -94.86829459,
+            -31.61852777
+          ],
+          [
+            -96.52298144,
+            -25.94529595
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05747217,
+              37.65624783
+            ],
+            [
+              127.05747217,
+              37.65628181
+            ],
+            [
+              127.05748558,
+              37.65631366
+            ],
+            [
+              127.05751508,
+              37.65634126
+            ],
+            [
+              127.05756605,
+              37.6563625
+            ],
+            [
+              127.05809712,
+              37.65647292
+            ],
+            [
+              127.05821782,
+              37.65649628
+            ],
+            [
+              127.05825001,
+              37.65640921
+            ],
+            [
+              127.05827147,
+              37.65635613
+            ],
+            [
+              127.058478,
+              37.65570422
+            ],
+            [
+              127.05850214,
+              37.65566812
+            ],
+            [
+              127.05850482,
+              37.65563414
+            ],
+            [
+              127.05849409,
+              37.65560017
+            ],
+            [
+              127.05846727,
+              37.65557044
+            ],
+            [
+              127.05842972,
+              37.65554283
+            ],
+            [
+              127.05837876,
+              37.65552372
+            ],
+            [
+              127.05776185,
+              37.65541117
+            ],
+            [
+              127.05773771,
+              37.655477
+            ],
+            [
+              127.05749094,
+              37.65619687
+            ],
+            [
+              127.05747217,
+              37.65624783
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "northwest-island-observed",
+      "properties": {
+        "id": "northwest-island-observed",
+        "kind": "non_drivable_island",
+        "grade": "B2",
+        "description": "2025 grass/unused interior west of the central longitudinal road. Former internal course marks are not ordinary driving surfaces.",
+        "current_check": "2026 western edge exposed; eastern edge shadowed.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            274,
+            434
+          ],
+          [
+            285,
+            429
+          ],
+          [
+            321,
+            419
+          ],
+          [
+            334,
+            419
+          ],
+          [
+            345,
+            427
+          ],
+          [
+            349,
+            439
+          ],
+          [
+            380,
+            543
+          ],
+          [
+            380,
+            553
+          ],
+          [
+            372,
+            563
+          ],
+          [
+            328,
+            577
+          ],
+          [
+            319,
+            578
+          ],
+          [
+            313,
+            574
+          ],
+          [
+            312,
+            567
+          ],
+          [
+            315,
+            557
+          ],
+          [
+            308,
+            550
+          ],
+          [
+            271,
+            455
+          ],
+          [
+            267,
+            445
+          ],
+          [
+            268,
+            438
+          ],
+          [
+            274,
+            434
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -83.52187045,
+            -23.81783502
+          ],
+          [
+            -80.92164825,
+            -22.63591252
+          ],
+          [
+            -72.41183014,
+            -20.27206802
+          ],
+          [
+            -69.33884027,
+            -20.27206802
+          ],
+          [
+            -66.73861807,
+            -22.16314356
+          ],
+          [
+            -65.79308273,
+            -24.99975769
+          ],
+          [
+            -58.46518381,
+            -49.58378758
+          ],
+          [
+            -58.46518381,
+            -51.94764046
+          ],
+          [
+            -60.3562545,
+            -54.31149401
+          ],
+          [
+            -70.75714329,
+            -57.62089013
+          ],
+          [
+            -72.88459782,
+            -57.85727562
+          ],
+          [
+            -74.30290083,
+            -56.91173371
+          ],
+          [
+            -74.53928467,
+            -55.25703563
+          ],
+          [
+            -73.83013316,
+            -52.8931818
+          ],
+          [
+            -75.48482001,
+            -51.23848452
+          ],
+          [
+            -84.23102196,
+            -28.78191137
+          ],
+          [
+            -85.1765573,
+            -26.41806512
+          ],
+          [
+            -84.94017346,
+            -24.76337314
+          ],
+          [
+            -83.52187045,
+            -23.81783502
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05761969,
+              37.65626694
+            ],
+            [
+              127.0576492,
+              37.65627756
+            ],
+            [
+              127.05774575,
+              37.65629879
+            ],
+            [
+              127.05778062,
+              37.65629879
+            ],
+            [
+              127.05781013,
+              37.65628181
+            ],
+            [
+              127.05782086,
+              37.65625632
+            ],
+            [
+              127.05790401,
+              37.65603548
+            ],
+            [
+              127.05790401,
+              37.65601425
+            ],
+            [
+              127.05788255,
+              37.65599301
+            ],
+            [
+              127.05776453,
+              37.65596328
+            ],
+            [
+              127.05774039,
+              37.65596116
+            ],
+            [
+              127.0577243,
+              37.65596965
+            ],
+            [
+              127.05772161,
+              37.65598452
+            ],
+            [
+              127.05772966,
+              37.65600575
+            ],
+            [
+              127.05771089,
+              37.65602062
+            ],
+            [
+              127.05761164,
+              37.65622235
+            ],
+            [
+              127.05760092,
+              37.65624358
+            ],
+            [
+              127.0576036,
+              37.65625845
+            ],
+            [
+              127.05761969,
+              37.65626694
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "northeast-island-observed",
+      "properties": {
+        "id": "northeast-island-observed",
+        "kind": "non_drivable_island",
+        "grade": "B2",
+        "description": "2025 northeast interior between central longitudinal and east perimeter roads; former inner markings do not create a through-road.",
+        "current_check": "2026 mostly shadowed.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            393,
+            400
+          ],
+          [
+            400,
+            392
+          ],
+          [
+            412,
+            389
+          ],
+          [
+            445,
+            380
+          ],
+          [
+            456,
+            380
+          ],
+          [
+            465,
+            386
+          ],
+          [
+            474,
+            399
+          ],
+          [
+            508,
+            523
+          ],
+          [
+            508,
+            533
+          ],
+          [
+            499,
+            540
+          ],
+          [
+            442,
+            556
+          ],
+          [
+            432,
+            553
+          ],
+          [
+            425,
+            543
+          ],
+          [
+            389,
+            416
+          ],
+          [
+            389,
+            407
+          ],
+          [
+            393,
+            400
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -55.39219393,
+            -15.78076533
+          ],
+          [
+            -53.73750708,
+            -13.88969125
+          ],
+          [
+            -50.90090105,
+            -13.18053858
+          ],
+          [
+            -43.10023445,
+            -11.05308094
+          ],
+          [
+            -40.50001225,
+            -11.05308094
+          ],
+          [
+            -38.37255773,
+            -12.47138597
+          ],
+          [
+            -36.2451032,
+            -15.54438105
+          ],
+          [
+            -28.20805277,
+            -44.85608384
+          ],
+          [
+            -28.20805277,
+            -47.21993537
+          ],
+          [
+            -30.33550729,
+            -48.87463184
+          ],
+          [
+            -43.80938596,
+            -52.65679645
+          ],
+          [
+            -46.17322432,
+            -51.94764046
+          ],
+          [
+            -47.82791118,
+            -49.58378758
+          ],
+          [
+            -56.33772928,
+            -19.5629148
+          ],
+          [
+            -56.33772928,
+            -17.43545551
+          ],
+          [
+            -55.39219393,
+            -15.78076533
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05793887,
+              37.65633914
+            ],
+            [
+              127.05795765,
+              37.65635613
+            ],
+            [
+              127.05798984,
+              37.6563625
+            ],
+            [
+              127.05807835,
+              37.65638161
+            ],
+            [
+              127.05810785,
+              37.65638161
+            ],
+            [
+              127.05813199,
+              37.65636887
+            ],
+            [
+              127.05815613,
+              37.65634126
+            ],
+            [
+              127.05824733,
+              37.65607795
+            ],
+            [
+              127.05824733,
+              37.65605672
+            ],
+            [
+              127.05822319,
+              37.65604185
+            ],
+            [
+              127.0580703,
+              37.65600788
+            ],
+            [
+              127.05804348,
+              37.65601425
+            ],
+            [
+              127.0580247,
+              37.65603548
+            ],
+            [
+              127.05792814,
+              37.65630516
+            ],
+            [
+              127.05792814,
+              37.65632427
+            ],
+            [
+              127.05793887,
+              37.65633914
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cross-intersection-observed",
+      "properties": {
+        "id": "cross-intersection-observed",
+        "kind": "intersection_pavement",
+        "grade": "B2",
+        "description": "Visible2025 central cross intersection bounded approximately by zebra approaches; not stop/scoring boundary.",
+        "current_check": "2026 shadowed.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            378,
+            558
+          ],
+          [
+            410,
+            548
+          ],
+          [
+            426,
+            585
+          ],
+          [
+            397,
+            595
+          ],
+          [
+            378,
+            558
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -58.93795148,
+            -53.12956715
+          ],
+          [
+            -51.37366872,
+            -50.76571393
+          ],
+          [
+            -47.59152734,
+            -59.51197422
+          ],
+          [
+            -54.44665859,
+            -61.87582994
+          ],
+          [
+            -58.93795148,
+            -53.12956715
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05789864,
+              37.65600363
+            ],
+            [
+              127.05798447,
+              37.65602486
+            ],
+            [
+              127.05802739,
+              37.65594629
+            ],
+            [
+              127.0579496,
+              37.65592506
+            ],
+            [
+              127.05789864,
+              37.65600363
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cross-road-observed",
+      "properties": {
+        "id": "cross-road-observed",
+        "kind": "connecting_pavement",
+        "grade": "B2",
+        "description": "2025 crosswise paved connection, actual aerial edges; no fixed8m width assumption.",
+        "current_check": "Mostly2026 shadow.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            278,
+            590
+          ],
+          [
+            505,
+            528
+          ],
+          [
+            518,
+            564
+          ],
+          [
+            291,
+            628
+          ],
+          [
+            278,
+            590
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -82.5763351,
+            -60.693902
+          ],
+          [
+            -28.91720428,
+            -46.03800952
+          ],
+          [
+            -25.84421441,
+            -54.54787941
+          ],
+          [
+            -79.50334523,
+            -69.67655861
+          ],
+          [
+            -82.5763351,
+            -60.693902
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05763042,
+              37.65593568
+            ],
+            [
+              127.05823928,
+              37.65606733
+            ],
+            [
+              127.05827415,
+              37.65599089
+            ],
+            [
+              127.05766529,
+              37.65585498
+            ],
+            [
+              127.05763042,
+              37.65593568
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "inner-longitudinal-road-observed",
+      "properties": {
+        "id": "inner-longitudinal-road-observed",
+        "kind": "connecting_pavement",
+        "grade": "B2",
+        "description": "2025 interior north-south connector; actual varying-width pavement joins northern perimeter through intersection to south apron.",
+        "current_check": "2026 mostly shadowed.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            348,
+            401
+          ],
+          [
+            383,
+            392
+          ],
+          [
+            487,
+            764
+          ],
+          [
+            452,
+            779
+          ],
+          [
+            348,
+            401
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -66.02946657,
+            -16.01714963
+          ],
+          [
+            -57.7560323,
+            -13.88969125
+          ],
+          [
+            -33.17211333,
+            -101.82509387
+          ],
+          [
+            -41.4455476,
+            -105.37089585
+          ],
+          [
+            -66.02946657,
+            -16.01714963
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05781817,
+              37.65633702
+            ],
+            [
+              127.05791205,
+              37.65635613
+            ],
+            [
+              127.058191,
+              37.65556619
+            ],
+            [
+              127.05809712,
+              37.65553434
+            ],
+            [
+              127.05781817,
+              37.65633702
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "parking-complex-envelope-observed",
+      "properties": {
+        "id": "parking-complex-envelope-observed",
+        "kind": "parking_complex_envelope",
+        "grade": "B1",
+        "description": "2025 southwest parking block with FOUR alternating actual paved T access/stall shapes. Subtract whole block then permit only the four observed access polygons; do not make lawns drivable.",
+        "current_check": "2026 exposed southwest parking structure corroborates multiple alternating shapes; exact paint shifts not measured.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            301,
+            621
+          ],
+          [
+            305,
+            613
+          ],
+          [
+            319,
+            608
+          ],
+          [
+            374,
+            593
+          ],
+          [
+            387,
+            598
+          ],
+          [
+            396,
+            613
+          ],
+          [
+            440,
+            732
+          ],
+          [
+            449,
+            754
+          ],
+          [
+            447,
+            764
+          ],
+          [
+            439,
+            774
+          ],
+          [
+            379,
+            789
+          ],
+          [
+            366,
+            786
+          ],
+          [
+            350,
+            773
+          ],
+          [
+            340,
+            750
+          ],
+          [
+            305,
+            644
+          ],
+          [
+            301,
+            633
+          ],
+          [
+            301,
+            621
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -77.13950687,
+            -68.02185798
+          ],
+          [
+            -76.19397152,
+            -66.13077194
+          ],
+          [
+            -72.88459782,
+            -64.94884339
+          ],
+          [
+            -59.88348682,
+            -61.40305874
+          ],
+          [
+            -56.81049695,
+            -62.58498679
+          ],
+          [
+            -54.68304243,
+            -66.13077194
+          ],
+          [
+            -44.28215363,
+            -94.26072138
+          ],
+          [
+            -42.15469911,
+            -99.46122672
+          ],
+          [
+            -42.62746678,
+            -101.82509387
+          ],
+          [
+            -44.51853747,
+            -104.18896169
+          ],
+          [
+            -58.70156764,
+            -107.73476469
+          ],
+          [
+            -61.77455751,
+            -107.02560397
+          ],
+          [
+            -65.55669889,
+            -103.95257488
+          ],
+          [
+            -67.92053726,
+            -98.51568005
+          ],
+          [
+            -76.19397152,
+            -73.45873274
+          ],
+          [
+            -77.13950687,
+            -70.85848784
+          ],
+          [
+            -77.13950687,
+            -68.02185798
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05769211,
+              37.65586985
+            ],
+            [
+              127.05770284,
+              37.65588684
+            ],
+            [
+              127.05774039,
+              37.65589745
+            ],
+            [
+              127.05788791,
+              37.65592931
+            ],
+            [
+              127.05792278,
+              37.65591869
+            ],
+            [
+              127.05794692,
+              37.65588684
+            ],
+            [
+              127.05806494,
+              37.65563414
+            ],
+            [
+              127.05808908,
+              37.65558742
+            ],
+            [
+              127.05808371,
+              37.65556619
+            ],
+            [
+              127.05806226,
+              37.65554495
+            ],
+            [
+              127.05790132,
+              37.6555131
+            ],
+            [
+              127.05786645,
+              37.65551947
+            ],
+            [
+              127.05782354,
+              37.65554708
+            ],
+            [
+              127.05779672,
+              37.65559592
+            ],
+            [
+              127.05770284,
+              37.65582101
+            ],
+            [
+              127.05769211,
+              37.65584437
+            ],
+            [
+              127.05769211,
+              37.65586985
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "parking-t-access-north-west-entry-observed",
+      "properties": {
+        "id": "parking-t-access-north-west-entry-observed",
+        "kind": "parking_access_stall_footprint_observed",
+        "grade": "B2",
+        "description": "Northernmost actual2025 access/stall outline, entrance from west-side parking loop. Manually traced pale/white physical edges; NOT legal detection-line dimensions. Small marking ambiguity and approximately2m pick uncertainty remain.",
+        "current_check": "2026 general structure visible; fine lines not compared individually.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            307,
+            645
+          ],
+          [
+            362,
+            630
+          ],
+          [
+            356,
+            612
+          ],
+          [
+            374,
+            607
+          ],
+          [
+            380,
+            625
+          ],
+          [
+            397,
+            620
+          ],
+          [
+            403,
+            638
+          ],
+          [
+            313,
+            664
+          ],
+          [
+            307,
+            645
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -75.72120385,
+            -73.69511868
+          ],
+          [
+            -62.72009286,
+            -70.14933029
+          ],
+          [
+            -64.13839588,
+            -65.89438622
+          ],
+          [
+            -59.88348682,
+            -64.7124577
+          ],
+          [
+            -58.46518381,
+            -68.96740116
+          ],
+          [
+            -54.44665859,
+            -67.7854722
+          ],
+          [
+            -53.02835557,
+            -72.04041724
+          ],
+          [
+            -74.30290083,
+            -78.18645284
+          ],
+          [
+            -75.72120385,
+            -73.69511868
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0577082,
+              37.65581889
+            ],
+            [
+              127.05785573,
+              37.65585074
+            ],
+            [
+              127.05783963,
+              37.65588896
+            ],
+            [
+              127.05788791,
+              37.65589958
+            ],
+            [
+              127.05790401,
+              37.65586136
+            ],
+            [
+              127.0579496,
+              37.65587197
+            ],
+            [
+              127.0579657,
+              37.65583375
+            ],
+            [
+              127.0577243,
+              37.65577854
+            ],
+            [
+              127.0577082,
+              37.65581889
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "parking-t-access-middle-north-east-entry-observed",
+      "properties": {
+        "id": "parking-t-access-middle-north-east-entry-observed",
+        "kind": "parking_access_stall_footprint_observed",
+        "grade": "B2",
+        "description": "Second-from-north actual2025 access/stall, entrance from east central longitudinal loop. Interior lawn remains outside this polygon; no maneuver/assigned-bay assumptions.",
+        "current_check": "2026 general structure visible; exact paint not individually checked.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            413,
+            652
+          ],
+          [
+            333,
+            675
+          ],
+          [
+            338,
+            693
+          ],
+          [
+            358,
+            687
+          ],
+          [
+            363,
+            703
+          ],
+          [
+            381,
+            698
+          ],
+          [
+            376,
+            682
+          ],
+          [
+            419,
+            671
+          ],
+          [
+            413,
+            652
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -50.66451721,
+            -75.34982046
+          ],
+          [
+            -69.57522411,
+            -80.78670004
+          ],
+          [
+            -68.39330493,
+            -85.04165178
+          ],
+          [
+            -63.6656282,
+            -83.62333429
+          ],
+          [
+            -62.48370902,
+            -87.4055148
+          ],
+          [
+            -58.22879997,
+            -86.2235832
+          ],
+          [
+            -59.41071915,
+            -82.44140323
+          ],
+          [
+            -49.24621419,
+            -79.84115551
+          ],
+          [
+            -50.66451721,
+            -75.34982046
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05799252,
+              37.65580402
+            ],
+            [
+              127.05777794,
+              37.65575518
+            ],
+            [
+              127.05779135,
+              37.65571696
+            ],
+            [
+              127.057845,
+              37.6557297
+            ],
+            [
+              127.05785841,
+              37.65569572
+            ],
+            [
+              127.05790669,
+              37.65570634
+            ],
+            [
+              127.05789328,
+              37.65574032
+            ],
+            [
+              127.05800861,
+              37.65576367
+            ],
+            [
+              127.05799252,
+              37.65580402
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "parking-t-access-middle-south-west-entry-observed",
+      "properties": {
+        "id": "parking-t-access-middle-south-west-entry-observed",
+        "kind": "parking_access_stall_footprint_observed",
+        "grade": "B2",
+        "description": "Third-from-north actual2025 access/stall, entrance from west-side loop, alternating against adjacent bays. Shape from aerial, not transformed official schematic.",
+        "current_check": "2026 general structure visible.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            333,
+            719
+          ],
+          [
+            386,
+            704
+          ],
+          [
+            380,
+            686
+          ],
+          [
+            399,
+            680
+          ],
+          [
+            405,
+            698
+          ],
+          [
+            439,
+            688
+          ],
+          [
+            445,
+            707
+          ],
+          [
+            339,
+            737
+          ],
+          [
+            333,
+            719
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -69.57522411,
+            -91.18769704
+          ],
+          [
+            -57.04688079,
+            -87.64190114
+          ],
+          [
+            -58.46518381,
+            -83.38694806
+          ],
+          [
+            -53.97389092,
+            -81.96863086
+          ],
+          [
+            -52.5555879,
+            -86.2235832
+          ],
+          [
+            -44.51853747,
+            -83.85972052
+          ],
+          [
+            -43.10023445,
+            -88.3510602
+          ],
+          [
+            -68.15692109,
+            -95.44265413
+          ],
+          [
+            -69.57522411,
+            -91.18769704
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05777794,
+              37.65566175
+            ],
+            [
+              127.0579201,
+              37.6556936
+            ],
+            [
+              127.05790401,
+              37.65573182
+            ],
+            [
+              127.05795497,
+              37.65574456
+            ],
+            [
+              127.05797106,
+              37.65570634
+            ],
+            [
+              127.05806226,
+              37.65572758
+            ],
+            [
+              127.05807835,
+              37.65568723
+            ],
+            [
+              127.05779403,
+              37.65562352
+            ],
+            [
+              127.05777794,
+              37.65566175
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "parking-t-access-south-east-entry-observed",
+      "properties": {
+        "id": "parking-t-access-south-east-entry-observed",
+        "kind": "parking_access_stall_footprint_observed",
+        "grade": "B2",
+        "description": "Southernmost actual2025 access/stall, entrance from east-side central loop. White edge and pale pad observed; current scoring/detection boundary not certified.",
+        "current_check": "2026 general structure visible.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            449,
+            713
+          ],
+          [
+            351,
+            741
+          ],
+          [
+            356,
+            759
+          ],
+          [
+            374,
+            753
+          ],
+          [
+            380,
+            771
+          ],
+          [
+            398,
+            766
+          ],
+          [
+            393,
+            747
+          ],
+          [
+            456,
+            731
+          ],
+          [
+            449,
+            713
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -42.15469911,
+            -89.7693785
+          ],
+          [
+            -65.32031506,
+            -96.38820044
+          ],
+          [
+            -64.13839588,
+            -100.64316021
+          ],
+          [
+            -59.88348682,
+            -99.22484005
+          ],
+          [
+            -58.46518381,
+            -103.47980127
+          ],
+          [
+            -54.21027475,
+            -102.29786738
+          ],
+          [
+            -55.39219393,
+            -97.80652012
+          ],
+          [
+            -40.50001225,
+            -94.02433485
+          ],
+          [
+            -42.15469911,
+            -89.7693785
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05808908,
+              37.65567449
+            ],
+            [
+              127.05782622,
+              37.65561503
+            ],
+            [
+              127.05783963,
+              37.65557681
+            ],
+            [
+              127.05788791,
+              37.65558955
+            ],
+            [
+              127.05790401,
+              37.65555133
+            ],
+            [
+              127.05795228,
+              37.65556194
+            ],
+            [
+              127.05793887,
+              37.65560229
+            ],
+            [
+              127.05810785,
+              37.65563627
+            ],
+            [
+              127.05808908,
+              37.65567449
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "vehicle-staging-apron-observed",
+      "properties": {
+        "id": "vehicle-staging-apron-observed",
+        "kind": "vehicle_staging_candidate",
+        "grade": "C",
+        "description": "2025 southeast INTERNAL NON-THROUGH-ROAD region with surface of uncertain material, stopped vehicles along east edge and southern green canopy. Visible north/west boundaries traced; south-east closure crosses partial canopy/shadow and is conservative exclusion, not surveyed curb. Official route goes around it. Keep excluded from normal course driving.",
+        "current_check": "2026 deep shadow; neither current vehicle allocation nor full material boundary confirmed.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            435,
+            585
+          ],
+          [
+            443,
+            577
+          ],
+          [
+            464,
+            571
+          ],
+          [
+            494,
+            561
+          ],
+          [
+            505,
+            563
+          ],
+          [
+            513,
+            574
+          ],
+          [
+            535,
+            650
+          ],
+          [
+            548,
+            697
+          ],
+          [
+            559,
+            741
+          ],
+          [
+            540,
+            749
+          ],
+          [
+            495,
+            760
+          ],
+          [
+            480,
+            757
+          ],
+          [
+            470,
+            744
+          ],
+          [
+            436,
+            611
+          ],
+          [
+            431,
+            598
+          ],
+          [
+            435,
+            585
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -45.46407281,
+            -59.51197422
+          ],
+          [
+            -43.57300212,
+            -57.62089013
+          ],
+          [
+            -38.60894156,
+            -56.20257735
+          ],
+          [
+            -31.51742648,
+            -53.83872325
+          ],
+          [
+            -28.91720428,
+            -54.31149401
+          ],
+          [
+            -27.02613359,
+            -56.91173371
+          ],
+          [
+            -21.82568919,
+            -74.87704849
+          ],
+          [
+            -18.75269932,
+            -85.9871969
+          ],
+          [
+            -16.15247712,
+            -96.38820044
+          ],
+          [
+            -20.64377001,
+            -98.2792934
+          ],
+          [
+            -31.28104264,
+            -100.87954693
+          ],
+          [
+            -34.82680018,
+            -100.1703868
+          ],
+          [
+            -37.19063855,
+            -97.09736025
+          ],
+          [
+            -45.22768898,
+            -65.6580005
+          ],
+          [
+            -46.40960816,
+            -62.58498679
+          ],
+          [
+            -45.46407281,
+            -59.51197422
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05805153,
+              37.65594629
+            ],
+            [
+              127.05807298,
+              37.65596328
+            ],
+            [
+              127.05812931,
+              37.65597602
+            ],
+            [
+              127.05820978,
+              37.65599726
+            ],
+            [
+              127.05823928,
+              37.65599301
+            ],
+            [
+              127.05826074,
+              37.65596965
+            ],
+            [
+              127.05831975,
+              37.65580827
+            ],
+            [
+              127.05835462,
+              37.65570846
+            ],
+            [
+              127.05838412,
+              37.65561503
+            ],
+            [
+              127.05833316,
+              37.65559804
+            ],
+            [
+              127.05821246,
+              37.65557468
+            ],
+            [
+              127.05817223,
+              37.65558105
+            ],
+            [
+              127.0581454,
+              37.65560866
+            ],
+            [
+              127.05805421,
+              37.65589108
+            ],
+            [
+              127.0580408,
+              37.65591869
+            ],
+            [
+              127.05805153,
+              37.65594629
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "north-crosswalk-observed",
+      "properties": {
+        "id": "north-crosswalk-observed",
+        "kind": "crosswalk_reference",
+        "grade": "B2",
+        "description": "2025 north approach zebra center reference; not adjacent stopping line.",
+        "current_check": "2026 shadowed.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            379,
+            556
+          ],
+          [
+            409,
+            547
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -58.70156764,
+            -52.65679645
+          ],
+          [
+            -51.61005256,
+            -50.52932865
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.05790132,
+            37.65600788
+          ],
+          [
+            127.05798179,
+            37.65602699
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "south-crosswalk-observed",
+      "properties": {
+        "id": "south-crosswalk-observed",
+        "kind": "crosswalk_reference",
+        "grade": "B2",
+        "description": "2025 south approach zebra center reference, separate from legal stop-line unknown.",
+        "current_check": "2026 shadowed.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            398,
+            592
+          ],
+          [
+            427,
+            583
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -54.21027475,
+            -61.16667315
+          ],
+          [
+            -47.3551435,
+            -59.03920316
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.05795228,
+            37.65593143
+          ],
+          [
+            127.05803007,
+            37.65595054
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "west-crosswalk-observed",
+      "properties": {
+        "id": "west-crosswalk-observed",
+        "kind": "crosswalk_reference",
+        "grade": "B2",
+        "description": "2025 west approach zebra center reference across crosswise road.",
+        "current_check": "2026 shadowed.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            383,
+            564
+          ],
+          [
+            392,
+            590
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -57.7560323,
+            -54.54787941
+          ],
+          [
+            -55.62857777,
+            -60.693902
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.05791205,
+            37.65599089
+          ],
+          [
+            127.05793619,
+            37.65593568
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "east-crosswalk-observed",
+      "properties": {
+        "id": "east-crosswalk-observed",
+        "kind": "crosswalk_reference",
+        "grade": "B2",
+        "description": "2025 east approach zebra center reference across crosswise road.",
+        "current_check": "2026 shadowed.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            418,
+            554
+          ],
+          [
+            427,
+            579
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -49.48259803,
+            -52.18402578
+          ],
+          [
+            -47.3551435,
+            -58.09366111
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.05800593,
+            37.65601212
+          ],
+          [
+            127.05803007,
+            37.65595904
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "slope-painted-rectangle-observed",
+      "properties": {
+        "id": "slope-painted-rectangle-observed",
+        "kind": "slope_plan_marking_not_elevation",
+        "grade": "C",
+        "description": "2025 visible white quadrilateral on east perimeter, position consistent with official2023 ramp. This is a plan marking only, not proof of ramp footprint/gradient or exact stopping detection zone.",
+        "current_check": "2026 east road partly shadowed;2025 source used.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            508,
+            489
+          ],
+          [
+            532,
+            482
+          ],
+          [
+            540,
+            510
+          ],
+          [
+            515,
+            517
+          ],
+          [
+            508,
+            489
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -28.20805277,
+            -36.8189937
+          ],
+          [
+            -22.5348407,
+            -35.16429964
+          ],
+          [
+            -20.64377001,
+            -41.78307787
+          ],
+          [
+            -26.55336591,
+            -43.43777325
+          ],
+          [
+            -28.20805277,
+            -36.8189937
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05824733,
+              37.65615015
+            ],
+            [
+              127.0583117,
+              37.65616501
+            ],
+            [
+              127.05833316,
+              37.65610556
+            ],
+            [
+              127.0582661,
+              37.65609069
+            ],
+            [
+              127.05824733,
+              37.65615015
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "east-longitudinal-divider-observed",
+      "properties": {
+        "id": "east-longitudinal-divider-observed",
+        "kind": "longitudinal_painted_line_reference",
+        "grade": "B2",
+        "description": "2025 visible lengthwise painted divider through east-side ramp area. Do not interpret as a measured ramp profile.",
+        "current_check": "2026 partly shadowed.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            488,
+            399
+          ],
+          [
+            559,
+            652
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -32.93572949,
+            -15.54438105
+          ],
+          [
+            -16.15247712,
+            -75.34982046
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.05819368,
+            37.65634126
+          ],
+          [
+            127.05838412,
+            37.65580402
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "west-acceleration-straight-reference",
+      "properties": {
+        "id": "west-acceleration-straight-reference",
+        "kind": "road_axis_reference_not_legal_accel_endpoints",
+        "grade": "C",
+        "description": "Manual center reference through visible west outer straight, matched to official acceleration SIDE only. Endpoints are reference stations, not verified20kmh trigger positions.",
+        "current_check": "West edge is exposed in2026 but exact speed-marker stationing unverified.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            247,
+            457
+          ],
+          [
+            273,
+            551
+          ],
+          [
+            301,
+            650
+          ],
+          [
+            328,
+            744
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -89.90423402,
+            -29.25468071
+          ],
+          [
+            -83.75825428,
+            -51.47486983
+          ],
+          [
+            -77.13950687,
+            -74.87704849
+          ],
+          [
+            -70.75714329,
+            -97.09736025
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.05754727,
+            37.6562181
+          ],
+          [
+            127.05761701,
+            37.65601849
+          ],
+          [
+            127.05769211,
+            37.65580827
+          ],
+          [
+            127.05776453,
+            37.65560866
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "northeast-expansion-hatching-observed",
+      "properties": {
+        "id": "northeast-expansion-hatching-observed",
+        "kind": "hatched_non_driving_pavement_observed",
+        "grade": "B1",
+        "description": "Visible post-works2025 hatched wedge outside north-east curved lane. Pavement envelope includes it but normal road helper must exclude it.",
+        "current_check": "2026 exposed hatching broadly agrees.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            450,
+            348
+          ],
+          [
+            492,
+            336
+          ],
+          [
+            501,
+            371
+          ],
+          [
+            476,
+            357
+          ],
+          [
+            450,
+            348
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -41.91831527,
+            -3.48879152
+          ],
+          [
+            -31.99019415,
+            -0.65218478
+          ],
+          [
+            -29.86273962,
+            -8.92562384
+          ],
+          [
+            -35.77233553,
+            -5.61624722
+          ],
+          [
+            -41.91831527,
+            -3.48879152
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05809176,
+              37.65644956
+            ],
+            [
+              127.05820441,
+              37.65647504
+            ],
+            [
+              127.05822855,
+              37.65640072
+            ],
+            [
+              127.0581615,
+              37.65643045
+            ],
+            [
+              127.05809176,
+              37.65644956
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "southwest-expansion-hatching-observed",
+      "properties": {
+        "id": "southwest-expansion-hatching-observed",
+        "kind": "hatched_non_driving_pavement_observed",
+        "grade": "B1",
+        "description": "2025 exposed triangular outer corner pavement/edge exclusion after acceleration-turn widening. Do not treat widened outer envelope as all active lane. Edge is visually approximate, not a legal lane trigger.",
+        "current_check": "2026 partly exposed atsouthwest; southernmost edge inshadow.",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": [
+          [
+            322,
+            790
+          ],
+          [
+            341,
+            811
+          ],
+          [
+            352,
+            818
+          ],
+          [
+            328,
+            824
+          ],
+          [
+            322,
+            790
+          ]
+        ],
+        "local_east_north_m": [
+          [
+            -72.17544631,
+            -107.97115161
+          ],
+          [
+            -67.68415342,
+            -112.93527851
+          ],
+          [
+            -65.08393122,
+            -114.58998814
+          ],
+          [
+            -70.75714329,
+            -116.00831094
+          ],
+          [
+            -72.17544631,
+            -107.97115161
+          ]
+        ]
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05774844,
+              37.65551098
+            ],
+            [
+              127.0577994,
+              37.65546639
+            ],
+            [
+              127.0578289,
+              37.65545152
+            ],
+            [
+              127.05776453,
+              37.65543878
+            ],
+            [
+              127.05774844,
+              37.65551098
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "start-line-unresolved",
+      "properties": {
+        "id": "start-line-unresolved",
+        "kind": "start_line",
+        "grade": "U",
+        "description": "Historical2023 schematic proves two departure symbols. Exact active class allocation and WGS84 stopping lines are not confirmed; no scored line invented.",
+        "current_check": "Unresolved",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": null,
+        "local_east_north_m": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "finish-line-unresolved",
+      "properties": {
+        "id": "finish-line-unresolved",
+        "kind": "finish_line",
+        "grade": "U",
+        "description": "Historical2023 schematic locates finish on south perimeter after acceleration corner, but post2023-work exact current line remainsunverified.",
+        "current_check": "Unresolved",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": null,
+        "local_east_north_m": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "slope-position-and-height-unresolved",
+      "properties": {
+        "id": "slope-position-and-height-unresolved",
+        "kind": "slope_profile",
+        "grade": "U",
+        "description": "A 2025 plan marking and official2023 side are now known separately; actual ramp height, gradient, limits and stop detection station remain unmeasured.",
+        "current_check": "Unresolved",
+        "source_capture_date": "2025-03-22",
+        "source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+        "source_accuracy_m": 8.47,
+        "pixel_pick_error_m_estimate": 2,
+        "pixel_coordinates": null,
+        "local_east_north_m": null
+      },
+      "geometry": null
+    }
+  ]
+}

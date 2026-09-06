@@ -1,0 +1,60 @@
+{
+  "retrieved": "2026-09-06",
+  "current_official_index": "https://www.koroad.or.kr/main/board/27/board_list.do?sc=BD.BD_TITLE&sv=%EB%8F%84%EB%B4%89",
+  "official_route_map": {
+    "page_url": "https://www.koroad.or.kr/main/board/9/87988/board_view.do",
+    "download_url": "https://www.koroad.or.kr/file/FileDown.do?atchFileId=FID00115925&fileSn=0&mtIdx=MN05010521",
+    "posted": "2023-04-10 09:50",
+    "pdf_metadata_created": "2022-05-19 00:51:39 Asia/Seoul",
+    "sha256": "bcce4464fb9c5c97c766f1ec19ae075ae5dd11df74010f7b3b40ff961a372831",
+    "note": "2-page schematic, visually inspected both pages. Not georeferenced. Do not project schematic pixels onto WGS84."
+  },
+  "official_change_notice": "https://www.koroad.or.kr/main/board/9/69255/board_view.do",
+  "videos": [
+    {
+      "route": "A",
+      "video_id": "Sh2U14jRV3o",
+      "url": "https://www.youtube.com/watch?v=Sh2U14jRV3o",
+      "title": "도봉운전면허시험장 도로주행 A코스(2022.06.20. 부터 시행)",
+      "channel": "한국도로교통공단",
+      "channel_id": "UCGPvcR_72yc5wPqsKefo4jg",
+      "publish_date": "2022-06-08T23:00:06-07:00",
+      "duration_seconds": 739
+    },
+    {
+      "route": "B",
+      "video_id": "nJsrQJSpwfA",
+      "url": "https://www.youtube.com/watch?v=nJsrQJSpwfA",
+      "title": "도봉운전면허시험장 도로주행 B코스(2022.06.20. 부터 시행)",
+      "channel": "한국도로교통공단",
+      "channel_id": "UCGPvcR_72yc5wPqsKefo4jg",
+      "publish_date": "2022-06-08T23:00:10-07:00",
+      "duration_seconds": 763
+    },
+    {
+      "route": "C",
+      "video_id": "z5rWad5g0u0",
+      "url": "https://www.youtube.com/watch?v=z5rWad5g0u0",
+      "title": "도봉운전면허시험장 도로주행 C코스(2022.06.20. 부터 시행)",
+      "channel": "한국도로교통공단",
+      "channel_id": "UCGPvcR_72yc5wPqsKefo4jg",
+      "publish_date": "2022-06-08T23:30:08-07:00",
+      "duration_seconds": 697
+    },
+    {
+      "route": "D",
+      "video_id": "4Sd7eO41DlI",
+      "url": "https://www.youtube.com/watch?v=4Sd7eO41DlI",
+      "title": "도봉운전면허시험장 도로주행 D코스(2022.06.20. 부터 시행)",
+      "channel": "한국도로교통공단",
+      "channel_id": "UCGPvcR_72yc5wPqsKefo4jg",
+      "publish_date": "2022-06-08T23:38:10-07:00",
+      "duration_seconds": 760
+    }
+  ],
+  "warnings": [
+    "Original official YouTube storyboards at 5-second sampling visually inspected for route order and turn signs; not full-resolution continuous playback or audio transcription. Time windows are rough evidence locators, NOT turn timing instructions.",
+    "OSM directed road/carriageway centrelines selected by official map and video turn topology. Exact U-turn arcs and stop/merge stations absent; no lane offsets invented.",
+    "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified."
+  ]
+}

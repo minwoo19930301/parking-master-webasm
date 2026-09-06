@@ -1,0 +1,7610 @@
+{
+  "metadata": {
+    "schema_version": 1,
+    "retrieved": "2026-09-06",
+    "origin_wgs84": [
+      127.0585674,
+      37.6564809
+    ],
+    "game_transform": "x=(lon-lon0)*pi/180*6378137*cos(lat0)+52; z=-(lat-lat0)*pi/180*6378137-60",
+    "official_route_effective_from": "2022-06-20",
+    "official_map_published": "2023-04-10",
+    "official_map_url": "https://www.koroad.or.kr/main/board/9/87988/board_view.do",
+    "official_change_notice": "https://www.koroad.or.kr/main/board/9/69255/board_view.do",
+    "current_official_video_index_verified": true,
+    "current_operation_or_closure_verified": false,
+    "video_review": "Original official YouTube storyboards at 5-second sampling visually inspected for route order and turn signs; not full-resolution continuous playback or audio transcription. Time windows are rough evidence locators, NOT turn timing instructions.",
+    "geometry_basis": "OSM directed road/carriageway centrelines selected by official map and video turn topology. Exact U-turn arcs and stop/merge stations absent; no lane offsets invented.",
+    "license": "OSM-derived geometry: OpenStreetMap contributors, ODbL 1.0, https://www.openstreetmap.org/copyright. Official video/PDF remain copyrighted source references and are not bundled as game textures.",
+    "lane_warning": "Some currently split one-way Dongil-ro ways retain lanes=6/8 likely inherited from former two-way roads. Preserve raw tag, do not interpret as 6/8 lanes per carriageway or multiply blindly. Actual individual lane widths/assignments unverified.",
+    "width_policy": "No physical pavement width supplied where absent. OSM tag lanes is source data, not validated road survey; rendering lane widths and traffic offsets must be marked estimates."
+  },
+  "anchors": {
+    "campus_access": {
+      "osm_node_id": 8459790625,
+      "source_url": "https://www.openstreetmap.org/node/8459790625",
+      "label": "시험장 진입로 서쪽 기준점 — 실제 시험 출발선 아님",
+      "wgs84": [
+        127.0582677,
+        37.6576315
+      ],
+      "game_xz": [
+        25.587,
+        -188.084
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "gate_nb": {
+      "osm_node_id": 13566334151,
+      "source_url": "https://www.openstreetmap.org/node/13566334151",
+      "label": "정문 동일로 북행 접속점",
+      "wgs84": [
+        127.0596596,
+        37.6579912
+      ],
+      "game_xz": [
+        148.256,
+        -228.126
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "gate_sb": {
+      "osm_node_id": 3839480726,
+      "source_url": "https://www.openstreetmap.org/node/3839480726",
+      "label": "정문 동일로 남행 접속점",
+      "wgs84": [
+        127.0595135,
+        37.6579633
+      ],
+      "game_xz": [
+        135.38,
+        -225.02
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "onsu_nb": {
+      "osm_node_id": 13566334156,
+      "source_url": "https://www.openstreetmap.org/node/13566334156",
+      "label": "온수골사거리 북행/노원로 접속",
+      "wgs84": [
+        127.0588042,
+        37.6611524
+      ],
+      "game_xz": [
+        72.869,
+        -580.029
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "onsu_sb": {
+      "osm_node_id": 436844708,
+      "source_url": "https://www.openstreetmap.org/node/436844708",
+      "label": "온수골사거리 남행/노원로 접속",
+      "wgs84": [
+        127.0586378,
+        37.661166
+      ],
+      "game_xz": [
+        58.204,
+        -581.543
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "onsu_right_slip": {
+      "osm_node_id": 6641403216,
+      "source_url": "https://www.openstreetmap.org/node/6641403216",
+      "label": "온수골 우회전 연결로 → 노원로",
+      "wgs84": [
+        127.0594552,
+        37.6610988
+      ],
+      "game_xz": [
+        130.242,
+        -574.062
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "ongok_approach": {
+      "osm_node_id": 436831758,
+      "source_url": "https://www.openstreetmap.org/node/436831758",
+      "label": "노원로·노원로34길 접속부, 온곡중 쪽 유턴 접근 기준",
+      "wgs84": [
+        127.06492,
+        37.65891
+      ],
+      "game_xz": [
+        611.856,
+        -330.406
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "sanggye_school": {
+      "osm_node_id": 436831747,
+      "source_url": "https://www.openstreetmap.org/node/436831747",
+      "label": "상계초교입구교차로 유턴 접근 기준",
+      "wgs84": [
+        127.0666162,
+        37.6570714
+      ],
+      "game_xz": [
+        761.343,
+        -125.734
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "junggye_sb": {
+      "osm_node_id": 3835756882,
+      "source_url": "https://www.openstreetmap.org/node/3835756882",
+      "label": "중계역 사거리 남행 접근 기준",
+      "wgs84": [
+        127.0638126,
+        37.6455005
+      ],
+      "game_xz": [
+        514.261,
+        1162.333
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "junggye_nb": {
+      "osm_node_id": 13566334123,
+      "source_url": "https://www.openstreetmap.org/node/13566334123",
+      "label": "중계역 사거리 북행 출구 기준",
+      "wgs84": [
+        127.0640045,
+        37.6455535
+      ],
+      "game_xz": [
+        531.173,
+        1156.433
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "complex26_sb": {
+      "osm_node_id": 2111825353,
+      "source_url": "https://www.openstreetmap.org/node/2111825353",
+      "label": "상계2-6단지 사거리 남행 접근 기준",
+      "wgs84": [
+        127.061288,
+        37.6514003
+      ],
+      "game_xz": [
+        291.767,
+        505.57
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "complex26_nb": {
+      "osm_node_id": 13566334128,
+      "source_url": "https://www.openstreetmap.org/node/13566334128",
+      "label": "상계2-6단지 사거리 북행 출구 기준",
+      "wgs84": [
+        127.0614282,
+        37.6514315
+      ],
+      "game_xz": [
+        304.123,
+        502.097
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "complex1416_nb": {
+      "osm_node_id": 13566334187,
+      "source_url": "https://www.openstreetmap.org/node/13566334187",
+      "label": "상계14-16단지 사거리 북행 접근 기준",
+      "wgs84": [
+        127.056333,
+        37.670487
+      ],
+      "game_xz": [
+        -144.918,
+        -1619.152
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    },
+    "complex1416_sb": {
+      "osm_node_id": 2111825358,
+      "source_url": "https://www.openstreetmap.org/node/2111825358",
+      "label": "상계14-16단지 사거리 남행 출구 기준",
+      "wgs84": [
+        127.0562193,
+        37.6704755
+      ],
+      "game_xz": [
+        -154.939,
+        -1617.872
+      ],
+      "precision_warning": "Contributed road junction/way node, not surveyed exam detection boundary"
+    }
+  },
+  "routes": [
+    {
+      "id": "A",
+      "name": "도봉 도로주행 A — 공식2022 안내 경로 기반",
+      "coordinates_wgs84": [
+        [
+          127.0582677,
+          37.6576315
+        ],
+        [
+          127.0593592,
+          37.6578916
+        ],
+        [
+          127.0593752,
+          37.6578955
+        ],
+        [
+          127.0595135,
+          37.6579633
+        ],
+        [
+          127.0596596,
+          37.6579912
+        ],
+        [
+          127.059607,
+          37.6581754
+        ],
+        [
+          127.0595177,
+          37.6585081
+        ],
+        [
+          127.0593668,
+          37.6590701
+        ],
+        [
+          127.0592334,
+          37.6595493
+        ],
+        [
+          127.0589332,
+          37.6606422
+        ],
+        [
+          127.0589492,
+          37.6608525
+        ],
+        [
+          127.0589921,
+          37.6609204
+        ],
+        [
+          127.0590127,
+          37.6609434
+        ],
+        [
+          127.0590551,
+          37.6609767
+        ],
+        [
+          127.0591087,
+          37.6610086
+        ],
+        [
+          127.0591758,
+          37.6610478
+        ],
+        [
+          127.0592576,
+          37.6610701
+        ],
+        [
+          127.0594552,
+          37.6610988
+        ],
+        [
+          127.0598924,
+          37.6610628
+        ],
+        [
+          127.0614602,
+          37.6609119
+        ],
+        [
+          127.0616831,
+          37.6608866
+        ],
+        [
+          127.061889,
+          37.660855
+        ],
+        [
+          127.06221,
+          37.66079
+        ],
+        [
+          127.06241,
+          37.66074
+        ],
+        [
+          127.06267,
+          37.66065
+        ],
+        [
+          127.06288,
+          37.66058
+        ],
+        [
+          127.0631893,
+          37.6604324
+        ],
+        [
+          127.06332,
+          37.66037
+        ],
+        [
+          127.06367,
+          37.66016
+        ],
+        [
+          127.06373,
+          37.6601
+        ],
+        [
+          127.0637492,
+          37.660083
+        ],
+        [
+          127.0640121,
+          37.6598505
+        ],
+        [
+          127.06425,
+          37.65964
+        ],
+        [
+          127.0642593,
+          37.6596299
+        ],
+        [
+          127.0646537,
+          37.6592002
+        ],
+        [
+          127.06492,
+          37.65891
+        ],
+        [
+          127.0653534,
+          37.6584515
+        ],
+        [
+          127.0654025,
+          37.6583996
+        ],
+        [
+          127.0655877,
+          37.6582036
+        ],
+        [
+          127.06561,
+          37.65818
+        ],
+        [
+          127.0659712,
+          37.6577966
+        ],
+        [
+          127.0661,
+          37.65766
+        ],
+        [
+          127.0661217,
+          37.6576363
+        ],
+        [
+          127.06643,
+          37.6573
+        ],
+        [
+          127.0666162,
+          37.6570714
+        ],
+        [
+          127.06643,
+          37.6573
+        ],
+        [
+          127.0661217,
+          37.6576363
+        ],
+        [
+          127.0661,
+          37.65766
+        ],
+        [
+          127.0659712,
+          37.6577966
+        ],
+        [
+          127.06561,
+          37.65818
+        ],
+        [
+          127.0655877,
+          37.6582036
+        ],
+        [
+          127.0654025,
+          37.6583996
+        ],
+        [
+          127.0653534,
+          37.6584515
+        ],
+        [
+          127.06492,
+          37.65891
+        ],
+        [
+          127.0646537,
+          37.6592002
+        ],
+        [
+          127.0642593,
+          37.6596299
+        ],
+        [
+          127.06425,
+          37.65964
+        ],
+        [
+          127.0640121,
+          37.6598505
+        ],
+        [
+          127.0637492,
+          37.660083
+        ],
+        [
+          127.06373,
+          37.6601
+        ],
+        [
+          127.06367,
+          37.66016
+        ],
+        [
+          127.06332,
+          37.66037
+        ],
+        [
+          127.0631893,
+          37.6604324
+        ],
+        [
+          127.06288,
+          37.66058
+        ],
+        [
+          127.06267,
+          37.66065
+        ],
+        [
+          127.06241,
+          37.66074
+        ],
+        [
+          127.06221,
+          37.66079
+        ],
+        [
+          127.061889,
+          37.660855
+        ],
+        [
+          127.0616831,
+          37.6608866
+        ],
+        [
+          127.0614602,
+          37.6609119
+        ],
+        [
+          127.0598924,
+          37.6610628
+        ],
+        [
+          127.0594552,
+          37.6610988
+        ],
+        [
+          127.0589996,
+          37.6611364
+        ],
+        [
+          127.0588042,
+          37.6611524
+        ],
+        [
+          127.0586378,
+          37.661166
+        ],
+        [
+          127.0586925,
+          37.660964
+        ],
+        [
+          127.0587903,
+          37.6605826
+        ],
+        [
+          127.0590905,
+          37.6594896
+        ],
+        [
+          127.0592239,
+          37.6590105
+        ],
+        [
+          127.0593536,
+          37.6585242
+        ],
+        [
+          127.0594568,
+          37.6581548
+        ],
+        [
+          127.0595135,
+          37.6579633
+        ],
+        [
+          127.0596508,
+          37.6574625
+        ],
+        [
+          127.0600481,
+          37.6560839
+        ],
+        [
+          127.0601183,
+          37.6558292
+        ],
+        [
+          127.0601868,
+          37.6556116
+        ],
+        [
+          127.0603561,
+          37.6550012
+        ],
+        [
+          127.060417,
+          37.6547243
+        ],
+        [
+          127.060483,
+          37.6545218
+        ],
+        [
+          127.0605421,
+          37.6542926
+        ],
+        [
+          127.060606,
+          37.6540854
+        ],
+        [
+          127.0606896,
+          37.6537839
+        ],
+        [
+          127.0607742,
+          37.65349
+        ],
+        [
+          127.061244,
+          37.651616
+        ],
+        [
+          127.061288,
+          37.6514003
+        ],
+        [
+          127.0613262,
+          37.6512474
+        ],
+        [
+          127.0617513,
+          37.6497641
+        ],
+        [
+          127.0619816,
+          37.6491335
+        ],
+        [
+          127.062064,
+          37.6489644
+        ],
+        [
+          127.0621465,
+          37.6488145
+        ],
+        [
+          127.0627019,
+          37.6477955
+        ],
+        [
+          127.0632182,
+          37.6467693
+        ],
+        [
+          127.0632688,
+          37.6466755
+        ],
+        [
+          127.0634275,
+          37.6463414
+        ],
+        [
+          127.0636317,
+          37.6458887
+        ],
+        [
+          127.0638126,
+          37.6455005
+        ],
+        [
+          127.0640045,
+          37.6455535
+        ],
+        [
+          127.063796,
+          37.6459415
+        ],
+        [
+          127.0635894,
+          37.6463619
+        ],
+        [
+          127.0635646,
+          37.6464124
+        ],
+        [
+          127.0633869,
+          37.6467568
+        ],
+        [
+          127.0633314,
+          37.6468715
+        ],
+        [
+          127.0628392,
+          37.6478182
+        ],
+        [
+          127.0622805,
+          37.6488412
+        ],
+        [
+          127.0621974,
+          37.6489928
+        ],
+        [
+          127.0621056,
+          37.6491623
+        ],
+        [
+          127.0618887,
+          37.6497868
+        ],
+        [
+          127.0614663,
+          37.6512725
+        ],
+        [
+          127.0614282,
+          37.6514315
+        ],
+        [
+          127.0613851,
+          37.6516395
+        ],
+        [
+          127.0608801,
+          37.6535204
+        ],
+        [
+          127.0608091,
+          37.6538046
+        ],
+        [
+          127.0607214,
+          37.6541114
+        ],
+        [
+          127.0606658,
+          37.6543195
+        ],
+        [
+          127.0605974,
+          37.6545402
+        ],
+        [
+          127.0605504,
+          37.6547543
+        ],
+        [
+          127.0604894,
+          37.6550313
+        ],
+        [
+          127.0603523,
+          37.655642
+        ],
+        [
+          127.0602562,
+          37.6558603
+        ],
+        [
+          127.0601934,
+          37.6561038
+        ],
+        [
+          127.0597938,
+          37.6575221
+        ],
+        [
+          127.0596596,
+          37.6579912
+        ],
+        [
+          127.0595135,
+          37.6579633
+        ],
+        [
+          127.0593752,
+          37.6578955
+        ],
+        [
+          127.0593592,
+          37.6578916
+        ],
+        [
+          127.0582677,
+          37.6576315
+        ]
+      ],
+      "game_xz": [
+        [
+          25.587,
+          -188.084
+        ],
+        [
+          121.782,
+          -217.038
+        ],
+        [
+          123.192,
+          -217.473
+        ],
+        [
+          135.38,
+          -225.02
+        ],
+        [
+          148.256,
+          -228.126
+        ],
+        [
+          143.62,
+          -248.631
+        ],
+        [
+          135.75,
+          -285.667
+        ],
+        [
+          122.451,
+          -348.228
+        ],
+        [
+          110.695,
+          -401.573
+        ],
+        [
+          84.238,
+          -523.234
+        ],
+        [
+          85.648,
+          -546.644
+        ],
+        [
+          89.429,
+          -554.203
+        ],
+        [
+          91.244,
+          -556.763
+        ],
+        [
+          94.981,
+          -560.47
+        ],
+        [
+          99.705,
+          -564.021
+        ],
+        [
+          105.618,
+          -568.385
+        ],
+        [
+          112.828,
+          -570.867
+        ],
+        [
+          130.242,
+          -574.062
+        ],
+        [
+          168.773,
+          -570.055
+        ],
+        [
+          306.943,
+          -553.257
+        ],
+        [
+          326.588,
+          -550.44
+        ],
+        [
+          344.734,
+          -546.923
+        ],
+        [
+          373.023,
+          -539.687
+        ],
+        [
+          390.649,
+          -534.121
+        ],
+        [
+          413.563,
+          -524.102
+        ],
+        [
+          432.071,
+          -516.31
+        ],
+        [
+          459.329,
+          -499.879
+        ],
+        [
+          470.848,
+          -492.933
+        ],
+        [
+          501.694,
+          -469.556
+        ],
+        [
+          506.981,
+          -462.876
+        ],
+        [
+          508.673,
+          -460.984
+        ],
+        [
+          531.843,
+          -435.102
+        ],
+        [
+          552.809,
+          -411.669
+        ],
+        [
+          553.629,
+          -410.545
+        ],
+        [
+          588.387,
+          -362.711
+        ],
+        [
+          611.856,
+          -330.406
+        ],
+        [
+          650.052,
+          -279.366
+        ],
+        [
+          654.379,
+          -273.589
+        ],
+        [
+          670.701,
+          -251.77
+        ],
+        [
+          672.666,
+          -249.143
+        ],
+        [
+          704.499,
+          -206.463
+        ],
+        [
+          715.85,
+          -191.257
+        ],
+        [
+          717.763,
+          -188.619
+        ],
+        [
+          744.933,
+          -151.182
+        ],
+        [
+          761.343,
+          -125.734
+        ],
+        [
+          744.933,
+          -151.182
+        ],
+        [
+          717.763,
+          -188.619
+        ],
+        [
+          715.85,
+          -191.257
+        ],
+        [
+          704.499,
+          -206.463
+        ],
+        [
+          672.666,
+          -249.143
+        ],
+        [
+          670.701,
+          -251.77
+        ],
+        [
+          654.379,
+          -273.589
+        ],
+        [
+          650.052,
+          -279.366
+        ],
+        [
+          611.856,
+          -330.406
+        ],
+        [
+          588.387,
+          -362.711
+        ],
+        [
+          553.629,
+          -410.545
+        ],
+        [
+          552.809,
+          -411.669
+        ],
+        [
+          531.843,
+          -435.102
+        ],
+        [
+          508.673,
+          -460.984
+        ],
+        [
+          506.981,
+          -462.876
+        ],
+        [
+          501.694,
+          -469.556
+        ],
+        [
+          470.848,
+          -492.933
+        ],
+        [
+          459.329,
+          -499.879
+        ],
+        [
+          432.071,
+          -516.31
+        ],
+        [
+          413.563,
+          -524.102
+        ],
+        [
+          390.649,
+          -534.121
+        ],
+        [
+          373.023,
+          -539.687
+        ],
+        [
+          344.734,
+          -546.923
+        ],
+        [
+          326.588,
+          -550.44
+        ],
+        [
+          306.943,
+          -553.257
+        ],
+        [
+          168.773,
+          -570.055
+        ],
+        [
+          130.242,
+          -574.062
+        ],
+        [
+          90.09,
+          -578.248
+        ],
+        [
+          72.869,
+          -580.029
+        ],
+        [
+          58.204,
+          -581.543
+        ],
+        [
+          63.025,
+          -559.056
+        ],
+        [
+          71.644,
+          -516.599
+        ],
+        [
+          98.101,
+          -394.927
+        ],
+        [
+          109.858,
+          -341.594
+        ],
+        [
+          121.288,
+          -287.459
+        ],
+        [
+          130.383,
+          -246.338
+        ],
+        [
+          135.38,
+          -225.02
+        ],
+        [
+          147.48,
+          -169.271
+        ],
+        [
+          182.495,
+          -15.806
+        ],
+        [
+          188.681,
+          12.547
+        ],
+        [
+          194.718,
+          36.77
+        ],
+        [
+          209.639,
+          104.719
+        ],
+        [
+          215.006,
+          135.544
+        ],
+        [
+          220.822,
+          158.086
+        ],
+        [
+          226.031,
+          183.6
+        ],
+        [
+          231.662,
+          206.666
+        ],
+        [
+          239.03,
+          240.229
+        ],
+        [
+          246.486,
+          272.945
+        ],
+        [
+          287.89,
+          481.558
+        ],
+        [
+          291.767,
+          505.57
+        ],
+        [
+          295.134,
+          522.591
+        ],
+        [
+          332.598,
+          687.711
+        ],
+        [
+          352.894,
+          757.909
+        ],
+        [
+          360.156,
+          776.733
+        ],
+        [
+          367.427,
+          793.42
+        ],
+        [
+          416.375,
+          906.854
+        ],
+        [
+          461.876,
+          1021.09
+        ],
+        [
+          466.336,
+          1031.532
+        ],
+        [
+          480.322,
+          1068.724
+        ],
+        [
+          498.318,
+          1119.118
+        ],
+        [
+          514.261,
+          1162.333
+        ],
+        [
+          531.173,
+          1156.433
+        ],
+        [
+          512.798,
+          1113.241
+        ],
+        [
+          494.59,
+          1066.442
+        ],
+        [
+          492.405,
+          1060.82
+        ],
+        [
+          476.744,
+          1022.482
+        ],
+        [
+          471.853,
+          1009.714
+        ],
+        [
+          428.475,
+          904.327
+        ],
+        [
+          379.237,
+          790.448
+        ],
+        [
+          371.913,
+          773.571
+        ],
+        [
+          363.823,
+          754.703
+        ],
+        [
+          344.707,
+          685.184
+        ],
+        [
+          307.481,
+          519.796
+        ],
+        [
+          304.123,
+          502.097
+        ],
+        [
+          300.325,
+          478.942
+        ],
+        [
+          255.819,
+          269.561
+        ],
+        [
+          249.562,
+          237.924
+        ],
+        [
+          241.833,
+          203.772
+        ],
+        [
+          236.933,
+          180.606
+        ],
+        [
+          230.904,
+          156.038
+        ],
+        [
+          226.762,
+          132.204
+        ],
+        [
+          221.386,
+          101.369
+        ],
+        [
+          209.304,
+          33.386
+        ],
+        [
+          200.834,
+          9.085
+        ],
+        [
+          195.3,
+          -18.021
+        ],
+        [
+          160.083,
+          -175.906
+        ],
+        [
+          148.256,
+          -228.126
+        ],
+        [
+          135.38,
+          -225.02
+        ],
+        [
+          123.192,
+          -217.473
+        ],
+        [
+          121.782,
+          -217.038
+        ],
+        [
+          25.587,
+          -188.084
+        ]
+      ],
+      "osm_node_ids": [
+        8459790625,
+        6641406389,
+        5072308072,
+        3839480726,
+        13566334151,
+        13566334152,
+        13566334147,
+        13566334153,
+        13566334154,
+        13566334148,
+        6641403209,
+        6641403210,
+        6641403211,
+        6641403212,
+        6641403213,
+        6641403214,
+        6641403215,
+        6641403216,
+        3988407858,
+        436831787,
+        436852432,
+        436831784,
+        436831781,
+        436831776,
+        436831774,
+        436831772,
+        8555606240,
+        436831768,
+        436831766,
+        436831762,
+        3839409061,
+        11640424351,
+        436831761,
+        11640424345,
+        3839415403,
+        436831758,
+        3839415406,
+        4011504805,
+        4011504802,
+        436831756,
+        3839415408,
+        436831753,
+        8499829492,
+        436831749,
+        436831747,
+        436831749,
+        8499829492,
+        436831753,
+        3839415408,
+        436831756,
+        4011504802,
+        4011504805,
+        3839415406,
+        436831758,
+        3839415403,
+        11640424345,
+        436831761,
+        11640424351,
+        3839409061,
+        436831762,
+        436831766,
+        436831768,
+        8555606240,
+        436831772,
+        436831774,
+        436831776,
+        436831781,
+        436831784,
+        436852432,
+        436831787,
+        3988407858,
+        6641403216,
+        5178974627,
+        13566334156,
+        436844708,
+        5178974626,
+        6641403208,
+        3839421324,
+        5208863473,
+        3839415409,
+        6603754559,
+        3839480726,
+        5208863472,
+        13566334142,
+        5965557118,
+        3835707014,
+        13566334141,
+        5965553946,
+        10598556476,
+        2111825356,
+        5178974621,
+        5965553951,
+        1837571112,
+        7569368426,
+        2111825353,
+        7569368443,
+        2111825354,
+        7569368471,
+        4156274093,
+        7569368465,
+        3835706782,
+        3835756897,
+        5519783606,
+        5519783607,
+        7569402358,
+        3835756882,
+        13566334123,
+        13566334122,
+        3835756888,
+        13566334120,
+        13566334121,
+        13566334135,
+        13566334134,
+        13566334133,
+        13566334132,
+        13566334131,
+        13566334130,
+        13566334129,
+        13566334128,
+        13566334138,
+        13566334137,
+        13566334136,
+        13566334140,
+        13566334139,
+        13566334146,
+        13566334143,
+        13566334144,
+        13821643825,
+        13566334149,
+        3839409062,
+        13566334150,
+        13566334151,
+        3839480726,
+        5072308072,
+        6641406389,
+        8459790625
+      ],
+      "segments": [
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 796660391,
+          "source_url": "https://www.openstreetmap.org/way/796660391"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 796660391,
+          "source_url": "https://www.openstreetmap.org/way/796660391"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 796660391,
+          "source_url": "https://www.openstreetmap.org/way/796660391"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631747997,
+          "source_url": "https://www.openstreetmap.org/way/631747997"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631747997,
+          "source_url": "https://www.openstreetmap.org/way/631747997"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033841,
+          "source_url": "https://www.openstreetmap.org/way/520033841"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033841,
+          "source_url": "https://www.openstreetmap.org/way/520033841"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631748004,
+          "source_url": "https://www.openstreetmap.org/way/631748004"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631748004,
+          "source_url": "https://www.openstreetmap.org/way/631748004"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 575184336,
+          "source_url": "https://www.openstreetmap.org/way/575184336"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 575184341,
+          "source_url": "https://www.openstreetmap.org/way/575184341"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 575184341,
+          "source_url": "https://www.openstreetmap.org/way/575184341"
+        },
+        {
+          "kind": "UNMEASURED_U_TURN_CONNECTOR",
+          "osm_way": null,
+          "warning": "Straight chord joining actual opposite-carriageway intersection anchors. Not a drivable U-turn arc. Consumer must make an explicitly illustrative maneuver path; no surveyed radius provided."
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779806,
+          "source_url": "https://www.openstreetmap.org/way/1478779806"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779806,
+          "source_url": "https://www.openstreetmap.org/way/1478779806"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779806,
+          "source_url": "https://www.openstreetmap.org/way/1478779806"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779805,
+          "source_url": "https://www.openstreetmap.org/way/1478779805"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779811,
+          "source_url": "https://www.openstreetmap.org/way/1478779811"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779811,
+          "source_url": "https://www.openstreetmap.org/way/1478779811"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779810,
+          "source_url": "https://www.openstreetmap.org/way/1478779810"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779810,
+          "source_url": "https://www.openstreetmap.org/way/1478779810"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        }
+      ],
+      "maneuvers": [
+        {
+          "anchor": "gate_nb",
+          "instruction": "정문에서 좌회전, 동일로 북행",
+          "vertex_index": 4,
+          "distance_from_start_m": 129.5,
+          "source_time_window_seconds": [
+            50,
+            75
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "onsu_right_slip",
+          "instruction": "온수골사거리 우회전 연결로로 노원로 진입",
+          "vertex_index": 17,
+          "distance_from_start_m": 510.4,
+          "source_time_window_seconds": [
+            100,
+            125
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "sanggye_school",
+          "instruction": "상계초교입구 쪽 유턴",
+          "vertex_index": 44,
+          "distance_from_start_m": 1334.6,
+          "source_time_window_seconds": [
+            195,
+            235
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "onsu_sb",
+          "instruction": "온수골사거리 좌회전, 동일로 남행",
+          "vertex_index": 74,
+          "distance_from_start_m": 2231.2,
+          "source_time_window_seconds": [
+            315,
+            340
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "junggye_sb",
+          "instruction": "중계역 사거리 앞 유턴",
+          "vertex_index": 105,
+          "distance_from_start_m": 4038.6,
+          "source_time_window_seconds": [
+            450,
+            520
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "gate_nb",
+          "instruction": "시험장 정문 좌회전",
+          "vertex_index": 131,
+          "distance_from_start_m": 5498.4,
+          "source_time_window_seconds": [
+            645,
+            675
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "campus_access",
+          "instruction": "캠퍼스 진입로 복귀; 실제 종료 베이는 미측정",
+          "vertex_index": 135,
+          "distance_from_start_m": 5627.9,
+          "source_time_window_seconds": [
+            680,
+            730
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        }
+      ],
+      "length_m": 5627.9,
+      "start_finish_kind": "OSM campus access anchor; actual numbered canopy bay / exam start and finish position unresolved",
+      "distinct_order_verified": true,
+      "lane_trajectory_verified": false,
+      "current_2026_road_conditions_verified": false
+    },
+    {
+      "id": "B",
+      "name": "도봉 도로주행 B — 공식2022 안내 경로 기반",
+      "coordinates_wgs84": [
+        [
+          127.0582677,
+          37.6576315
+        ],
+        [
+          127.0593592,
+          37.6578916
+        ],
+        [
+          127.0593752,
+          37.6578955
+        ],
+        [
+          127.0595135,
+          37.6579633
+        ],
+        [
+          127.0596596,
+          37.6579912
+        ],
+        [
+          127.059607,
+          37.6581754
+        ],
+        [
+          127.0595177,
+          37.6585081
+        ],
+        [
+          127.0593668,
+          37.6590701
+        ],
+        [
+          127.0592334,
+          37.6595493
+        ],
+        [
+          127.0589332,
+          37.6606422
+        ],
+        [
+          127.0589492,
+          37.6608525
+        ],
+        [
+          127.0589921,
+          37.6609204
+        ],
+        [
+          127.0590127,
+          37.6609434
+        ],
+        [
+          127.0590551,
+          37.6609767
+        ],
+        [
+          127.0591087,
+          37.6610086
+        ],
+        [
+          127.0591758,
+          37.6610478
+        ],
+        [
+          127.0592576,
+          37.6610701
+        ],
+        [
+          127.0594552,
+          37.6610988
+        ],
+        [
+          127.0598924,
+          37.6610628
+        ],
+        [
+          127.0614602,
+          37.6609119
+        ],
+        [
+          127.0616831,
+          37.6608866
+        ],
+        [
+          127.061889,
+          37.660855
+        ],
+        [
+          127.06221,
+          37.66079
+        ],
+        [
+          127.06241,
+          37.66074
+        ],
+        [
+          127.06267,
+          37.66065
+        ],
+        [
+          127.06288,
+          37.66058
+        ],
+        [
+          127.0631893,
+          37.6604324
+        ],
+        [
+          127.06332,
+          37.66037
+        ],
+        [
+          127.06367,
+          37.66016
+        ],
+        [
+          127.06373,
+          37.6601
+        ],
+        [
+          127.0637492,
+          37.660083
+        ],
+        [
+          127.0640121,
+          37.6598505
+        ],
+        [
+          127.06425,
+          37.65964
+        ],
+        [
+          127.0642593,
+          37.6596299
+        ],
+        [
+          127.0646537,
+          37.6592002
+        ],
+        [
+          127.06492,
+          37.65891
+        ],
+        [
+          127.0646537,
+          37.6592002
+        ],
+        [
+          127.0642593,
+          37.6596299
+        ],
+        [
+          127.06425,
+          37.65964
+        ],
+        [
+          127.0640121,
+          37.6598505
+        ],
+        [
+          127.0637492,
+          37.660083
+        ],
+        [
+          127.06373,
+          37.6601
+        ],
+        [
+          127.06367,
+          37.66016
+        ],
+        [
+          127.06332,
+          37.66037
+        ],
+        [
+          127.0631893,
+          37.6604324
+        ],
+        [
+          127.06288,
+          37.66058
+        ],
+        [
+          127.06267,
+          37.66065
+        ],
+        [
+          127.06241,
+          37.66074
+        ],
+        [
+          127.06221,
+          37.66079
+        ],
+        [
+          127.061889,
+          37.660855
+        ],
+        [
+          127.0616831,
+          37.6608866
+        ],
+        [
+          127.0614602,
+          37.6609119
+        ],
+        [
+          127.0598924,
+          37.6610628
+        ],
+        [
+          127.0594552,
+          37.6610988
+        ],
+        [
+          127.0589996,
+          37.6611364
+        ],
+        [
+          127.0588042,
+          37.6611524
+        ],
+        [
+          127.058732,
+          37.6614241
+        ],
+        [
+          127.0586159,
+          37.6618327
+        ],
+        [
+          127.0579325,
+          37.6644063
+        ],
+        [
+          127.0579104,
+          37.6645381
+        ],
+        [
+          127.0578686,
+          37.664676
+        ],
+        [
+          127.0572196,
+          37.6671744
+        ],
+        [
+          127.0571785,
+          37.6673326
+        ],
+        [
+          127.0571256,
+          37.6675203
+        ],
+        [
+          127.0563812,
+          37.6703206
+        ],
+        [
+          127.056333,
+          37.670487
+        ],
+        [
+          127.0562193,
+          37.6704755
+        ],
+        [
+          127.0562654,
+          37.6702958
+        ],
+        [
+          127.056983,
+          37.6674997
+        ],
+        [
+          127.0570332,
+          37.6673085
+        ],
+        [
+          127.057074,
+          37.6671516
+        ],
+        [
+          127.0577253,
+          37.6646504
+        ],
+        [
+          127.0577562,
+          37.6645118
+        ],
+        [
+          127.0577842,
+          37.6643784
+        ],
+        [
+          127.0584695,
+          37.6618203
+        ],
+        [
+          127.0585768,
+          37.6614074
+        ],
+        [
+          127.0586378,
+          37.661166
+        ],
+        [
+          127.0586925,
+          37.660964
+        ],
+        [
+          127.0587903,
+          37.6605826
+        ],
+        [
+          127.0590905,
+          37.6594896
+        ],
+        [
+          127.0592239,
+          37.6590105
+        ],
+        [
+          127.0593536,
+          37.6585242
+        ],
+        [
+          127.0594568,
+          37.6581548
+        ],
+        [
+          127.0595135,
+          37.6579633
+        ],
+        [
+          127.0596508,
+          37.6574625
+        ],
+        [
+          127.0600481,
+          37.6560839
+        ],
+        [
+          127.0601183,
+          37.6558292
+        ],
+        [
+          127.0601868,
+          37.6556116
+        ],
+        [
+          127.0603561,
+          37.6550012
+        ],
+        [
+          127.060417,
+          37.6547243
+        ],
+        [
+          127.060483,
+          37.6545218
+        ],
+        [
+          127.0605421,
+          37.6542926
+        ],
+        [
+          127.060606,
+          37.6540854
+        ],
+        [
+          127.0606896,
+          37.6537839
+        ],
+        [
+          127.0607742,
+          37.65349
+        ],
+        [
+          127.061244,
+          37.651616
+        ],
+        [
+          127.061288,
+          37.6514003
+        ],
+        [
+          127.0614282,
+          37.6514315
+        ],
+        [
+          127.0613851,
+          37.6516395
+        ],
+        [
+          127.0608801,
+          37.6535204
+        ],
+        [
+          127.0608091,
+          37.6538046
+        ],
+        [
+          127.0607214,
+          37.6541114
+        ],
+        [
+          127.0606658,
+          37.6543195
+        ],
+        [
+          127.0605974,
+          37.6545402
+        ],
+        [
+          127.0605504,
+          37.6547543
+        ],
+        [
+          127.0604894,
+          37.6550313
+        ],
+        [
+          127.0603523,
+          37.655642
+        ],
+        [
+          127.0602562,
+          37.6558603
+        ],
+        [
+          127.0601934,
+          37.6561038
+        ],
+        [
+          127.0597938,
+          37.6575221
+        ],
+        [
+          127.0596596,
+          37.6579912
+        ],
+        [
+          127.0595135,
+          37.6579633
+        ],
+        [
+          127.0593752,
+          37.6578955
+        ],
+        [
+          127.0593592,
+          37.6578916
+        ],
+        [
+          127.0582677,
+          37.6576315
+        ]
+      ],
+      "game_xz": [
+        [
+          25.587,
+          -188.084
+        ],
+        [
+          121.782,
+          -217.038
+        ],
+        [
+          123.192,
+          -217.473
+        ],
+        [
+          135.38,
+          -225.02
+        ],
+        [
+          148.256,
+          -228.126
+        ],
+        [
+          143.62,
+          -248.631
+        ],
+        [
+          135.75,
+          -285.667
+        ],
+        [
+          122.451,
+          -348.228
+        ],
+        [
+          110.695,
+          -401.573
+        ],
+        [
+          84.238,
+          -523.234
+        ],
+        [
+          85.648,
+          -546.644
+        ],
+        [
+          89.429,
+          -554.203
+        ],
+        [
+          91.244,
+          -556.763
+        ],
+        [
+          94.981,
+          -560.47
+        ],
+        [
+          99.705,
+          -564.021
+        ],
+        [
+          105.618,
+          -568.385
+        ],
+        [
+          112.828,
+          -570.867
+        ],
+        [
+          130.242,
+          -574.062
+        ],
+        [
+          168.773,
+          -570.055
+        ],
+        [
+          306.943,
+          -553.257
+        ],
+        [
+          326.588,
+          -550.44
+        ],
+        [
+          344.734,
+          -546.923
+        ],
+        [
+          373.023,
+          -539.687
+        ],
+        [
+          390.649,
+          -534.121
+        ],
+        [
+          413.563,
+          -524.102
+        ],
+        [
+          432.071,
+          -516.31
+        ],
+        [
+          459.329,
+          -499.879
+        ],
+        [
+          470.848,
+          -492.933
+        ],
+        [
+          501.694,
+          -469.556
+        ],
+        [
+          506.981,
+          -462.876
+        ],
+        [
+          508.673,
+          -460.984
+        ],
+        [
+          531.843,
+          -435.102
+        ],
+        [
+          552.809,
+          -411.669
+        ],
+        [
+          553.629,
+          -410.545
+        ],
+        [
+          588.387,
+          -362.711
+        ],
+        [
+          611.856,
+          -330.406
+        ],
+        [
+          588.387,
+          -362.711
+        ],
+        [
+          553.629,
+          -410.545
+        ],
+        [
+          552.809,
+          -411.669
+        ],
+        [
+          531.843,
+          -435.102
+        ],
+        [
+          508.673,
+          -460.984
+        ],
+        [
+          506.981,
+          -462.876
+        ],
+        [
+          501.694,
+          -469.556
+        ],
+        [
+          470.848,
+          -492.933
+        ],
+        [
+          459.329,
+          -499.879
+        ],
+        [
+          432.071,
+          -516.31
+        ],
+        [
+          413.563,
+          -524.102
+        ],
+        [
+          390.649,
+          -534.121
+        ],
+        [
+          373.023,
+          -539.687
+        ],
+        [
+          344.734,
+          -546.923
+        ],
+        [
+          326.588,
+          -550.44
+        ],
+        [
+          306.943,
+          -553.257
+        ],
+        [
+          168.773,
+          -570.055
+        ],
+        [
+          130.242,
+          -574.062
+        ],
+        [
+          90.09,
+          -578.248
+        ],
+        [
+          72.869,
+          -580.029
+        ],
+        [
+          66.506,
+          -610.275
+        ],
+        [
+          56.274,
+          -655.76
+        ],
+        [
+          -3.954,
+          -942.251
+        ],
+        [
+          -5.902,
+          -956.923
+        ],
+        [
+          -9.585,
+          -972.274
+        ],
+        [
+          -66.782,
+          -1250.395
+        ],
+        [
+          -70.404,
+          -1268.006
+        ],
+        [
+          -75.066,
+          -1288.9
+        ],
+        [
+          -140.67,
+          -1600.628
+        ],
+        [
+          -144.918,
+          -1619.152
+        ],
+        [
+          -154.939,
+          -1617.872
+        ],
+        [
+          -150.876,
+          -1597.868
+        ],
+        [
+          -87.634,
+          -1286.607
+        ],
+        [
+          -83.209,
+          -1265.323
+        ],
+        [
+          -79.614,
+          -1247.857
+        ],
+        [
+          -22.215,
+          -969.425
+        ],
+        [
+          -19.491,
+          -953.996
+        ],
+        [
+          -17.024,
+          -939.146
+        ],
+        [
+          43.372,
+          -654.379
+        ],
+        [
+          52.828,
+          -608.415
+        ],
+        [
+          58.204,
+          -581.543
+        ],
+        [
+          63.025,
+          -559.056
+        ],
+        [
+          71.644,
+          -516.599
+        ],
+        [
+          98.101,
+          -394.927
+        ],
+        [
+          109.858,
+          -341.594
+        ],
+        [
+          121.288,
+          -287.459
+        ],
+        [
+          130.383,
+          -246.338
+        ],
+        [
+          135.38,
+          -225.02
+        ],
+        [
+          147.48,
+          -169.271
+        ],
+        [
+          182.495,
+          -15.806
+        ],
+        [
+          188.681,
+          12.547
+        ],
+        [
+          194.718,
+          36.77
+        ],
+        [
+          209.639,
+          104.719
+        ],
+        [
+          215.006,
+          135.544
+        ],
+        [
+          220.822,
+          158.086
+        ],
+        [
+          226.031,
+          183.6
+        ],
+        [
+          231.662,
+          206.666
+        ],
+        [
+          239.03,
+          240.229
+        ],
+        [
+          246.486,
+          272.945
+        ],
+        [
+          287.89,
+          481.558
+        ],
+        [
+          291.767,
+          505.57
+        ],
+        [
+          304.123,
+          502.097
+        ],
+        [
+          300.325,
+          478.942
+        ],
+        [
+          255.819,
+          269.561
+        ],
+        [
+          249.562,
+          237.924
+        ],
+        [
+          241.833,
+          203.772
+        ],
+        [
+          236.933,
+          180.606
+        ],
+        [
+          230.904,
+          156.038
+        ],
+        [
+          226.762,
+          132.204
+        ],
+        [
+          221.386,
+          101.369
+        ],
+        [
+          209.304,
+          33.386
+        ],
+        [
+          200.834,
+          9.085
+        ],
+        [
+          195.3,
+          -18.021
+        ],
+        [
+          160.083,
+          -175.906
+        ],
+        [
+          148.256,
+          -228.126
+        ],
+        [
+          135.38,
+          -225.02
+        ],
+        [
+          123.192,
+          -217.473
+        ],
+        [
+          121.782,
+          -217.038
+        ],
+        [
+          25.587,
+          -188.084
+        ]
+      ],
+      "osm_node_ids": [
+        8459790625,
+        6641406389,
+        5072308072,
+        3839480726,
+        13566334151,
+        13566334152,
+        13566334147,
+        13566334153,
+        13566334154,
+        13566334148,
+        6641403209,
+        6641403210,
+        6641403211,
+        6641403212,
+        6641403213,
+        6641403214,
+        6641403215,
+        6641403216,
+        3988407858,
+        436831787,
+        436852432,
+        436831784,
+        436831781,
+        436831776,
+        436831774,
+        436831772,
+        8555606240,
+        436831768,
+        436831766,
+        436831762,
+        3839409061,
+        11640424351,
+        436831761,
+        11640424345,
+        3839415403,
+        436831758,
+        3839415403,
+        11640424345,
+        436831761,
+        11640424351,
+        3839409061,
+        436831762,
+        436831766,
+        436831768,
+        8555606240,
+        436831772,
+        436831774,
+        436831776,
+        436831781,
+        436831784,
+        436852432,
+        436831787,
+        3988407858,
+        6641403216,
+        5178974627,
+        13566334156,
+        13566334159,
+        13566334160,
+        13566334161,
+        13566334162,
+        9410070135,
+        13566405248,
+        13566334184,
+        13566334185,
+        13566334186,
+        13566334187,
+        2111825358,
+        7558511480,
+        7558511508,
+        13566334182,
+        13566405247,
+        9410070134,
+        13566334158,
+        6468489289,
+        8499201871,
+        5097717943,
+        436844708,
+        5178974626,
+        6641403208,
+        3839421324,
+        5208863473,
+        3839415409,
+        6603754559,
+        3839480726,
+        5208863472,
+        13566334142,
+        5965557118,
+        3835707014,
+        13566334141,
+        5965553946,
+        10598556476,
+        2111825356,
+        5178974621,
+        5965553951,
+        1837571112,
+        7569368426,
+        2111825353,
+        13566334128,
+        13566334138,
+        13566334137,
+        13566334136,
+        13566334140,
+        13566334139,
+        13566334146,
+        13566334143,
+        13566334144,
+        13821643825,
+        13566334149,
+        3839409062,
+        13566334150,
+        13566334151,
+        3839480726,
+        5072308072,
+        6641406389,
+        8459790625
+      ],
+      "segments": [
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 796660391,
+          "source_url": "https://www.openstreetmap.org/way/796660391"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 796660391,
+          "source_url": "https://www.openstreetmap.org/way/796660391"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779817,
+          "source_url": "https://www.openstreetmap.org/way/1478779817"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779817,
+          "source_url": "https://www.openstreetmap.org/way/1478779817"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779817,
+          "source_url": "https://www.openstreetmap.org/way/1478779817"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779817,
+          "source_url": "https://www.openstreetmap.org/way/1478779817"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779817,
+          "source_url": "https://www.openstreetmap.org/way/1478779817"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779823,
+          "source_url": "https://www.openstreetmap.org/way/1478779823"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779823,
+          "source_url": "https://www.openstreetmap.org/way/1478779823"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779824,
+          "source_url": "https://www.openstreetmap.org/way/1478779824"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779824,
+          "source_url": "https://www.openstreetmap.org/way/1478779824"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779824,
+          "source_url": "https://www.openstreetmap.org/way/1478779824"
+        },
+        {
+          "kind": "UNMEASURED_U_TURN_CONNECTOR",
+          "osm_way": null,
+          "warning": "Straight chord joining actual opposite-carriageway intersection anchors. Not a drivable U-turn arc. Consumer must make an explicitly illustrative maneuver path; no surveyed radius provided."
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520023265,
+          "source_url": "https://www.openstreetmap.org/way/520023265"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520023265,
+          "source_url": "https://www.openstreetmap.org/way/520023265"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520023265,
+          "source_url": "https://www.openstreetmap.org/way/520023265"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779813,
+          "source_url": "https://www.openstreetmap.org/way/1478779813"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779813,
+          "source_url": "https://www.openstreetmap.org/way/1478779813"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520018144,
+          "source_url": "https://www.openstreetmap.org/way/520018144"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520018144,
+          "source_url": "https://www.openstreetmap.org/way/520018144"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520018144,
+          "source_url": "https://www.openstreetmap.org/way/520018144"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520018144,
+          "source_url": "https://www.openstreetmap.org/way/520018144"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520018144,
+          "source_url": "https://www.openstreetmap.org/way/520018144"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631747997,
+          "source_url": "https://www.openstreetmap.org/way/631747997"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631747997,
+          "source_url": "https://www.openstreetmap.org/way/631747997"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033841,
+          "source_url": "https://www.openstreetmap.org/way/520033841"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033841,
+          "source_url": "https://www.openstreetmap.org/way/520033841"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631748004,
+          "source_url": "https://www.openstreetmap.org/way/631748004"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631748004,
+          "source_url": "https://www.openstreetmap.org/way/631748004"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "UNMEASURED_U_TURN_CONNECTOR",
+          "osm_way": null,
+          "warning": "Straight chord joining actual opposite-carriageway intersection anchors. Not a drivable U-turn arc. Consumer must make an explicitly illustrative maneuver path; no surveyed radius provided."
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779811,
+          "source_url": "https://www.openstreetmap.org/way/1478779811"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779811,
+          "source_url": "https://www.openstreetmap.org/way/1478779811"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779810,
+          "source_url": "https://www.openstreetmap.org/way/1478779810"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779810,
+          "source_url": "https://www.openstreetmap.org/way/1478779810"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        }
+      ],
+      "maneuvers": [
+        {
+          "anchor": "gate_nb",
+          "instruction": "정문에서 좌회전, 동일로 북행",
+          "vertex_index": 4,
+          "distance_from_start_m": 129.5,
+          "source_time_window_seconds": [
+            50,
+            75
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "onsu_right_slip",
+          "instruction": "온수골사거리 우회전 연결로로 노원로 진입",
+          "vertex_index": 17,
+          "distance_from_start_m": 510.4,
+          "source_time_window_seconds": [
+            100,
+            125
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "ongok_approach",
+          "instruction": "온곡중 쪽 삼거리 접근에서 유턴",
+          "vertex_index": 35,
+          "distance_from_start_m": 1081.1,
+          "source_time_window_seconds": [
+            165,
+            190
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "onsu_nb",
+          "instruction": "온수골사거리 우회전, 동일로 북행",
+          "vertex_index": 55,
+          "distance_from_start_m": 1709.5,
+          "source_time_window_seconds": [
+            235,
+            265
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "complex1416_nb",
+          "instruction": "상계14-16단지 사거리 앞 유턴",
+          "vertex_index": 65,
+          "distance_from_start_m": 2771.2,
+          "source_time_window_seconds": [
+            350,
+            395
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "complex26_sb",
+          "instruction": "상계2-6단지 사거리 앞 유턴",
+          "vertex_index": 96,
+          "distance_from_start_m": 4951.4,
+          "source_time_window_seconds": [
+            565,
+            605
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "gate_nb",
+          "instruction": "시험장 정문 좌회전",
+          "vertex_index": 110,
+          "distance_from_start_m": 5711.3,
+          "source_time_window_seconds": [
+            660,
+            695
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "campus_access",
+          "instruction": "캠퍼스 진입로 복귀; 실제 종료 베이는 미측정",
+          "vertex_index": 114,
+          "distance_from_start_m": 5840.8,
+          "source_time_window_seconds": [
+            700,
+            760
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        }
+      ],
+      "length_m": 5840.8,
+      "start_finish_kind": "OSM campus access anchor; actual numbered canopy bay / exam start and finish position unresolved",
+      "distinct_order_verified": true,
+      "lane_trajectory_verified": false,
+      "current_2026_road_conditions_verified": false
+    },
+    {
+      "id": "C",
+      "name": "도봉 도로주행 C — 공식2022 안내 경로 기반",
+      "coordinates_wgs84": [
+        [
+          127.0582677,
+          37.6576315
+        ],
+        [
+          127.0593592,
+          37.6578916
+        ],
+        [
+          127.0593752,
+          37.6578955
+        ],
+        [
+          127.0595135,
+          37.6579633
+        ],
+        [
+          127.0596508,
+          37.6574625
+        ],
+        [
+          127.0600481,
+          37.6560839
+        ],
+        [
+          127.0601183,
+          37.6558292
+        ],
+        [
+          127.0601868,
+          37.6556116
+        ],
+        [
+          127.0603561,
+          37.6550012
+        ],
+        [
+          127.060417,
+          37.6547243
+        ],
+        [
+          127.060483,
+          37.6545218
+        ],
+        [
+          127.0605421,
+          37.6542926
+        ],
+        [
+          127.060606,
+          37.6540854
+        ],
+        [
+          127.0606896,
+          37.6537839
+        ],
+        [
+          127.0607742,
+          37.65349
+        ],
+        [
+          127.061244,
+          37.651616
+        ],
+        [
+          127.061288,
+          37.6514003
+        ],
+        [
+          127.0613262,
+          37.6512474
+        ],
+        [
+          127.0617513,
+          37.6497641
+        ],
+        [
+          127.0619816,
+          37.6491335
+        ],
+        [
+          127.062064,
+          37.6489644
+        ],
+        [
+          127.0621465,
+          37.6488145
+        ],
+        [
+          127.0627019,
+          37.6477955
+        ],
+        [
+          127.0632182,
+          37.6467693
+        ],
+        [
+          127.0632688,
+          37.6466755
+        ],
+        [
+          127.0634275,
+          37.6463414
+        ],
+        [
+          127.0636317,
+          37.6458887
+        ],
+        [
+          127.0638126,
+          37.6455005
+        ],
+        [
+          127.0640045,
+          37.6455535
+        ],
+        [
+          127.063796,
+          37.6459415
+        ],
+        [
+          127.0635894,
+          37.6463619
+        ],
+        [
+          127.0635646,
+          37.6464124
+        ],
+        [
+          127.0633869,
+          37.6467568
+        ],
+        [
+          127.0633314,
+          37.6468715
+        ],
+        [
+          127.0628392,
+          37.6478182
+        ],
+        [
+          127.0622805,
+          37.6488412
+        ],
+        [
+          127.0621974,
+          37.6489928
+        ],
+        [
+          127.0621056,
+          37.6491623
+        ],
+        [
+          127.0618887,
+          37.6497868
+        ],
+        [
+          127.0614663,
+          37.6512725
+        ],
+        [
+          127.0614282,
+          37.6514315
+        ],
+        [
+          127.0613851,
+          37.6516395
+        ],
+        [
+          127.0608801,
+          37.6535204
+        ],
+        [
+          127.0608091,
+          37.6538046
+        ],
+        [
+          127.0607214,
+          37.6541114
+        ],
+        [
+          127.0606658,
+          37.6543195
+        ],
+        [
+          127.0605974,
+          37.6545402
+        ],
+        [
+          127.0605504,
+          37.6547543
+        ],
+        [
+          127.0604894,
+          37.6550313
+        ],
+        [
+          127.0603523,
+          37.655642
+        ],
+        [
+          127.0602562,
+          37.6558603
+        ],
+        [
+          127.0601934,
+          37.6561038
+        ],
+        [
+          127.0597938,
+          37.6575221
+        ],
+        [
+          127.0596596,
+          37.6579912
+        ],
+        [
+          127.059607,
+          37.6581754
+        ],
+        [
+          127.0595177,
+          37.6585081
+        ],
+        [
+          127.0593668,
+          37.6590701
+        ],
+        [
+          127.0592334,
+          37.6595493
+        ],
+        [
+          127.0589332,
+          37.6606422
+        ],
+        [
+          127.0589492,
+          37.6608525
+        ],
+        [
+          127.0589921,
+          37.6609204
+        ],
+        [
+          127.0590127,
+          37.6609434
+        ],
+        [
+          127.0590551,
+          37.6609767
+        ],
+        [
+          127.0591087,
+          37.6610086
+        ],
+        [
+          127.0591758,
+          37.6610478
+        ],
+        [
+          127.0592576,
+          37.6610701
+        ],
+        [
+          127.0594552,
+          37.6610988
+        ],
+        [
+          127.0598924,
+          37.6610628
+        ],
+        [
+          127.0614602,
+          37.6609119
+        ],
+        [
+          127.0616831,
+          37.6608866
+        ],
+        [
+          127.061889,
+          37.660855
+        ],
+        [
+          127.06221,
+          37.66079
+        ],
+        [
+          127.06241,
+          37.66074
+        ],
+        [
+          127.06267,
+          37.66065
+        ],
+        [
+          127.06288,
+          37.66058
+        ],
+        [
+          127.0631893,
+          37.6604324
+        ],
+        [
+          127.06332,
+          37.66037
+        ],
+        [
+          127.06367,
+          37.66016
+        ],
+        [
+          127.06373,
+          37.6601
+        ],
+        [
+          127.0637492,
+          37.660083
+        ],
+        [
+          127.0640121,
+          37.6598505
+        ],
+        [
+          127.06425,
+          37.65964
+        ],
+        [
+          127.0642593,
+          37.6596299
+        ],
+        [
+          127.0646537,
+          37.6592002
+        ],
+        [
+          127.06492,
+          37.65891
+        ],
+        [
+          127.0653534,
+          37.6584515
+        ],
+        [
+          127.0654025,
+          37.6583996
+        ],
+        [
+          127.0655877,
+          37.6582036
+        ],
+        [
+          127.06561,
+          37.65818
+        ],
+        [
+          127.0659712,
+          37.6577966
+        ],
+        [
+          127.0661,
+          37.65766
+        ],
+        [
+          127.0661217,
+          37.6576363
+        ],
+        [
+          127.06643,
+          37.6573
+        ],
+        [
+          127.0666162,
+          37.6570714
+        ],
+        [
+          127.06643,
+          37.6573
+        ],
+        [
+          127.0661217,
+          37.6576363
+        ],
+        [
+          127.0661,
+          37.65766
+        ],
+        [
+          127.0659712,
+          37.6577966
+        ],
+        [
+          127.06561,
+          37.65818
+        ],
+        [
+          127.0655877,
+          37.6582036
+        ],
+        [
+          127.0654025,
+          37.6583996
+        ],
+        [
+          127.0653534,
+          37.6584515
+        ],
+        [
+          127.06492,
+          37.65891
+        ],
+        [
+          127.0646537,
+          37.6592002
+        ],
+        [
+          127.0642593,
+          37.6596299
+        ],
+        [
+          127.06425,
+          37.65964
+        ],
+        [
+          127.0640121,
+          37.6598505
+        ],
+        [
+          127.0637492,
+          37.660083
+        ],
+        [
+          127.06373,
+          37.6601
+        ],
+        [
+          127.06367,
+          37.66016
+        ],
+        [
+          127.06332,
+          37.66037
+        ],
+        [
+          127.0631893,
+          37.6604324
+        ],
+        [
+          127.06288,
+          37.66058
+        ],
+        [
+          127.06267,
+          37.66065
+        ],
+        [
+          127.06241,
+          37.66074
+        ],
+        [
+          127.06221,
+          37.66079
+        ],
+        [
+          127.061889,
+          37.660855
+        ],
+        [
+          127.0616831,
+          37.6608866
+        ],
+        [
+          127.0614602,
+          37.6609119
+        ],
+        [
+          127.0598924,
+          37.6610628
+        ],
+        [
+          127.0594552,
+          37.6610988
+        ],
+        [
+          127.0589996,
+          37.6611364
+        ],
+        [
+          127.0588042,
+          37.6611524
+        ],
+        [
+          127.0586378,
+          37.661166
+        ],
+        [
+          127.0586925,
+          37.660964
+        ],
+        [
+          127.0587903,
+          37.6605826
+        ],
+        [
+          127.0590905,
+          37.6594896
+        ],
+        [
+          127.0592239,
+          37.6590105
+        ],
+        [
+          127.0593536,
+          37.6585242
+        ],
+        [
+          127.0594568,
+          37.6581548
+        ],
+        [
+          127.0595135,
+          37.6579633
+        ],
+        [
+          127.0593752,
+          37.6578955
+        ],
+        [
+          127.0593592,
+          37.6578916
+        ],
+        [
+          127.0582677,
+          37.6576315
+        ]
+      ],
+      "game_xz": [
+        [
+          25.587,
+          -188.084
+        ],
+        [
+          121.782,
+          -217.038
+        ],
+        [
+          123.192,
+          -217.473
+        ],
+        [
+          135.38,
+          -225.02
+        ],
+        [
+          147.48,
+          -169.271
+        ],
+        [
+          182.495,
+          -15.806
+        ],
+        [
+          188.681,
+          12.547
+        ],
+        [
+          194.718,
+          36.77
+        ],
+        [
+          209.639,
+          104.719
+        ],
+        [
+          215.006,
+          135.544
+        ],
+        [
+          220.822,
+          158.086
+        ],
+        [
+          226.031,
+          183.6
+        ],
+        [
+          231.662,
+          206.666
+        ],
+        [
+          239.03,
+          240.229
+        ],
+        [
+          246.486,
+          272.945
+        ],
+        [
+          287.89,
+          481.558
+        ],
+        [
+          291.767,
+          505.57
+        ],
+        [
+          295.134,
+          522.591
+        ],
+        [
+          332.598,
+          687.711
+        ],
+        [
+          352.894,
+          757.909
+        ],
+        [
+          360.156,
+          776.733
+        ],
+        [
+          367.427,
+          793.42
+        ],
+        [
+          416.375,
+          906.854
+        ],
+        [
+          461.876,
+          1021.09
+        ],
+        [
+          466.336,
+          1031.532
+        ],
+        [
+          480.322,
+          1068.724
+        ],
+        [
+          498.318,
+          1119.118
+        ],
+        [
+          514.261,
+          1162.333
+        ],
+        [
+          531.173,
+          1156.433
+        ],
+        [
+          512.798,
+          1113.241
+        ],
+        [
+          494.59,
+          1066.442
+        ],
+        [
+          492.405,
+          1060.82
+        ],
+        [
+          476.744,
+          1022.482
+        ],
+        [
+          471.853,
+          1009.714
+        ],
+        [
+          428.475,
+          904.327
+        ],
+        [
+          379.237,
+          790.448
+        ],
+        [
+          371.913,
+          773.571
+        ],
+        [
+          363.823,
+          754.703
+        ],
+        [
+          344.707,
+          685.184
+        ],
+        [
+          307.481,
+          519.796
+        ],
+        [
+          304.123,
+          502.097
+        ],
+        [
+          300.325,
+          478.942
+        ],
+        [
+          255.819,
+          269.561
+        ],
+        [
+          249.562,
+          237.924
+        ],
+        [
+          241.833,
+          203.772
+        ],
+        [
+          236.933,
+          180.606
+        ],
+        [
+          230.904,
+          156.038
+        ],
+        [
+          226.762,
+          132.204
+        ],
+        [
+          221.386,
+          101.369
+        ],
+        [
+          209.304,
+          33.386
+        ],
+        [
+          200.834,
+          9.085
+        ],
+        [
+          195.3,
+          -18.021
+        ],
+        [
+          160.083,
+          -175.906
+        ],
+        [
+          148.256,
+          -228.126
+        ],
+        [
+          143.62,
+          -248.631
+        ],
+        [
+          135.75,
+          -285.667
+        ],
+        [
+          122.451,
+          -348.228
+        ],
+        [
+          110.695,
+          -401.573
+        ],
+        [
+          84.238,
+          -523.234
+        ],
+        [
+          85.648,
+          -546.644
+        ],
+        [
+          89.429,
+          -554.203
+        ],
+        [
+          91.244,
+          -556.763
+        ],
+        [
+          94.981,
+          -560.47
+        ],
+        [
+          99.705,
+          -564.021
+        ],
+        [
+          105.618,
+          -568.385
+        ],
+        [
+          112.828,
+          -570.867
+        ],
+        [
+          130.242,
+          -574.062
+        ],
+        [
+          168.773,
+          -570.055
+        ],
+        [
+          306.943,
+          -553.257
+        ],
+        [
+          326.588,
+          -550.44
+        ],
+        [
+          344.734,
+          -546.923
+        ],
+        [
+          373.023,
+          -539.687
+        ],
+        [
+          390.649,
+          -534.121
+        ],
+        [
+          413.563,
+          -524.102
+        ],
+        [
+          432.071,
+          -516.31
+        ],
+        [
+          459.329,
+          -499.879
+        ],
+        [
+          470.848,
+          -492.933
+        ],
+        [
+          501.694,
+          -469.556
+        ],
+        [
+          506.981,
+          -462.876
+        ],
+        [
+          508.673,
+          -460.984
+        ],
+        [
+          531.843,
+          -435.102
+        ],
+        [
+          552.809,
+          -411.669
+        ],
+        [
+          553.629,
+          -410.545
+        ],
+        [
+          588.387,
+          -362.711
+        ],
+        [
+          611.856,
+          -330.406
+        ],
+        [
+          650.052,
+          -279.366
+        ],
+        [
+          654.379,
+          -273.589
+        ],
+        [
+          670.701,
+          -251.77
+        ],
+        [
+          672.666,
+          -249.143
+        ],
+        [
+          704.499,
+          -206.463
+        ],
+        [
+          715.85,
+          -191.257
+        ],
+        [
+          717.763,
+          -188.619
+        ],
+        [
+          744.933,
+          -151.182
+        ],
+        [
+          761.343,
+          -125.734
+        ],
+        [
+          744.933,
+          -151.182
+        ],
+        [
+          717.763,
+          -188.619
+        ],
+        [
+          715.85,
+          -191.257
+        ],
+        [
+          704.499,
+          -206.463
+        ],
+        [
+          672.666,
+          -249.143
+        ],
+        [
+          670.701,
+          -251.77
+        ],
+        [
+          654.379,
+          -273.589
+        ],
+        [
+          650.052,
+          -279.366
+        ],
+        [
+          611.856,
+          -330.406
+        ],
+        [
+          588.387,
+          -362.711
+        ],
+        [
+          553.629,
+          -410.545
+        ],
+        [
+          552.809,
+          -411.669
+        ],
+        [
+          531.843,
+          -435.102
+        ],
+        [
+          508.673,
+          -460.984
+        ],
+        [
+          506.981,
+          -462.876
+        ],
+        [
+          501.694,
+          -469.556
+        ],
+        [
+          470.848,
+          -492.933
+        ],
+        [
+          459.329,
+          -499.879
+        ],
+        [
+          432.071,
+          -516.31
+        ],
+        [
+          413.563,
+          -524.102
+        ],
+        [
+          390.649,
+          -534.121
+        ],
+        [
+          373.023,
+          -539.687
+        ],
+        [
+          344.734,
+          -546.923
+        ],
+        [
+          326.588,
+          -550.44
+        ],
+        [
+          306.943,
+          -553.257
+        ],
+        [
+          168.773,
+          -570.055
+        ],
+        [
+          130.242,
+          -574.062
+        ],
+        [
+          90.09,
+          -578.248
+        ],
+        [
+          72.869,
+          -580.029
+        ],
+        [
+          58.204,
+          -581.543
+        ],
+        [
+          63.025,
+          -559.056
+        ],
+        [
+          71.644,
+          -516.599
+        ],
+        [
+          98.101,
+          -394.927
+        ],
+        [
+          109.858,
+          -341.594
+        ],
+        [
+          121.288,
+          -287.459
+        ],
+        [
+          130.383,
+          -246.338
+        ],
+        [
+          135.38,
+          -225.02
+        ],
+        [
+          123.192,
+          -217.473
+        ],
+        [
+          121.782,
+          -217.038
+        ],
+        [
+          25.587,
+          -188.084
+        ]
+      ],
+      "osm_node_ids": [
+        8459790625,
+        6641406389,
+        5072308072,
+        3839480726,
+        5208863472,
+        13566334142,
+        5965557118,
+        3835707014,
+        13566334141,
+        5965553946,
+        10598556476,
+        2111825356,
+        5178974621,
+        5965553951,
+        1837571112,
+        7569368426,
+        2111825353,
+        7569368443,
+        2111825354,
+        7569368471,
+        4156274093,
+        7569368465,
+        3835706782,
+        3835756897,
+        5519783606,
+        5519783607,
+        7569402358,
+        3835756882,
+        13566334123,
+        13566334122,
+        3835756888,
+        13566334120,
+        13566334121,
+        13566334135,
+        13566334134,
+        13566334133,
+        13566334132,
+        13566334131,
+        13566334130,
+        13566334129,
+        13566334128,
+        13566334138,
+        13566334137,
+        13566334136,
+        13566334140,
+        13566334139,
+        13566334146,
+        13566334143,
+        13566334144,
+        13821643825,
+        13566334149,
+        3839409062,
+        13566334150,
+        13566334151,
+        13566334152,
+        13566334147,
+        13566334153,
+        13566334154,
+        13566334148,
+        6641403209,
+        6641403210,
+        6641403211,
+        6641403212,
+        6641403213,
+        6641403214,
+        6641403215,
+        6641403216,
+        3988407858,
+        436831787,
+        436852432,
+        436831784,
+        436831781,
+        436831776,
+        436831774,
+        436831772,
+        8555606240,
+        436831768,
+        436831766,
+        436831762,
+        3839409061,
+        11640424351,
+        436831761,
+        11640424345,
+        3839415403,
+        436831758,
+        3839415406,
+        4011504805,
+        4011504802,
+        436831756,
+        3839415408,
+        436831753,
+        8499829492,
+        436831749,
+        436831747,
+        436831749,
+        8499829492,
+        436831753,
+        3839415408,
+        436831756,
+        4011504802,
+        4011504805,
+        3839415406,
+        436831758,
+        3839415403,
+        11640424345,
+        436831761,
+        11640424351,
+        3839409061,
+        436831762,
+        436831766,
+        436831768,
+        8555606240,
+        436831772,
+        436831774,
+        436831776,
+        436831781,
+        436831784,
+        436852432,
+        436831787,
+        3988407858,
+        6641403216,
+        5178974627,
+        13566334156,
+        436844708,
+        5178974626,
+        6641403208,
+        3839421324,
+        5208863473,
+        3839415409,
+        6603754559,
+        3839480726,
+        5072308072,
+        6641406389,
+        8459790625
+      ],
+      "segments": [
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631747997,
+          "source_url": "https://www.openstreetmap.org/way/631747997"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631747997,
+          "source_url": "https://www.openstreetmap.org/way/631747997"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033841,
+          "source_url": "https://www.openstreetmap.org/way/520033841"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033841,
+          "source_url": "https://www.openstreetmap.org/way/520033841"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631748004,
+          "source_url": "https://www.openstreetmap.org/way/631748004"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631748004,
+          "source_url": "https://www.openstreetmap.org/way/631748004"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 218778495,
+          "source_url": "https://www.openstreetmap.org/way/218778495"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 575184336,
+          "source_url": "https://www.openstreetmap.org/way/575184336"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 575184341,
+          "source_url": "https://www.openstreetmap.org/way/575184341"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 575184341,
+          "source_url": "https://www.openstreetmap.org/way/575184341"
+        },
+        {
+          "kind": "UNMEASURED_U_TURN_CONNECTOR",
+          "osm_way": null,
+          "warning": "Straight chord joining actual opposite-carriageway intersection anchors. Not a drivable U-turn arc. Consumer must make an explicitly illustrative maneuver path; no surveyed radius provided."
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779806,
+          "source_url": "https://www.openstreetmap.org/way/1478779806"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779806,
+          "source_url": "https://www.openstreetmap.org/way/1478779806"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779806,
+          "source_url": "https://www.openstreetmap.org/way/1478779806"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779805,
+          "source_url": "https://www.openstreetmap.org/way/1478779805"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779808,
+          "source_url": "https://www.openstreetmap.org/way/1478779808"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779811,
+          "source_url": "https://www.openstreetmap.org/way/1478779811"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779811,
+          "source_url": "https://www.openstreetmap.org/way/1478779811"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779810,
+          "source_url": "https://www.openstreetmap.org/way/1478779810"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779810,
+          "source_url": "https://www.openstreetmap.org/way/1478779810"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520307298,
+          "source_url": "https://www.openstreetmap.org/way/520307298"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 519932779,
+          "source_url": "https://www.openstreetmap.org/way/519932779"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 796660391,
+          "source_url": "https://www.openstreetmap.org/way/796660391"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 796660391,
+          "source_url": "https://www.openstreetmap.org/way/796660391"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 796660391,
+          "source_url": "https://www.openstreetmap.org/way/796660391"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        }
+      ],
+      "maneuvers": [
+        {
+          "anchor": "gate_sb",
+          "instruction": "정문에서 우회전, 동일로 남행",
+          "vertex_index": 3,
+          "distance_from_start_m": 116.3,
+          "source_time_window_seconds": [
+            50,
+            80
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "junggye_sb",
+          "instruction": "중계역 사거리 앞 유턴",
+          "vertex_index": 27,
+          "distance_from_start_m": 1558.8,
+          "source_time_window_seconds": [
+            200,
+            230
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "onsu_right_slip",
+          "instruction": "온수골사거리 우회전 연결로로 노원로 진입",
+          "vertex_index": 66,
+          "distance_from_start_m": 3399.5,
+          "source_time_window_seconds": [
+            405,
+            425
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "sanggye_school",
+          "instruction": "상계초교입구 쪽 유턴",
+          "vertex_index": 93,
+          "distance_from_start_m": 4223.7,
+          "source_time_window_seconds": [
+            480,
+            515
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "onsu_sb",
+          "instruction": "온수골사거리 좌회전, 동일로 남행",
+          "vertex_index": 123,
+          "distance_from_start_m": 5120.4,
+          "source_time_window_seconds": [
+            570,
+            600
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "gate_sb",
+          "instruction": "시험장 정문 우회전",
+          "vertex_index": 130,
+          "distance_from_start_m": 5485.1,
+          "source_time_window_seconds": [
+            620,
+            650
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "campus_access",
+          "instruction": "캠퍼스 진입로 복귀; 실제 종료 베이는 미측정",
+          "vertex_index": 133,
+          "distance_from_start_m": 5601.4,
+          "source_time_window_seconds": [
+            650,
+            690
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        }
+      ],
+      "length_m": 5601.4,
+      "start_finish_kind": "OSM campus access anchor; actual numbered canopy bay / exam start and finish position unresolved",
+      "distinct_order_verified": true,
+      "lane_trajectory_verified": false,
+      "current_2026_road_conditions_verified": false
+    },
+    {
+      "id": "D",
+      "name": "도봉 도로주행 D — 공식2022 안내 경로 기반",
+      "coordinates_wgs84": [
+        [
+          127.0582677,
+          37.6576315
+        ],
+        [
+          127.0593592,
+          37.6578916
+        ],
+        [
+          127.0593752,
+          37.6578955
+        ],
+        [
+          127.0595135,
+          37.6579633
+        ],
+        [
+          127.0596508,
+          37.6574625
+        ],
+        [
+          127.0600481,
+          37.6560839
+        ],
+        [
+          127.0601183,
+          37.6558292
+        ],
+        [
+          127.0601868,
+          37.6556116
+        ],
+        [
+          127.0603561,
+          37.6550012
+        ],
+        [
+          127.060417,
+          37.6547243
+        ],
+        [
+          127.060483,
+          37.6545218
+        ],
+        [
+          127.0605421,
+          37.6542926
+        ],
+        [
+          127.060606,
+          37.6540854
+        ],
+        [
+          127.0606896,
+          37.6537839
+        ],
+        [
+          127.0607742,
+          37.65349
+        ],
+        [
+          127.061244,
+          37.651616
+        ],
+        [
+          127.061288,
+          37.6514003
+        ],
+        [
+          127.0614282,
+          37.6514315
+        ],
+        [
+          127.0613851,
+          37.6516395
+        ],
+        [
+          127.0608801,
+          37.6535204
+        ],
+        [
+          127.0608091,
+          37.6538046
+        ],
+        [
+          127.0607214,
+          37.6541114
+        ],
+        [
+          127.0606658,
+          37.6543195
+        ],
+        [
+          127.0605974,
+          37.6545402
+        ],
+        [
+          127.0605504,
+          37.6547543
+        ],
+        [
+          127.0604894,
+          37.6550313
+        ],
+        [
+          127.0603523,
+          37.655642
+        ],
+        [
+          127.0602562,
+          37.6558603
+        ],
+        [
+          127.0601934,
+          37.6561038
+        ],
+        [
+          127.0597938,
+          37.6575221
+        ],
+        [
+          127.0596596,
+          37.6579912
+        ],
+        [
+          127.059607,
+          37.6581754
+        ],
+        [
+          127.0595177,
+          37.6585081
+        ],
+        [
+          127.0593668,
+          37.6590701
+        ],
+        [
+          127.0592334,
+          37.6595493
+        ],
+        [
+          127.0589332,
+          37.6606422
+        ],
+        [
+          127.0589492,
+          37.6608525
+        ],
+        [
+          127.0589921,
+          37.6609204
+        ],
+        [
+          127.0590127,
+          37.6609434
+        ],
+        [
+          127.0590551,
+          37.6609767
+        ],
+        [
+          127.0591087,
+          37.6610086
+        ],
+        [
+          127.0591758,
+          37.6610478
+        ],
+        [
+          127.0592576,
+          37.6610701
+        ],
+        [
+          127.0594552,
+          37.6610988
+        ],
+        [
+          127.0598924,
+          37.6610628
+        ],
+        [
+          127.0614602,
+          37.6609119
+        ],
+        [
+          127.0616831,
+          37.6608866
+        ],
+        [
+          127.061889,
+          37.660855
+        ],
+        [
+          127.06221,
+          37.66079
+        ],
+        [
+          127.06241,
+          37.66074
+        ],
+        [
+          127.06267,
+          37.66065
+        ],
+        [
+          127.06288,
+          37.66058
+        ],
+        [
+          127.0631893,
+          37.6604324
+        ],
+        [
+          127.06332,
+          37.66037
+        ],
+        [
+          127.06367,
+          37.66016
+        ],
+        [
+          127.06373,
+          37.6601
+        ],
+        [
+          127.0637492,
+          37.660083
+        ],
+        [
+          127.0640121,
+          37.6598505
+        ],
+        [
+          127.06425,
+          37.65964
+        ],
+        [
+          127.0642593,
+          37.6596299
+        ],
+        [
+          127.0646537,
+          37.6592002
+        ],
+        [
+          127.06492,
+          37.65891
+        ],
+        [
+          127.0646537,
+          37.6592002
+        ],
+        [
+          127.0642593,
+          37.6596299
+        ],
+        [
+          127.06425,
+          37.65964
+        ],
+        [
+          127.0640121,
+          37.6598505
+        ],
+        [
+          127.0637492,
+          37.660083
+        ],
+        [
+          127.06373,
+          37.6601
+        ],
+        [
+          127.06367,
+          37.66016
+        ],
+        [
+          127.06332,
+          37.66037
+        ],
+        [
+          127.0631893,
+          37.6604324
+        ],
+        [
+          127.06288,
+          37.66058
+        ],
+        [
+          127.06267,
+          37.66065
+        ],
+        [
+          127.06241,
+          37.66074
+        ],
+        [
+          127.06221,
+          37.66079
+        ],
+        [
+          127.061889,
+          37.660855
+        ],
+        [
+          127.0616831,
+          37.6608866
+        ],
+        [
+          127.0614602,
+          37.6609119
+        ],
+        [
+          127.0598924,
+          37.6610628
+        ],
+        [
+          127.0594552,
+          37.6610988
+        ],
+        [
+          127.0589996,
+          37.6611364
+        ],
+        [
+          127.0588042,
+          37.6611524
+        ],
+        [
+          127.058732,
+          37.6614241
+        ],
+        [
+          127.0586159,
+          37.6618327
+        ],
+        [
+          127.0579325,
+          37.6644063
+        ],
+        [
+          127.0579104,
+          37.6645381
+        ],
+        [
+          127.0578686,
+          37.664676
+        ],
+        [
+          127.0572196,
+          37.6671744
+        ],
+        [
+          127.0571785,
+          37.6673326
+        ],
+        [
+          127.0571256,
+          37.6675203
+        ],
+        [
+          127.0563812,
+          37.6703206
+        ],
+        [
+          127.056333,
+          37.670487
+        ],
+        [
+          127.0562193,
+          37.6704755
+        ],
+        [
+          127.0562654,
+          37.6702958
+        ],
+        [
+          127.056983,
+          37.6674997
+        ],
+        [
+          127.0570332,
+          37.6673085
+        ],
+        [
+          127.057074,
+          37.6671516
+        ],
+        [
+          127.0577253,
+          37.6646504
+        ],
+        [
+          127.0577562,
+          37.6645118
+        ],
+        [
+          127.0577842,
+          37.6643784
+        ],
+        [
+          127.0584695,
+          37.6618203
+        ],
+        [
+          127.0585768,
+          37.6614074
+        ],
+        [
+          127.0586378,
+          37.661166
+        ],
+        [
+          127.0586925,
+          37.660964
+        ],
+        [
+          127.0587903,
+          37.6605826
+        ],
+        [
+          127.0590905,
+          37.6594896
+        ],
+        [
+          127.0592239,
+          37.6590105
+        ],
+        [
+          127.0593536,
+          37.6585242
+        ],
+        [
+          127.0594568,
+          37.6581548
+        ],
+        [
+          127.0595135,
+          37.6579633
+        ],
+        [
+          127.0593752,
+          37.6578955
+        ],
+        [
+          127.0593592,
+          37.6578916
+        ],
+        [
+          127.0582677,
+          37.6576315
+        ]
+      ],
+      "game_xz": [
+        [
+          25.587,
+          -188.084
+        ],
+        [
+          121.782,
+          -217.038
+        ],
+        [
+          123.192,
+          -217.473
+        ],
+        [
+          135.38,
+          -225.02
+        ],
+        [
+          147.48,
+          -169.271
+        ],
+        [
+          182.495,
+          -15.806
+        ],
+        [
+          188.681,
+          12.547
+        ],
+        [
+          194.718,
+          36.77
+        ],
+        [
+          209.639,
+          104.719
+        ],
+        [
+          215.006,
+          135.544
+        ],
+        [
+          220.822,
+          158.086
+        ],
+        [
+          226.031,
+          183.6
+        ],
+        [
+          231.662,
+          206.666
+        ],
+        [
+          239.03,
+          240.229
+        ],
+        [
+          246.486,
+          272.945
+        ],
+        [
+          287.89,
+          481.558
+        ],
+        [
+          291.767,
+          505.57
+        ],
+        [
+          304.123,
+          502.097
+        ],
+        [
+          300.325,
+          478.942
+        ],
+        [
+          255.819,
+          269.561
+        ],
+        [
+          249.562,
+          237.924
+        ],
+        [
+          241.833,
+          203.772
+        ],
+        [
+          236.933,
+          180.606
+        ],
+        [
+          230.904,
+          156.038
+        ],
+        [
+          226.762,
+          132.204
+        ],
+        [
+          221.386,
+          101.369
+        ],
+        [
+          209.304,
+          33.386
+        ],
+        [
+          200.834,
+          9.085
+        ],
+        [
+          195.3,
+          -18.021
+        ],
+        [
+          160.083,
+          -175.906
+        ],
+        [
+          148.256,
+          -228.126
+        ],
+        [
+          143.62,
+          -248.631
+        ],
+        [
+          135.75,
+          -285.667
+        ],
+        [
+          122.451,
+          -348.228
+        ],
+        [
+          110.695,
+          -401.573
+        ],
+        [
+          84.238,
+          -523.234
+        ],
+        [
+          85.648,
+          -546.644
+        ],
+        [
+          89.429,
+          -554.203
+        ],
+        [
+          91.244,
+          -556.763
+        ],
+        [
+          94.981,
+          -560.47
+        ],
+        [
+          99.705,
+          -564.021
+        ],
+        [
+          105.618,
+          -568.385
+        ],
+        [
+          112.828,
+          -570.867
+        ],
+        [
+          130.242,
+          -574.062
+        ],
+        [
+          168.773,
+          -570.055
+        ],
+        [
+          306.943,
+          -553.257
+        ],
+        [
+          326.588,
+          -550.44
+        ],
+        [
+          344.734,
+          -546.923
+        ],
+        [
+          373.023,
+          -539.687
+        ],
+        [
+          390.649,
+          -534.121
+        ],
+        [
+          413.563,
+          -524.102
+        ],
+        [
+          432.071,
+          -516.31
+        ],
+        [
+          459.329,
+          -499.879
+        ],
+        [
+          470.848,
+          -492.933
+        ],
+        [
+          501.694,
+          -469.556
+        ],
+        [
+          506.981,
+          -462.876
+        ],
+        [
+          508.673,
+          -460.984
+        ],
+        [
+          531.843,
+          -435.102
+        ],
+        [
+          552.809,
+          -411.669
+        ],
+        [
+          553.629,
+          -410.545
+        ],
+        [
+          588.387,
+          -362.711
+        ],
+        [
+          611.856,
+          -330.406
+        ],
+        [
+          588.387,
+          -362.711
+        ],
+        [
+          553.629,
+          -410.545
+        ],
+        [
+          552.809,
+          -411.669
+        ],
+        [
+          531.843,
+          -435.102
+        ],
+        [
+          508.673,
+          -460.984
+        ],
+        [
+          506.981,
+          -462.876
+        ],
+        [
+          501.694,
+          -469.556
+        ],
+        [
+          470.848,
+          -492.933
+        ],
+        [
+          459.329,
+          -499.879
+        ],
+        [
+          432.071,
+          -516.31
+        ],
+        [
+          413.563,
+          -524.102
+        ],
+        [
+          390.649,
+          -534.121
+        ],
+        [
+          373.023,
+          -539.687
+        ],
+        [
+          344.734,
+          -546.923
+        ],
+        [
+          326.588,
+          -550.44
+        ],
+        [
+          306.943,
+          -553.257
+        ],
+        [
+          168.773,
+          -570.055
+        ],
+        [
+          130.242,
+          -574.062
+        ],
+        [
+          90.09,
+          -578.248
+        ],
+        [
+          72.869,
+          -580.029
+        ],
+        [
+          66.506,
+          -610.275
+        ],
+        [
+          56.274,
+          -655.76
+        ],
+        [
+          -3.954,
+          -942.251
+        ],
+        [
+          -5.902,
+          -956.923
+        ],
+        [
+          -9.585,
+          -972.274
+        ],
+        [
+          -66.782,
+          -1250.395
+        ],
+        [
+          -70.404,
+          -1268.006
+        ],
+        [
+          -75.066,
+          -1288.9
+        ],
+        [
+          -140.67,
+          -1600.628
+        ],
+        [
+          -144.918,
+          -1619.152
+        ],
+        [
+          -154.939,
+          -1617.872
+        ],
+        [
+          -150.876,
+          -1597.868
+        ],
+        [
+          -87.634,
+          -1286.607
+        ],
+        [
+          -83.209,
+          -1265.323
+        ],
+        [
+          -79.614,
+          -1247.857
+        ],
+        [
+          -22.215,
+          -969.425
+        ],
+        [
+          -19.491,
+          -953.996
+        ],
+        [
+          -17.024,
+          -939.146
+        ],
+        [
+          43.372,
+          -654.379
+        ],
+        [
+          52.828,
+          -608.415
+        ],
+        [
+          58.204,
+          -581.543
+        ],
+        [
+          63.025,
+          -559.056
+        ],
+        [
+          71.644,
+          -516.599
+        ],
+        [
+          98.101,
+          -394.927
+        ],
+        [
+          109.858,
+          -341.594
+        ],
+        [
+          121.288,
+          -287.459
+        ],
+        [
+          130.383,
+          -246.338
+        ],
+        [
+          135.38,
+          -225.02
+        ],
+        [
+          123.192,
+          -217.473
+        ],
+        [
+          121.782,
+          -217.038
+        ],
+        [
+          25.587,
+          -188.084
+        ]
+      ],
+      "osm_node_ids": [
+        8459790625,
+        6641406389,
+        5072308072,
+        3839480726,
+        5208863472,
+        13566334142,
+        5965557118,
+        3835707014,
+        13566334141,
+        5965553946,
+        10598556476,
+        2111825356,
+        5178974621,
+        5965553951,
+        1837571112,
+        7569368426,
+        2111825353,
+        13566334128,
+        13566334138,
+        13566334137,
+        13566334136,
+        13566334140,
+        13566334139,
+        13566334146,
+        13566334143,
+        13566334144,
+        13821643825,
+        13566334149,
+        3839409062,
+        13566334150,
+        13566334151,
+        13566334152,
+        13566334147,
+        13566334153,
+        13566334154,
+        13566334148,
+        6641403209,
+        6641403210,
+        6641403211,
+        6641403212,
+        6641403213,
+        6641403214,
+        6641403215,
+        6641403216,
+        3988407858,
+        436831787,
+        436852432,
+        436831784,
+        436831781,
+        436831776,
+        436831774,
+        436831772,
+        8555606240,
+        436831768,
+        436831766,
+        436831762,
+        3839409061,
+        11640424351,
+        436831761,
+        11640424345,
+        3839415403,
+        436831758,
+        3839415403,
+        11640424345,
+        436831761,
+        11640424351,
+        3839409061,
+        436831762,
+        436831766,
+        436831768,
+        8555606240,
+        436831772,
+        436831774,
+        436831776,
+        436831781,
+        436831784,
+        436852432,
+        436831787,
+        3988407858,
+        6641403216,
+        5178974627,
+        13566334156,
+        13566334159,
+        13566334160,
+        13566334161,
+        13566334162,
+        9410070135,
+        13566405248,
+        13566334184,
+        13566334185,
+        13566334186,
+        13566334187,
+        2111825358,
+        7558511480,
+        7558511508,
+        13566334182,
+        13566405247,
+        9410070134,
+        13566334158,
+        6468489289,
+        8499201871,
+        5097717943,
+        436844708,
+        5178974626,
+        6641403208,
+        3839421324,
+        5208863473,
+        3839415409,
+        6603754559,
+        3839480726,
+        5072308072,
+        6641406389,
+        8459790625
+      ],
+      "segments": [
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631747997,
+          "source_url": "https://www.openstreetmap.org/way/631747997"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631747997,
+          "source_url": "https://www.openstreetmap.org/way/631747997"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033841,
+          "source_url": "https://www.openstreetmap.org/way/520033841"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033841,
+          "source_url": "https://www.openstreetmap.org/way/520033841"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631748004,
+          "source_url": "https://www.openstreetmap.org/way/631748004"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 631748004,
+          "source_url": "https://www.openstreetmap.org/way/631748004"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 470096416,
+          "source_url": "https://www.openstreetmap.org/way/470096416"
+        },
+        {
+          "kind": "UNMEASURED_U_TURN_CONNECTOR",
+          "osm_way": null,
+          "warning": "Straight chord joining actual opposite-carriageway intersection anchors. Not a drivable U-turn arc. Consumer must make an explicitly illustrative maneuver path; no surveyed radius provided."
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779809,
+          "source_url": "https://www.openstreetmap.org/way/1478779809"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779811,
+          "source_url": "https://www.openstreetmap.org/way/1478779811"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779811,
+          "source_url": "https://www.openstreetmap.org/way/1478779811"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779810,
+          "source_url": "https://www.openstreetmap.org/way/1478779810"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779810,
+          "source_url": "https://www.openstreetmap.org/way/1478779810"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779812,
+          "source_url": "https://www.openstreetmap.org/way/1478779812"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753554,
+          "source_url": "https://www.openstreetmap.org/way/706753554"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 706753555,
+          "source_url": "https://www.openstreetmap.org/way/706753555"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 796660391,
+          "source_url": "https://www.openstreetmap.org/way/796660391"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 796660391,
+          "source_url": "https://www.openstreetmap.org/way/796660391"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779817,
+          "source_url": "https://www.openstreetmap.org/way/1478779817"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779817,
+          "source_url": "https://www.openstreetmap.org/way/1478779817"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779817,
+          "source_url": "https://www.openstreetmap.org/way/1478779817"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779817,
+          "source_url": "https://www.openstreetmap.org/way/1478779817"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779817,
+          "source_url": "https://www.openstreetmap.org/way/1478779817"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779823,
+          "source_url": "https://www.openstreetmap.org/way/1478779823"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779823,
+          "source_url": "https://www.openstreetmap.org/way/1478779823"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779824,
+          "source_url": "https://www.openstreetmap.org/way/1478779824"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779824,
+          "source_url": "https://www.openstreetmap.org/way/1478779824"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779824,
+          "source_url": "https://www.openstreetmap.org/way/1478779824"
+        },
+        {
+          "kind": "UNMEASURED_U_TURN_CONNECTOR",
+          "osm_way": null,
+          "warning": "Straight chord joining actual opposite-carriageway intersection anchors. Not a drivable U-turn arc. Consumer must make an explicitly illustrative maneuver path; no surveyed radius provided."
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520023265,
+          "source_url": "https://www.openstreetmap.org/way/520023265"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520023265,
+          "source_url": "https://www.openstreetmap.org/way/520023265"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520023265,
+          "source_url": "https://www.openstreetmap.org/way/520023265"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779813,
+          "source_url": "https://www.openstreetmap.org/way/1478779813"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 1478779813,
+          "source_url": "https://www.openstreetmap.org/way/1478779813"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520018144,
+          "source_url": "https://www.openstreetmap.org/way/520018144"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520018144,
+          "source_url": "https://www.openstreetmap.org/way/520018144"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520018144,
+          "source_url": "https://www.openstreetmap.org/way/520018144"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520018144,
+          "source_url": "https://www.openstreetmap.org/way/520018144"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520018144,
+          "source_url": "https://www.openstreetmap.org/way/520018144"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 520033847,
+          "source_url": "https://www.openstreetmap.org/way/520033847"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        },
+        {
+          "kind": "OSM_road_centerline",
+          "osm_way": 911080724,
+          "source_url": "https://www.openstreetmap.org/way/911080724"
+        }
+      ],
+      "maneuvers": [
+        {
+          "anchor": "gate_sb",
+          "instruction": "정문에서 우회전, 동일로 남행",
+          "vertex_index": 3,
+          "distance_from_start_m": 116.3,
+          "source_time_window_seconds": [
+            50,
+            80
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "complex26_sb",
+          "instruction": "상계2-6단지 사거리 앞 유턴",
+          "vertex_index": 16,
+          "distance_from_start_m": 863.6,
+          "source_time_window_seconds": [
+            140,
+            165
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "onsu_right_slip",
+          "instruction": "온수골사거리 우회전 연결로로 노원로 진입",
+          "vertex_index": 43,
+          "distance_from_start_m": 2004.3,
+          "source_time_window_seconds": [
+            250,
+            270
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "ongok_approach",
+          "instruction": "온곡중 쪽 삼거리 접근에서 유턴",
+          "vertex_index": 61,
+          "distance_from_start_m": 2575.0,
+          "source_time_window_seconds": [
+            315,
+            345
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "onsu_nb",
+          "instruction": "온수골사거리 우회전, 동일로 북행",
+          "vertex_index": 81,
+          "distance_from_start_m": 3203.3,
+          "source_time_window_seconds": [
+            390,
+            420
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "complex1416_nb",
+          "instruction": "상계14-16단지 사거리 앞 유턴",
+          "vertex_index": 91,
+          "distance_from_start_m": 4265.1,
+          "source_time_window_seconds": [
+            500,
+            540
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "gate_sb",
+          "instruction": "시험장 정문 우회전",
+          "vertex_index": 109,
+          "distance_from_start_m": 5698.0,
+          "source_time_window_seconds": [
+            675,
+            710
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        },
+        {
+          "anchor": "campus_access",
+          "instruction": "캠퍼스 진입로 복귀; 실제 종료 베이는 미측정",
+          "vertex_index": 112,
+          "distance_from_start_m": 5814.3,
+          "source_time_window_seconds": [
+            710,
+            755
+          ],
+          "position_grade": "intersection/access anchor, not measured lane turn/stop location",
+          "exact_turn_arc_known": false
+        }
+      ],
+      "length_m": 5814.3,
+      "start_finish_kind": "OSM campus access anchor; actual numbered canopy bay / exam start and finish position unresolved",
+      "distinct_order_verified": true,
+      "lane_trajectory_verified": false,
+      "current_2026_road_conditions_verified": false
+    }
+  ]
+}
