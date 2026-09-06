@@ -1,0 +1,5054 @@
+{
+  "type": "FeatureCollection",
+  "name": "Dobong surroundings source geometry",
+  "metadata": {
+    "retrieved": "2026-09-06",
+    "origin": {
+      "lat": 37.6564809,
+      "lon": 127.0585674
+    },
+    "license": "OpenStreetMap contributors, ODbL 1.0. https://www.openstreetmap.org/copyright",
+    "notes": "Selected nearby buildings + explicitly retained north main hall and adjacent course buildings + named context + primary roads + overhead rail + power. Original source geometry retained, including way portions beyond site. Clipping/floor extrusion is consumer responsibility. Coordinate positions are source data, not an official as-built survey."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "way/172470015",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 172470015,
+        "source_url": "https://www.openstreetmap.org/way/172470015",
+        "tags": {
+          "building": "yes",
+          "building:levels": "11",
+          "height": "68",
+          "level": "12",
+          "name": "롯데백화점",
+          "name:en": "LOTTE department store",
+          "name:ja": "ロッテ百貨店",
+          "operator": "lotte",
+          "shop": "mall",
+          "start_date": "1992",
+          "wheelchair": "yes"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          228.02,
+          -159.97
+        ],
+        "local_east_north_m": [
+          [
+            184.2,
+            -139.29
+          ],
+          [
+            190.7,
+            -137.82
+          ],
+          [
+            196.15,
+            -136.12
+          ],
+          [
+            194.54,
+            -128.41
+          ],
+          [
+            247.27,
+            -113.86
+          ],
+          [
+            249.28,
+            -120.41
+          ],
+          [
+            253.2,
+            -134.51
+          ],
+          [
+            254.67,
+            -134.51
+          ],
+          [
+            271.83,
+            -194.32
+          ],
+          [
+            269.63,
+            -195.67
+          ],
+          [
+            266.07,
+            -195.79
+          ],
+          [
+            238.37,
+            -204
+          ],
+          [
+            237.51,
+            -202.9
+          ],
+          [
+            231.88,
+            -204.37
+          ],
+          [
+            231.76,
+            -206.09
+          ],
+          [
+            224.4,
+            -205.84
+          ],
+          [
+            219.13,
+            -204.86
+          ],
+          [
+            214.72,
+            -203.27
+          ],
+          [
+            210.55,
+            -201.07
+          ],
+          [
+            205.65,
+            -197.15
+          ],
+          [
+            201.48,
+            -192.85
+          ],
+          [
+            200.01,
+            -190.16
+          ],
+          [
+            197.92,
+            -181.08
+          ],
+          [
+            196.57,
+            -180.84
+          ],
+          [
+            186.4,
+            -143.82
+          ],
+          [
+            185.18,
+            -143.7
+          ],
+          [
+            184.2,
+            -139.29
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0606575,
+              37.6552296
+            ],
+            [
+              127.0607312,
+              37.6552428
+            ],
+            [
+              127.0607931,
+              37.6552581
+            ],
+            [
+              127.0607748,
+              37.6553274
+            ],
+            [
+              127.0613731,
+              37.6554581
+            ],
+            [
+              127.0613959,
+              37.6553992
+            ],
+            [
+              127.0614404,
+              37.6552726
+            ],
+            [
+              127.0614571,
+              37.6552726
+            ],
+            [
+              127.0616518,
+              37.6547353
+            ],
+            [
+              127.0616268,
+              37.6547232
+            ],
+            [
+              127.0615865,
+              37.6547221
+            ],
+            [
+              127.0612722,
+              37.6546483
+            ],
+            [
+              127.0612624,
+              37.6546582
+            ],
+            [
+              127.0611985,
+              37.654645
+            ],
+            [
+              127.0611971,
+              37.6546296
+            ],
+            [
+              127.0611136,
+              37.6546318
+            ],
+            [
+              127.0610538,
+              37.6546406
+            ],
+            [
+              127.0610038,
+              37.6546549
+            ],
+            [
+              127.0609565,
+              37.6546747
+            ],
+            [
+              127.0609009,
+              37.6547099
+            ],
+            [
+              127.0608536,
+              37.6547485
+            ],
+            [
+              127.0608369,
+              37.6547727
+            ],
+            [
+              127.0608132,
+              37.6548542
+            ],
+            [
+              127.0607979,
+              37.6548564
+            ],
+            [
+              127.0606825,
+              37.6551889
+            ],
+            [
+              127.0606686,
+              37.65519
+            ],
+            [
+              127.0606575,
+              37.6552296
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/380676074",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 380676074,
+        "source_url": "https://www.openstreetmap.org/way/380676074",
+        "tags": {
+          "amenity": "driving_school",
+          "building": "yes"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -54.29,
+          154.24
+        ],
+        "local_east_north_m": [
+          [
+            -90.45,
+            157.46
+          ],
+          [
+            -26.79,
+            176.45
+          ],
+          [
+            -18.13,
+            147.42
+          ],
+          [
+            -69.78,
+            132.02
+          ],
+          [
+            -71.86,
+            139
+          ],
+          [
+            -83.87,
+            135.42
+          ],
+          [
+            -90.45,
+            157.46
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0575411,
+              37.6578954
+            ],
+            [
+              127.0582634,
+              37.658066
+            ],
+            [
+              127.0583617,
+              37.6578052
+            ],
+            [
+              127.0577756,
+              37.6576669
+            ],
+            [
+              127.057752,
+              37.6577296
+            ],
+            [
+              127.0576157,
+              37.6576974
+            ],
+            [
+              127.0575411,
+              37.6578954
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/381674543",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 381674543,
+        "source_url": "https://www.openstreetmap.org/way/381674543",
+        "tags": {
+          "addr:city": "서울특별시",
+          "addr:district": "노원구",
+          "addr:housenumber": "437",
+          "addr:postcode": "01689",
+          "addr:street": "노해로",
+          "addr:subdistrict": "상계동",
+          "amenity": "townhall",
+          "building": "yes",
+          "name": "노원구청",
+          "name:en": "Nowon-gu office",
+          "name:ko": "노원구청"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -188.57,
+          -231.43
+        ],
+        "local_east_north_m": [
+          [
+            -222.81,
+            -218.55
+          ],
+          [
+            -171.14,
+            -204.16
+          ],
+          [
+            -166.56,
+            -220.61
+          ],
+          [
+            -160.93,
+            -219.04
+          ],
+          [
+            -154.32,
+            -242.72
+          ],
+          [
+            -211.62,
+            -258.7
+          ],
+          [
+            -222.81,
+            -218.55
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0560392,
+              37.6545176
+            ],
+            [
+              127.0566255,
+              37.6546469
+            ],
+            [
+              127.0566775,
+              37.6544991
+            ],
+            [
+              127.0567414,
+              37.6545132
+            ],
+            [
+              127.0568163,
+              37.6543005
+            ],
+            [
+              127.0561662,
+              37.654157
+            ],
+            [
+              127.0560392,
+              37.6545176
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/471659165",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 471659165,
+        "source_url": "https://www.openstreetmap.org/way/471659165",
+        "tags": {
+          "building": "apartments",
+          "building:flats": "149",
+          "building:levels": "15",
+          "name": "3",
+          "start_date": "1988"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -132.57,
+          329.15
+        ],
+        "local_east_north_m": [
+          [
+            -184.79,
+            321.67
+          ],
+          [
+            -180.43,
+            309.51
+          ],
+          [
+            -80.35,
+            338.19
+          ],
+          [
+            -83.47,
+            348.79
+          ],
+          [
+            -184.79,
+            321.67
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0564706,
+              37.6593705
+            ],
+            [
+              127.0565201,
+              37.6592613
+            ],
+            [
+              127.0576557,
+              37.6595189
+            ],
+            [
+              127.0576203,
+              37.6596141
+            ],
+            [
+              127.0564706,
+              37.6593705
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/471659166",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 471659166,
+        "source_url": "https://www.openstreetmap.org/way/471659166",
+        "tags": {
+          "building": "apartments",
+          "building:flats": "120",
+          "building:levels": "15",
+          "name": "1",
+          "start_date": "1988"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -31.05,
+          346.6
+        ],
+        "local_east_north_m": [
+          [
+            -73.14,
+            341.92
+          ],
+          [
+            -68.46,
+            330.39
+          ],
+          [
+            11.04,
+            352.53
+          ],
+          [
+            8.55,
+            362.81
+          ],
+          [
+            -73.14,
+            341.92
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0577375,
+              37.6595524
+            ],
+            [
+              127.0577906,
+              37.6594488
+            ],
+            [
+              127.0586927,
+              37.6596477
+            ],
+            [
+              127.0586644,
+              37.6597401
+            ],
+            [
+              127.0577375,
+              37.6595524
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/471659906",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 471659906,
+        "source_url": "https://www.openstreetmap.org/way/471659906",
+        "tags": {
+          "building": "school",
+          "name": "체육관"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -49.05,
+          215.26
+        ],
+        "local_east_north_m": [
+          [
+            -70.2,
+            232.4
+          ],
+          [
+            -65,
+            233.35
+          ],
+          [
+            -66.42,
+            237.6
+          ],
+          [
+            -48.45,
+            243.28
+          ],
+          [
+            -46.8,
+            238.55
+          ],
+          [
+            -40.89,
+            239.73
+          ],
+          [
+            -27.89,
+            196.23
+          ],
+          [
+            -56.49,
+            187.25
+          ],
+          [
+            -70.2,
+            232.4
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0577708,
+              37.6585686
+            ],
+            [
+              127.0578298,
+              37.6585771
+            ],
+            [
+              127.0578137,
+              37.6586153
+            ],
+            [
+              127.0580176,
+              37.6586663
+            ],
+            [
+              127.0580364,
+              37.6586238
+            ],
+            [
+              127.0581034,
+              37.6586344
+            ],
+            [
+              127.0582509,
+              37.6582437
+            ],
+            [
+              127.0579264,
+              37.658163
+            ],
+            [
+              127.0577708,
+              37.6585686
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/472046102",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 472046102,
+        "source_url": "https://www.openstreetmap.org/way/472046102",
+        "tags": {
+          "building": "apartments",
+          "building:flats": "210",
+          "building:levels": "15",
+          "name": "714동",
+          "start_date": "1988"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          105.12,
+          403.95
+        ],
+        "local_east_north_m": [
+          [
+            60.2,
+            412.68
+          ],
+          [
+            63.01,
+            403.95
+          ],
+          [
+            89.21,
+            409.24
+          ],
+          [
+            111.67,
+            392.71
+          ],
+          [
+            114.16,
+            394.91
+          ],
+          [
+            123.83,
+            390.84
+          ],
+          [
+            124.15,
+            387.1
+          ],
+          [
+            150.03,
+            393.02
+          ],
+          [
+            146.3,
+            402.7
+          ],
+          [
+            124.46,
+            397.4
+          ],
+          [
+            119.78,
+            400.2
+          ],
+          [
+            121.03,
+            402.7
+          ],
+          [
+            91.08,
+            420.79
+          ],
+          [
+            87.96,
+            418.29
+          ],
+          [
+            60.2,
+            412.68
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0592505,
+              37.6601881
+            ],
+            [
+              127.0592824,
+              37.6601096
+            ],
+            [
+              127.0595797,
+              37.6601572
+            ],
+            [
+              127.0598345,
+              37.6600087
+            ],
+            [
+              127.0598628,
+              37.6600284
+            ],
+            [
+              127.0599725,
+              37.6599919
+            ],
+            [
+              127.0599761,
+              37.6599583
+            ],
+            [
+              127.0602698,
+              37.6600115
+            ],
+            [
+              127.0602274,
+              37.6600984
+            ],
+            [
+              127.0599796,
+              37.6600508
+            ],
+            [
+              127.0599265,
+              37.660076
+            ],
+            [
+              127.0599407,
+              37.6600984
+            ],
+            [
+              127.0596009,
+              37.6602609
+            ],
+            [
+              127.0595655,
+              37.6602385
+            ],
+            [
+              127.0592505,
+              37.6601881
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/472046103",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 472046103,
+        "source_url": "https://www.openstreetmap.org/way/472046103",
+        "tags": {
+          "building": "apartments",
+          "building:flats": "90",
+          "building:levels": "15",
+          "name": "713동",
+          "start_date": "1988"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          181.69,
+          367.92
+        ],
+        "local_east_north_m": [
+          [
+            166.57,
+            374.31
+          ],
+          [
+            169.99,
+            374.94
+          ],
+          [
+            180.91,
+            369.01
+          ],
+          [
+            184.97,
+            369.01
+          ],
+          [
+            189.96,
+            379
+          ],
+          [
+            193.7,
+            379.31
+          ],
+          [
+            196.82,
+            374.94
+          ],
+          [
+            196.82,
+            369.01
+          ],
+          [
+            191.52,
+            358.72
+          ],
+          [
+            178.73,
+            356.53
+          ],
+          [
+            166.57,
+            363.71
+          ],
+          [
+            166.57,
+            374.31
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0604574,
+              37.6598434
+            ],
+            [
+              127.0604963,
+              37.659849
+            ],
+            [
+              127.0606202,
+              37.6597958
+            ],
+            [
+              127.0606662,
+              37.6597958
+            ],
+            [
+              127.0607228,
+              37.6598855
+            ],
+            [
+              127.0607653,
+              37.6598883
+            ],
+            [
+              127.0608007,
+              37.659849
+            ],
+            [
+              127.0608007,
+              37.6597958
+            ],
+            [
+              127.0607405,
+              37.6597033
+            ],
+            [
+              127.0605954,
+              37.6596837
+            ],
+            [
+              127.0604574,
+              37.6597482
+            ],
+            [
+              127.0604574,
+              37.6598434
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/472046113",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 472046113,
+        "source_url": "https://www.openstreetmap.org/way/472046113",
+        "tags": {
+          "building": "apartments",
+          "building:flats": "210",
+          "building:levels": "15",
+          "name": "712동",
+          "start_date": "1988"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          117.05,
+          345.62
+        ],
+        "local_east_north_m": [
+          [
+            72.71,
+            353.85
+          ],
+          [
+            75.59,
+            344.79
+          ],
+          [
+            100.9,
+            349.94
+          ],
+          [
+            125.18,
+            332.86
+          ],
+          [
+            126.63,
+            334.72
+          ],
+          [
+            135.06,
+            333.07
+          ],
+          [
+            135.26,
+            330.4
+          ],
+          [
+            161.4,
+            336.15
+          ],
+          [
+            158.93,
+            345
+          ],
+          [
+            136.09,
+            341.09
+          ],
+          [
+            108.72,
+            359.19
+          ],
+          [
+            100.9,
+            360.84
+          ],
+          [
+            72.71,
+            353.85
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0593924,
+              37.6596596
+            ],
+            [
+              127.0594251,
+              37.6595782
+            ],
+            [
+              127.0597123,
+              37.6596245
+            ],
+            [
+              127.0599878,
+              37.659471
+            ],
+            [
+              127.0600042,
+              37.6594877
+            ],
+            [
+              127.0600999,
+              37.6594729
+            ],
+            [
+              127.0601022,
+              37.6594489
+            ],
+            [
+              127.0603988,
+              37.6595006
+            ],
+            [
+              127.0603708,
+              37.6595801
+            ],
+            [
+              127.0601116,
+              37.659545
+            ],
+            [
+              127.059801,
+              37.6597076
+            ],
+            [
+              127.0597123,
+              37.6597224
+            ],
+            [
+              127.0593924,
+              37.6596596
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/472046116",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 472046116,
+        "source_url": "https://www.openstreetmap.org/way/472046116",
+        "tags": {
+          "building": "apartments",
+          "building:flats": "210",
+          "building:levels": "15",
+          "name": "711동",
+          "start_date": "1988"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          133.16,
+          285.96
+        ],
+        "local_east_north_m": [
+          [
+            88.63,
+            295.33
+          ],
+          [
+            90.8,
+            284.2
+          ],
+          [
+            115.24,
+            289.91
+          ],
+          [
+            140.49,
+            273.35
+          ],
+          [
+            141.85,
+            275.78
+          ],
+          [
+            151.08,
+            274.16
+          ],
+          [
+            151.63,
+            270.35
+          ],
+          [
+            177.69,
+            276.33
+          ],
+          [
+            175.52,
+            285.29
+          ],
+          [
+            155.7,
+            281.22
+          ],
+          [
+            148.09,
+            284.2
+          ],
+          [
+            123.38,
+            299.95
+          ],
+          [
+            114.97,
+            301.58
+          ],
+          [
+            88.63,
+            295.33
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0595731,
+              37.6591339
+            ],
+            [
+              127.0595977,
+              37.6590339
+            ],
+            [
+              127.059875,
+              37.6590852
+            ],
+            [
+              127.0601615,
+              37.6589364
+            ],
+            [
+              127.0601769,
+              37.6589583
+            ],
+            [
+              127.0602817,
+              37.6589437
+            ],
+            [
+              127.0602879,
+              37.6589095
+            ],
+            [
+              127.0605836,
+              37.6589632
+            ],
+            [
+              127.060559,
+              37.6590437
+            ],
+            [
+              127.0603341,
+              37.6590071
+            ],
+            [
+              127.0602478,
+              37.6590339
+            ],
+            [
+              127.0599674,
+              37.6591754
+            ],
+            [
+              127.0598719,
+              37.65919
+            ],
+            [
+              127.0595731,
+              37.6591339
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/551184149",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 551184149,
+        "source_url": "https://www.openstreetmap.org/way/551184149",
+        "tags": {
+          "building": "yes",
+          "name": "호텔 럭스",
+          "name:en": "Hotel LUXE",
+          "name:ko": "호텔 럭스",
+          "tourism": "hotel"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -90.04,
+          -222.94
+        ],
+        "local_east_north_m": [
+          [
+            -97.43,
+            -232.75
+          ],
+          [
+            -78.75,
+            -227.78
+          ],
+          [
+            -82.53,
+            -213.13
+          ],
+          [
+            -101.32,
+            -217.74
+          ],
+          [
+            -97.43,
+            -232.75
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0574619,
+              37.6543901
+            ],
+            [
+              127.0576738,
+              37.6544347
+            ],
+            [
+              127.0576309,
+              37.6545663
+            ],
+            [
+              127.0574177,
+              37.6545249
+            ],
+            [
+              127.0574619,
+              37.6543901
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/604149507",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 604149507,
+        "source_url": "https://www.openstreetmap.org/way/604149507",
+        "tags": {
+          "building": "yes",
+          "building:levels": "11",
+          "height": "36",
+          "start_date": "1988",
+          "tourism": "hotel"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          72.95,
+          -138.2
+        ],
+        "local_east_north_m": [
+          [
+            52.61,
+            -153.33
+          ],
+          [
+            84.06,
+            -145.77
+          ],
+          [
+            83.58,
+            -143.17
+          ],
+          [
+            98.48,
+            -139.63
+          ],
+          [
+            93.74,
+            -123.07
+          ],
+          [
+            76.96,
+            -127.57
+          ],
+          [
+            75.31,
+            -130.4
+          ],
+          [
+            49.07,
+            -137.74
+          ],
+          [
+            47.41,
+            -139.86
+          ],
+          [
+            52.61,
+            -153.33
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0591644,
+              37.6551035
+            ],
+            [
+              127.0595212,
+              37.6551714
+            ],
+            [
+              127.0595158,
+              37.6551948
+            ],
+            [
+              127.0596848,
+              37.6552266
+            ],
+            [
+              127.0596311,
+              37.6553753
+            ],
+            [
+              127.0594407,
+              37.6553349
+            ],
+            [
+              127.0594219,
+              37.6553095
+            ],
+            [
+              127.0591242,
+              37.6552436
+            ],
+            [
+              127.0591054,
+              37.6552245
+            ],
+            [
+              127.0591644,
+              37.6551035
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/604149509",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 604149509,
+        "source_url": "https://www.openstreetmap.org/way/604149509",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          64.32,
+          -176.97
+        ],
+        "local_east_north_m": [
+          [
+            52.85,
+            -173.42
+          ],
+          [
+            72.95,
+            -168.69
+          ],
+          [
+            75.78,
+            -179.81
+          ],
+          [
+            56.17,
+            -185.25
+          ],
+          [
+            52.85,
+            -173.42
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0591671,
+              37.654923
+            ],
+            [
+              127.0593951,
+              37.6549655
+            ],
+            [
+              127.0594273,
+              37.6548656
+            ],
+            [
+              127.0592047,
+              37.6548168
+            ],
+            [
+              127.0591671,
+              37.654923
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761934",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761934,
+        "source_url": "https://www.openstreetmap.org/way/605761934",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -70.96,
+          -216.71
+        ],
+        "local_east_north_m": [
+          [
+            -79.71,
+            -214.23
+          ],
+          [
+            -65.51,
+            -209.5
+          ],
+          [
+            -62.21,
+            -220
+          ],
+          [
+            -76.62,
+            -223.91
+          ],
+          [
+            -79.71,
+            -214.23
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.057663,
+              37.6545564
+            ],
+            [
+              127.0578241,
+              37.6545989
+            ],
+            [
+              127.0578615,
+              37.6545046
+            ],
+            [
+              127.057698,
+              37.6544695
+            ],
+            [
+              127.057663,
+              37.6545564
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761935",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761935,
+        "source_url": "https://www.openstreetmap.org/way/605761935",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -57.48,
+          -208.48
+        ],
+        "local_east_north_m": [
+          [
+            -64.89,
+            -204.57
+          ],
+          [
+            -53.57,
+            -201.28
+          ],
+          [
+            -50.08,
+            -212.6
+          ],
+          [
+            -61.18,
+            -215.68
+          ],
+          [
+            -64.89,
+            -204.57
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0578311,
+              37.6546432
+            ],
+            [
+              127.0579596,
+              37.6546728
+            ],
+            [
+              127.0579992,
+              37.6545711
+            ],
+            [
+              127.0578732,
+              37.6545434
+            ],
+            [
+              127.0578311,
+              37.6546432
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761936",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761936,
+        "source_url": "https://www.openstreetmap.org/way/605761936",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -43.04,
+          -207.38
+        ],
+        "local_east_north_m": [
+          [
+            -51.31,
+            -202.71
+          ],
+          [
+            -39.37,
+            -199.63
+          ],
+          [
+            -38.55,
+            -201.69
+          ],
+          [
+            -36.95,
+            -202.81
+          ],
+          [
+            -34.77,
+            -211.08
+          ],
+          [
+            -47.71,
+            -215.14
+          ],
+          [
+            -51.31,
+            -202.71
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0579852,
+              37.6546599
+            ],
+            [
+              127.0581207,
+              37.6546876
+            ],
+            [
+              127.05813,
+              37.6546691
+            ],
+            [
+              127.0581481,
+              37.654659
+            ],
+            [
+              127.0581729,
+              37.6545847
+            ],
+            [
+              127.058026,
+              37.6545483
+            ],
+            [
+              127.0579852,
+              37.6546599
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761940",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761940,
+        "source_url": "https://www.openstreetmap.org/way/605761940",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -13.48,
+          -223.01
+        ],
+        "local_east_north_m": [
+          [
+            -22.91,
+            -219.19
+          ],
+          [
+            -19.49,
+            -231.98
+          ],
+          [
+            -4.05,
+            -227.46
+          ],
+          [
+            -7.79,
+            -214.05
+          ],
+          [
+            -22.91,
+            -219.19
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0583074,
+              37.6545119
+            ],
+            [
+              127.0583463,
+              37.654397
+            ],
+            [
+              127.0585215,
+              37.6544376
+            ],
+            [
+              127.058479,
+              37.6545581
+            ],
+            [
+              127.0583074,
+              37.6545119
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761941",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761941,
+        "source_url": "https://www.openstreetmap.org/way/605761941",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          1.49,
+          -221.92
+        ],
+        "local_east_north_m": [
+          [
+            -6.07,
+            -213.73
+          ],
+          [
+            -0.93,
+            -233.54
+          ],
+          [
+            2.66,
+            -232.6
+          ],
+          [
+            1.1,
+            -226.84
+          ],
+          [
+            9.06,
+            -225.43
+          ],
+          [
+            4.69,
+            -210.3
+          ],
+          [
+            -6.07,
+            -213.73
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0584985,
+              37.6545609
+            ],
+            [
+              127.0585569,
+              37.654383
+            ],
+            [
+              127.0585976,
+              37.6543914
+            ],
+            [
+              127.0585799,
+              37.6544432
+            ],
+            [
+              127.0586702,
+              37.6544558
+            ],
+            [
+              127.0586206,
+              37.6545917
+            ],
+            [
+              127.0584985,
+              37.6545609
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761942",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761942,
+        "source_url": "https://www.openstreetmap.org/way/605761942",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          14.52,
+          -216.15
+        ],
+        "local_east_north_m": [
+          [
+            6.41,
+            -210.3
+          ],
+          [
+            10.46,
+            -225.12
+          ],
+          [
+            22.62,
+            -221.53
+          ],
+          [
+            18.1,
+            -207.18
+          ],
+          [
+            6.41,
+            -210.3
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0586401,
+              37.6545917
+            ],
+            [
+              127.0586861,
+              37.6544586
+            ],
+            [
+              127.0588241,
+              37.6544909
+            ],
+            [
+              127.0587728,
+              37.6546198
+            ],
+            [
+              127.0586401,
+              37.6545917
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761944",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761944,
+        "source_url": "https://www.openstreetmap.org/way/605761944",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -21.51,
+          -202.2
+        ],
+        "local_east_north_m": [
+          [
+            -30.55,
+            -198.14
+          ],
+          [
+            -27.43,
+            -210.46
+          ],
+          [
+            -12.47,
+            -205.46
+          ],
+          [
+            -15.74,
+            -193.93
+          ],
+          [
+            -30.55,
+            -198.14
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0582207,
+              37.654701
+            ],
+            [
+              127.0582561,
+              37.6545903
+            ],
+            [
+              127.0584259,
+              37.6546352
+            ],
+            [
+              127.0583888,
+              37.6547388
+            ],
+            [
+              127.0582207,
+              37.654701
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761945",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761945,
+        "source_url": "https://www.openstreetmap.org/way/605761945",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -6.23,
+          -196.42
+        ],
+        "local_east_north_m": [
+          [
+            -13.87,
+            -196.58
+          ],
+          [
+            -11.38,
+            -204.68
+          ],
+          [
+            1.41,
+            -201.41
+          ],
+          [
+            -2.33,
+            -188.15
+          ],
+          [
+            -13.09,
+            -191.27
+          ],
+          [
+            -11.69,
+            -195.96
+          ],
+          [
+            -13.87,
+            -196.58
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05841,
+              37.654715
+            ],
+            [
+              127.0584383,
+              37.6546422
+            ],
+            [
+              127.0585834,
+              37.6546716
+            ],
+            [
+              127.058541,
+              37.6547907
+            ],
+            [
+              127.0584189,
+              37.6547627
+            ],
+            [
+              127.0584348,
+              37.6547206
+            ],
+            [
+              127.05841,
+              37.654715
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761946",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761946,
+        "source_url": "https://www.openstreetmap.org/way/605761946",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          6.72,
+          -191.35
+        ],
+        "local_east_north_m": [
+          [
+            -1.39,
+            -187.53
+          ],
+          [
+            1.57,
+            -197.67
+          ],
+          [
+            14.82,
+            -194.09
+          ],
+          [
+            13.26,
+            -188.46
+          ],
+          [
+            10.93,
+            -188.31
+          ],
+          [
+            10.62,
+            -185.5
+          ],
+          [
+            7.5,
+            -185.04
+          ],
+          [
+            -1.39,
+            -187.53
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0585516,
+              37.6547963
+            ],
+            [
+              127.0585852,
+              37.6547052
+            ],
+            [
+              127.0587356,
+              37.6547374
+            ],
+            [
+              127.0587179,
+              37.6547879
+            ],
+            [
+              127.0586914,
+              37.6547893
+            ],
+            [
+              127.0586879,
+              37.6548145
+            ],
+            [
+              127.0586525,
+              37.6548187
+            ],
+            [
+              127.0585516,
+              37.6547963
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761947",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761947,
+        "source_url": "https://www.openstreetmap.org/way/605761947",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          20.6,
+          -190.65
+        ],
+        "local_east_north_m": [
+          [
+            13.89,
+            -186.75
+          ],
+          [
+            24.49,
+            -184.1
+          ],
+          [
+            27.3,
+            -194.09
+          ],
+          [
+            16.54,
+            -197.2
+          ],
+          [
+            13.89,
+            -186.75
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.058725,
+              37.6548033
+            ],
+            [
+              127.0588453,
+              37.6548271
+            ],
+            [
+              127.0588772,
+              37.6547374
+            ],
+            [
+              127.0587551,
+              37.6547094
+            ],
+            [
+              127.058725,
+              37.6548033
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761948",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761948,
+        "source_url": "https://www.openstreetmap.org/way/605761948",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          33.15,
+          -182.54
+        ],
+        "local_east_north_m": [
+          [
+            24.34,
+            -180.67
+          ],
+          [
+            26.84,
+            -188.62
+          ],
+          [
+            41.96,
+            -184.88
+          ],
+          [
+            39.62,
+            -176.45
+          ],
+          [
+            24.34,
+            -180.67
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0588436,
+              37.6548579
+            ],
+            [
+              127.0588719,
+              37.6547865
+            ],
+            [
+              127.0590435,
+              37.6548201
+            ],
+            [
+              127.059017,
+              37.6548958
+            ],
+            [
+              127.0588436,
+              37.6548579
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761951",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761951,
+        "source_url": "https://www.openstreetmap.org/way/605761951",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -9.66,
+          -164.06
+        ],
+        "local_east_north_m": [
+          [
+            -12.94,
+            -173.96
+          ],
+          [
+            -1.23,
+            -170.22
+          ],
+          [
+            -6.07,
+            -154.16
+          ],
+          [
+            -18.08,
+            -158.36
+          ],
+          [
+            -12.94,
+            -173.96
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0584206,
+              37.6549182
+            ],
+            [
+              127.0585534,
+              37.6549518
+            ],
+            [
+              127.0584985,
+              37.6550961
+            ],
+            [
+              127.0583622,
+              37.6550583
+            ],
+            [
+              127.0584206,
+              37.6549182
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761952",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761952,
+        "source_url": "https://www.openstreetmap.org/way/605761952",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -24.94,
+          -169.05
+        ],
+        "local_east_north_m": [
+          [
+            -28.69,
+            -180.2
+          ],
+          [
+            -15.74,
+            -176.45
+          ],
+          [
+            -20.42,
+            -157.9
+          ],
+          [
+            -34.14,
+            -161.79
+          ],
+          [
+            -28.69,
+            -180.2
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0582419,
+              37.6548621
+            ],
+            [
+              127.0583888,
+              37.6548958
+            ],
+            [
+              127.0583357,
+              37.6550625
+            ],
+            [
+              127.05818,
+              37.6550275
+            ],
+            [
+              127.0582419,
+              37.6548621
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761953",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761953,
+        "source_url": "https://www.openstreetmap.org/way/605761953",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -97.85,
+          -190.73
+        ],
+        "local_east_north_m": [
+          [
+            -107.76,
+            -182.85
+          ],
+          [
+            -92.62,
+            -179.27
+          ],
+          [
+            -87.95,
+            -197.98
+          ],
+          [
+            -102.76,
+            -202.19
+          ],
+          [
+            -107.76,
+            -182.85
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0573447,
+              37.6548383
+            ],
+            [
+              127.0575164,
+              37.6548705
+            ],
+            [
+              127.0575695,
+              37.6547024
+            ],
+            [
+              127.0574014,
+              37.6546646
+            ],
+            [
+              127.0573447,
+              37.6548383
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761954",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761954,
+        "source_url": "https://www.openstreetmap.org/way/605761954",
+        "tags": {
+          "building": "commercial"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -72.99,
+          -183.99
+        ],
+        "local_east_north_m": [
+          [
+            -88.73,
+            -179.58
+          ],
+          [
+            -60.45,
+            -171.82
+          ],
+          [
+            -57.26,
+            -183.63
+          ],
+          [
+            -61.04,
+            -184.81
+          ],
+          [
+            -59.62,
+            -188.95
+          ],
+          [
+            -84.8,
+            -196.17
+          ],
+          [
+            -88.73,
+            -179.58
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0575606,
+              37.6548677
+            ],
+            [
+              127.0578815,
+              37.6549374
+            ],
+            [
+              127.0579177,
+              37.6548313
+            ],
+            [
+              127.0578748,
+              37.6548207
+            ],
+            [
+              127.0578909,
+              37.6547835
+            ],
+            [
+              127.0576052,
+              37.6547187
+            ],
+            [
+              127.0575606,
+              37.6548677
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/605761955",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 605761955,
+        "source_url": "https://www.openstreetmap.org/way/605761955",
+        "tags": {
+          "building": "commercial",
+          "building:levels": "10",
+          "height": "36",
+          "start_date": "2005"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -49.69,
+          -179.32
+        ],
+        "local_east_north_m": [
+          [
+            -57.26,
+            -171.47
+          ],
+          [
+            -47.09,
+            -168.5
+          ],
+          [
+            -42.13,
+            -187.42
+          ],
+          [
+            -52.17,
+            -190.13
+          ],
+          [
+            -57.26,
+            -171.47
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0579177,
+              37.6549406
+            ],
+            [
+              127.0580331,
+              37.6549672
+            ],
+            [
+              127.0580894,
+              37.6547973
+            ],
+            [
+              127.0579754,
+              37.6547729
+            ],
+            [
+              127.0579177,
+              37.6549406
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/631747997",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 631747997,
+        "source_url": "https://www.openstreetmap.org/way/631747997",
+        "tags": {
+          "highway": "primary",
+          "lanes": "6",
+          "maxspeed": "50",
+          "maxspeed:type": "sign",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          152.86,
+          -146.16
+        ],
+        "local_east_north_m": [
+          [
+            142.72,
+            -96.77
+          ],
+          [
+            157.64,
+            -164.72
+          ],
+          [
+            163.01,
+            -195.54
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0601868,
+            37.6556116
+          ],
+          [
+            127.0603561,
+            37.6550012
+          ],
+          [
+            127.060417,
+            37.6547243
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/887784323",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 887784323,
+        "source_url": "https://www.openstreetmap.org/way/887784323",
+        "tags": {
+          "building": "disused"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -106.9,
+          -118.15
+        ],
+        "local_east_north_m": [
+          [
+            -121.69,
+            -132.3
+          ],
+          [
+            -86.07,
+            -123.4
+          ],
+          [
+            -90.84,
+            -103.99
+          ],
+          [
+            -127.73,
+            -116.72
+          ],
+          [
+            -121.69,
+            -132.3
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0571866,
+              37.6552924
+            ],
+            [
+              127.0575908,
+              37.6553724
+            ],
+            [
+              127.0575367,
+              37.6555467
+            ],
+            [
+              127.0571181,
+              37.6554324
+            ],
+            [
+              127.0571866,
+              37.6552924
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/911080722",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 911080722,
+        "source_url": "https://www.openstreetmap.org/way/911080722",
+        "tags": {
+          "building": "yes"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -7.16,
+          -36.65
+        ],
+        "local_east_north_m": [
+          [
+            -12.41,
+            -21.8
+          ],
+          [
+            -7.59,
+            -20.79
+          ],
+          [
+            -1.17,
+            -51.55
+          ],
+          [
+            -5.74,
+            -52.51
+          ],
+          [
+            -8.42,
+            -39.66
+          ],
+          [
+            -11.59,
+            -40.32
+          ],
+          [
+            -13.15,
+            -38.14
+          ],
+          [
+            -12.84,
+            -36.11
+          ],
+          [
+            -9.57,
+            -35.42
+          ],
+          [
+            -12.41,
+            -21.8
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0584266,
+              37.6562851
+            ],
+            [
+              127.0584813,
+              37.6562941
+            ],
+            [
+              127.0585541,
+              37.6560178
+            ],
+            [
+              127.0585023,
+              37.6560092
+            ],
+            [
+              127.0584719,
+              37.6561246
+            ],
+            [
+              127.0584359,
+              37.6561187
+            ],
+            [
+              127.0584182,
+              37.6561383
+            ],
+            [
+              127.0584217,
+              37.6561565
+            ],
+            [
+              127.0584588,
+              37.6561627
+            ],
+            [
+              127.0584266,
+              37.6562851
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/911080726",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 911080726,
+        "source_url": "https://www.openstreetmap.org/way/911080726",
+        "tags": {
+          "building": "yes"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -32.3,
+          31.41
+        ],
+        "local_east_north_m": [
+          [
+            -39.34,
+            36.17
+          ],
+          [
+            -25.85,
+            39.35
+          ],
+          [
+            -25.25,
+            36.81
+          ],
+          [
+            -30.15,
+            35.66
+          ],
+          [
+            -27.75,
+            25.49
+          ],
+          [
+            -36.34,
+            23.47
+          ],
+          [
+            -39.34,
+            36.17
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.058121,
+              37.6568058
+            ],
+            [
+              127.0582741,
+              37.6568344
+            ],
+            [
+              127.0582809,
+              37.6568116
+            ],
+            [
+              127.0582253,
+              37.6568012
+            ],
+            [
+              127.0582525,
+              37.6567099
+            ],
+            [
+              127.058155,
+              37.6566917
+            ],
+            [
+              127.058121,
+              37.6568058
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1014534178",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1014534178,
+        "source_url": "https://www.openstreetmap.org/way/1014534178",
+        "tags": {
+          "bicycle": "no",
+          "expressway": "yes",
+          "foot": "no",
+          "highway": "trunk",
+          "horse": "no",
+          "lanes": "2",
+          "motor_vehicle": "yes",
+          "motorroad": "yes",
+          "name": "동부간선로",
+          "name:en": "Dongbuganseon-ro",
+          "name:ko": "동부간선로",
+          "name:zh": "东部干线路",
+          "oneway": "yes",
+          "ref": "61",
+          "surface": "asphalt",
+          "width": "12"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -358.56,
+          -82.92
+        ],
+        "local_east_north_m": [
+          [
+            -299.98,
+            -340.62
+          ],
+          [
+            -306.87,
+            -211.34
+          ],
+          [
+            -311,
+            -166.78
+          ],
+          [
+            -316.43,
+            -124.34
+          ],
+          [
+            -318.3,
+            -83
+          ],
+          [
+            -323.17,
+            -51.9
+          ],
+          [
+            -336.39,
+            -14.44
+          ],
+          [
+            -358.25,
+            37.47
+          ],
+          [
+            -375.23,
+            79.85
+          ],
+          [
+            -396.6,
+            124.93
+          ],
+          [
+            -417.14,
+            174.78
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0551636,
+            37.6534211
+          ],
+          [
+            127.0550854,
+            37.6545824
+          ],
+          [
+            127.0550385,
+            37.6549827
+          ],
+          [
+            127.0549769,
+            37.6553639
+          ],
+          [
+            127.0549557,
+            37.6557353
+          ],
+          [
+            127.0549004,
+            37.6560147
+          ],
+          [
+            127.0547504,
+            37.6563512
+          ],
+          [
+            127.0545024,
+            37.6568175
+          ],
+          [
+            127.0543097,
+            37.6571982
+          ],
+          [
+            127.0540672,
+            37.6576032
+          ],
+          [
+            127.0538342,
+            37.658051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1072173600",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1072173600,
+        "source_url": "https://www.openstreetmap.org/way/1072173600",
+        "tags": {
+          "highway": "secondary",
+          "maxspeed": "50",
+          "maxspeed:type": "sign",
+          "name": "상계로",
+          "name:en": "Sanggye-ro",
+          "name:ko": "상계로",
+          "name:ko-Latn": "Sanggyero",
+          "oneway": "no",
+          "surface": "asphalt"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -8.95,
+          -141.75
+        ],
+        "local_east_north_m": [
+          [
+            -48.71,
+            -153.51
+          ],
+          [
+            30.8,
+            -130
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0580147,
+            37.6551019
+          ],
+          [
+            127.0589169,
+            37.6553131
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1072173601",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1072173601,
+        "source_url": "https://www.openstreetmap.org/way/1072173601",
+        "tags": {
+          "highway": "secondary",
+          "name": "상계로",
+          "name:en": "Sanggye-ro",
+          "name:ko": "상계로",
+          "name:ko-Latn": "Sanggyero",
+          "oneway": "no",
+          "surface": "asphalt"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          94.05,
+          -111.69
+        ],
+        "local_east_north_m": [
+          [
+            30.8,
+            -130
+          ],
+          [
+            130.93,
+            -100.42
+          ],
+          [
+            142.72,
+            -96.77
+          ],
+          [
+            157.3,
+            -93.39
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0589169,
+            37.6553131
+          ],
+          [
+            127.060053,
+            37.6555788
+          ],
+          [
+            127.0601868,
+            37.6556116
+          ],
+          [
+            127.0603523,
+            37.655642
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1226934249",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1226934249,
+        "source_url": "https://www.openstreetmap.org/way/1226934249",
+        "tags": {
+          "building": "yes"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          2.15,
+          -69.14
+        ],
+        "local_east_north_m": [
+          [
+            -4.19,
+            -65.36
+          ],
+          [
+            -0.59,
+            -75.01
+          ],
+          [
+            8.49,
+            -73.3
+          ],
+          [
+            5.46,
+            -63.27
+          ],
+          [
+            -4.19,
+            -65.36
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0585199,
+              37.6558938
+            ],
+            [
+              127.0585607,
+              37.6558071
+            ],
+            [
+              127.0586637,
+              37.6558224
+            ],
+            [
+              127.0586294,
+              37.6559125
+            ],
+            [
+              127.0585199,
+              37.6558938
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1226934250",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1226934250,
+        "source_url": "https://www.openstreetmap.org/way/1226934250",
+        "tags": {
+          "building": "apartments",
+          "building:flats": "204",
+          "building:levels": "20",
+          "height": "79",
+          "start_date": "2023"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          16.28,
+          -157.48
+        ],
+        "local_east_north_m": [
+          [
+            -1.81,
+            -154.69
+          ],
+          [
+            30.46,
+            -146.04
+          ],
+          [
+            34.37,
+            -161.18
+          ],
+          [
+            2.68,
+            -168.92
+          ],
+          [
+            -1.81,
+            -154.69
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0585469,
+              37.6550913
+            ],
+            [
+              127.058913,
+              37.655169
+            ],
+            [
+              127.0589574,
+              37.655033
+            ],
+            [
+              127.0585978,
+              37.6549635
+            ],
+            [
+              127.0585469,
+              37.6550913
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779810",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1478779810,
+        "source_url": "https://www.openstreetmap.org/way/1478779810",
+        "tags": {
+          "highway": "primary",
+          "lanes": "6",
+          "maxspeed": "50",
+          "maxspeed:type": "sign",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          166.03,
+          -142.8
+        ],
+        "local_east_north_m": [
+          [
+            174.76,
+            -192.2
+          ],
+          [
+            169.39,
+            -161.37
+          ],
+          [
+            157.3,
+            -93.39
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0605504,
+            37.6547543
+          ],
+          [
+            127.0604894,
+            37.6550313
+          ],
+          [
+            127.0603523,
+            37.655642
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1478779812",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1478779812,
+        "source_url": "https://www.openstreetmap.org/way/1478779812",
+        "tags": {
+          "bicycle": "designated",
+          "cycleway": "track",
+          "highway": "primary",
+          "lanes": "8",
+          "name": "동일로",
+          "name:en": "Dongil-ro",
+          "name:ja": "ドンイルロ",
+          "name:ko": "동일로",
+          "name:ko-Latn": "Dongil-ro",
+          "name:zh": "东一路",
+          "oneway": "yes",
+          "ref": "3",
+          "surface": "asphalt",
+          "wikidata": "Q12593533",
+          "wikipedia": "ko:동일로"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          89.09,
+          213.32
+        ],
+        "local_east_north_m": [
+          [
+            157.3,
+            -93.39
+          ],
+          [
+            148.83,
+            -69.08
+          ],
+          [
+            143.3,
+            -41.98
+          ],
+          [
+            108.08,
+            115.91
+          ],
+          [
+            96.26,
+            168.13
+          ],
+          [
+            91.62,
+            188.63
+          ],
+          [
+            83.75,
+            225.67
+          ],
+          [
+            70.45,
+            288.23
+          ],
+          [
+            58.69,
+            341.57
+          ],
+          [
+            32.24,
+            463.23
+          ],
+          [
+            23.77,
+            502.18
+          ],
+          [
+            20.87,
+            520.03
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0603523,
+            37.655642
+          ],
+          [
+            127.0602562,
+            37.6558603
+          ],
+          [
+            127.0601934,
+            37.6561038
+          ],
+          [
+            127.0597938,
+            37.6575221
+          ],
+          [
+            127.0596596,
+            37.6579912
+          ],
+          [
+            127.059607,
+            37.6581754
+          ],
+          [
+            127.0595177,
+            37.6585081
+          ],
+          [
+            127.0593668,
+            37.6590701
+          ],
+          [
+            127.0592334,
+            37.6595493
+          ],
+          [
+            127.0589332,
+            37.6606422
+          ],
+          [
+            127.0588371,
+            37.6609921
+          ],
+          [
+            127.0588042,
+            37.6611524
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1180013352",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1180013352,
+        "source_url": "https://www.openstreetmap.org/way/1180013352",
+        "tags": {
+          "building": "yes",
+          "building:levels": "49",
+          "height": "168",
+          "start_date": "2023"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -765.18,
+          -215.43
+        ],
+        "local_east_north_m": [
+          [
+            -810.31,
+            -238.31
+          ],
+          [
+            -796.39,
+            -287.15
+          ],
+          [
+            -720.06,
+            -265.2
+          ],
+          [
+            -726.09,
+            -246.76
+          ],
+          [
+            -759.81,
+            -143.7
+          ],
+          [
+            -781.59,
+            -150.97
+          ],
+          [
+            -775.65,
+            -168.52
+          ],
+          [
+            -796.12,
+            -175.03
+          ],
+          [
+            -788.48,
+            -201.41
+          ],
+          [
+            -771.44,
+            -197.5
+          ],
+          [
+            -762.64,
+            -224.46
+          ],
+          [
+            -810.31,
+            -238.31
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.049373,
+              37.6543401
+            ],
+            [
+              127.0495309,
+              37.6539014
+            ],
+            [
+              127.050397,
+              37.6540986
+            ],
+            [
+              127.0503286,
+              37.6542642
+            ],
+            [
+              127.049946,
+              37.65519
+            ],
+            [
+              127.0496988,
+              37.6551247
+            ],
+            [
+              127.0497662,
+              37.6549671
+            ],
+            [
+              127.049534,
+              37.6549086
+            ],
+            [
+              127.0496207,
+              37.6546716
+            ],
+            [
+              127.049814,
+              37.6547067
+            ],
+            [
+              127.0499139,
+              37.6544645
+            ],
+            [
+              127.049373,
+              37.6543401
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/10086517456",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 10086517456,
+        "source_url": "https://www.openstreetmap.org/node/10086517456",
+        "tags": {
+          "power": "tower"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -281.58,
+          -257.48
+        ],
+        "local_east_north_m": [
+          -281.5762502344992,
+          -257.4819822049417
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0553724,
+          37.6541679
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/10086517458",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 10086517458,
+        "source_url": "https://www.openstreetmap.org/node/10086517458",
+        "tags": {
+          "power": "tower"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -287.38,
+          -149.9
+        ],
+        "local_east_north_m": [
+          -287.3752227746679,
+          -149.902826301997
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0553066,
+          37.6551343
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/10086517459",
+      "properties": {
+        "osm_type": "node",
+        "osm_id": 10086517459,
+        "source_url": "https://www.openstreetmap.org/node/10086517459",
+        "tags": {
+          "power": "tower"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -375.37,
+          121.09
+        ],
+        "local_east_north_m": [
+          -375.373309114919,
+          121.09334208498167
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.0543081,
+          37.6575687
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/380628633",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 380628633,
+        "source_url": "https://www.openstreetmap.org/way/380628633",
+        "tags": {
+          "bridge": "yes",
+          "electrified": "contact_line",
+          "end_date": "2026-08-21",
+          "frequency": "0",
+          "gauge": "1435",
+          "layer": "2",
+          "name": "창동출고선",
+          "name:ko": "창동출고선",
+          "oneway": "yes",
+          "operator": "서울교통공사",
+          "operator:en": "Seoul Metro",
+          "operator:ko": "서울교통공사",
+          "operator:type": "public",
+          "operator:wikidata": "Q28699048",
+          "railway": "disused",
+          "service": "yard",
+          "tracks": "1",
+          "voltage": "1500"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -487.98,
+          -209.25
+        ],
+        "local_east_north_m": [
+          [
+            -258.7,
+            -131.28
+          ],
+          [
+            -263.04,
+            -141.6
+          ],
+          [
+            -266.03,
+            -147.84
+          ],
+          [
+            -270.92,
+            -156.8
+          ],
+          [
+            -276.89,
+            -164.14
+          ],
+          [
+            -279.51,
+            -167.24
+          ],
+          [
+            -282.86,
+            -171.2
+          ],
+          [
+            -289.65,
+            -178.8
+          ],
+          [
+            -297.53,
+            -185.59
+          ],
+          [
+            -307.03,
+            -193.19
+          ],
+          [
+            -318.17,
+            -199.71
+          ],
+          [
+            -327.12,
+            -202.97
+          ],
+          [
+            -348.3,
+            -210.57
+          ],
+          [
+            -370.57,
+            -214.16
+          ],
+          [
+            -410.59,
+            -217.9
+          ],
+          [
+            -459.26,
+            -221.2
+          ],
+          [
+            -503.1,
+            -226.64
+          ],
+          [
+            -566.69,
+            -242.48
+          ],
+          [
+            -717.26,
+            -287.23
+          ]
+        ],
+        "temporal_warning": "OSM reports end_date/disused. Independent official verification not obtained; retain geometry but do not animate service based on this alone.",
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.055632,
+            37.6553016
+          ],
+          [
+            127.0555827,
+            37.6552089
+          ],
+          [
+            127.0555488,
+            37.6551528
+          ],
+          [
+            127.0554933,
+            37.6550723
+          ],
+          [
+            127.0554256,
+            37.6550064
+          ],
+          [
+            127.0553959,
+            37.6549786
+          ],
+          [
+            127.0553578,
+            37.654943
+          ],
+          [
+            127.0552808,
+            37.6548747
+          ],
+          [
+            127.0551914,
+            37.6548137
+          ],
+          [
+            127.0550836,
+            37.6547454
+          ],
+          [
+            127.0549572,
+            37.6546869
+          ],
+          [
+            127.0548556,
+            37.6546576
+          ],
+          [
+            127.0546153,
+            37.6545893
+          ],
+          [
+            127.0543626,
+            37.6545571
+          ],
+          [
+            127.0539085,
+            37.6545235
+          ],
+          [
+            127.0533563,
+            37.6544938
+          ],
+          [
+            127.0528588,
+            37.654445
+          ],
+          [
+            127.0521373,
+            37.6543027
+          ],
+          [
+            127.0504288,
+            37.6539007
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/380628634",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 380628634,
+        "source_url": "https://www.openstreetmap.org/way/380628634",
+        "tags": {
+          "electrified": "contact_line",
+          "end_date": "2026-08-21",
+          "frequency": "0",
+          "gauge": "1435",
+          "name": "창동출고선",
+          "name:ko": "창동출고선",
+          "operator": "서울교통공사",
+          "operator:en": "Seoul Metro",
+          "operator:ko": "서울교통공사",
+          "operator:type": "public",
+          "operator:wikidata": "Q28699048",
+          "railway": "disused",
+          "service": "yard",
+          "voltage": "1500"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -252.7,
+          -68
+        ],
+        "local_east_north_m": [
+          [
+            -254.73,
+            -4.72
+          ],
+          [
+            -248.59,
+            -36.4
+          ],
+          [
+            -246.69,
+            -55.78
+          ],
+          [
+            -246.69,
+            -78.48
+          ],
+          [
+            -247.17,
+            -90.29
+          ],
+          [
+            -249.53,
+            -104.47
+          ],
+          [
+            -251.09,
+            -108.97
+          ],
+          [
+            -253.79,
+            -116.77
+          ],
+          [
+            -258.7,
+            -131.28
+          ]
+        ],
+        "temporal_warning": "OSM reports end_date/disused. Independent official verification not obtained; retain geometry but do not animate service based on this alone.",
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.055677,
+            37.6564385
+          ],
+          [
+            127.0557467,
+            37.6561539
+          ],
+          [
+            127.0557682,
+            37.6559798
+          ],
+          [
+            127.0557682,
+            37.6557759
+          ],
+          [
+            127.0557628,
+            37.6556698
+          ],
+          [
+            127.055736,
+            37.6555424
+          ],
+          [
+            127.0557183,
+            37.655502
+          ],
+          [
+            127.0556877,
+            37.6554319
+          ],
+          [
+            127.055632,
+            37.6553016
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/380676716",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 380676716,
+        "source_url": "https://www.openstreetmap.org/way/380676716",
+        "tags": {
+          "bridge": "yes",
+          "electrified": "contact_line",
+          "end_date": "2026-08-21",
+          "frequency": "0",
+          "gauge": "1435",
+          "layer": "2",
+          "name": "노원입고선",
+          "name:ko": "노원입고선",
+          "oneway": "yes",
+          "operator": "서울교통공사",
+          "operator:en": "Seoul Metro",
+          "operator:ko": "서울교통공사",
+          "operator:type": "public",
+          "operator:wikidata": "Q28699048",
+          "railway": "disused",
+          "service": "yard",
+          "voltage": "1500"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          35.08,
+          -108.49
+        ],
+        "local_east_north_m": [
+          [
+            242.44,
+            -65.22
+          ],
+          [
+            191.87,
+            -74.05
+          ],
+          [
+            -76.26,
+            -150.47
+          ],
+          [
+            -105.47,
+            -151.75
+          ],
+          [
+            -120.41,
+            -150.66
+          ],
+          [
+            -141.86,
+            -145.77
+          ],
+          [
+            -145.58,
+            -144.48
+          ],
+          [
+            -155.17,
+            -141.16
+          ],
+          [
+            -172.28,
+            -133.15
+          ]
+        ],
+        "temporal_warning": "OSM reports end_date/disused. Independent official verification not obtained; retain geometry but do not animate service based on this alone.",
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0613183,
+            37.655895
+          ],
+          [
+            127.0607445,
+            37.6558157
+          ],
+          [
+            127.0577021,
+            37.6551292
+          ],
+          [
+            127.0573706,
+            37.6551177
+          ],
+          [
+            127.0572011,
+            37.6551275
+          ],
+          [
+            127.0569577,
+            37.6551714
+          ],
+          [
+            127.0569155,
+            37.655183
+          ],
+          [
+            127.0568067,
+            37.6552128
+          ],
+          [
+            127.0566126,
+            37.6552848
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/380677245",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 380677245,
+        "source_url": "https://www.openstreetmap.org/way/380677245",
+        "tags": {
+          "electrified": "contact_line",
+          "end_date": "2026-08-21",
+          "frequency": "0",
+          "gauge": "1435",
+          "name": "노원입고선",
+          "name:ko": "노원입고선",
+          "oneway": "yes",
+          "operator": "서울교통공사",
+          "operator:en": "Seoul Metro",
+          "operator:ko": "서울교통공사",
+          "operator:type": "public",
+          "operator:wikidata": "Q28699048",
+          "railway": "disused",
+          "service": "yard",
+          "voltage": "1500"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -207.64,
+          -74.9
+        ],
+        "local_east_north_m": [
+          [
+            -172.28,
+            -133.15
+          ],
+          [
+            -204.14,
+            -103.42
+          ],
+          [
+            -212.82,
+            -88.84
+          ],
+          [
+            -219.32,
+            -79.42
+          ],
+          [
+            -224.21,
+            -70.06
+          ],
+          [
+            -228.67,
+            -59.33
+          ],
+          [
+            -232.36,
+            -50.1
+          ],
+          [
+            -236.07,
+            -36.89
+          ],
+          [
+            -241.51,
+            -22.5
+          ],
+          [
+            -243.01,
+            -16.64
+          ]
+        ],
+        "temporal_warning": "OSM reports end_date/disused. Independent official verification not obtained; retain geometry but do not animate service based on this alone.",
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0566126,
+            37.6552848
+          ],
+          [
+            127.056251,
+            37.6555519
+          ],
+          [
+            127.0561526,
+            37.6556828
+          ],
+          [
+            127.0560788,
+            37.6557675
+          ],
+          [
+            127.0560233,
+            37.6558515
+          ],
+          [
+            127.0559727,
+            37.6559479
+          ],
+          [
+            127.0559309,
+            37.6560308
+          ],
+          [
+            127.0558887,
+            37.6561495
+          ],
+          [
+            127.055827,
+            37.6562788
+          ],
+          [
+            127.05581,
+            37.6563314
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/472066007",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 472066007,
+        "source_url": "https://www.openstreetmap.org/way/472066007",
+        "tags": {
+          "building": "yes",
+          "location": "indoor",
+          "name": "상계변전소",
+          "name:en": "Sanggye Substation",
+          "name:ko": "상계변전소",
+          "operator": "한국전력공사",
+          "operator:en": "Korea Electric Power Corporation",
+          "operator:ko": "한국전력공사",
+          "operator:short": "KEPCO",
+          "operator:wikidata": "Q486737",
+          "power": "substation",
+          "substation": "distribution",
+          "voltage": "154000"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -255.74,
+          -257.01
+        ],
+        "local_east_north_m": [
+          [
+            -272.38,
+            -234.97
+          ],
+          [
+            -267.28,
+            -254
+          ],
+          [
+            -259.11,
+            -284.43
+          ],
+          [
+            -239.09,
+            -279.06
+          ],
+          [
+            -252.37,
+            -229.6
+          ],
+          [
+            -272.38,
+            -234.97
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": "Height/levels only as tagged. No invented generic apartment-height replacement."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0554767,
+              37.6543701
+            ],
+            [
+              127.0555346,
+              37.6541992
+            ],
+            [
+              127.0556273,
+              37.6539258
+            ],
+            [
+              127.0558545,
+              37.6539741
+            ],
+            [
+              127.0557038,
+              37.6544184
+            ],
+            [
+              127.0554767,
+              37.6543701
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/640794394",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 640794394,
+        "source_url": "https://www.openstreetmap.org/way/640794394",
+        "tags": {
+          "bridge": "yes",
+          "colour": "#32A1C8",
+          "electrified": "contact_line",
+          "frequency": "0",
+          "gauge": "1435",
+          "layer": "3",
+          "name": "4호선",
+          "name:en": "Line 4",
+          "name:ja": "4号線",
+          "name:ko": "4호선",
+          "name:zh": "4號線",
+          "name:zh-Hans": "4号线",
+          "name:zh-Hant": "4號線",
+          "network": "수도권 전철",
+          "operator": "서울교통공사",
+          "operator:en": "Seoul Metro",
+          "operator:ko": "서울교통공사",
+          "operator:type": "public",
+          "operator:wikidata": "Q28699048",
+          "railway": "subway",
+          "railway:atc": "yes",
+          "railway:radio": "lte-r",
+          "tracks": "1",
+          "tunnel": "no",
+          "usage": "main",
+          "voltage": "1500",
+          "workrules": "KR:URA"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -165.33,
+          -162.82
+        ],
+        "local_east_north_m": [
+          [
+            524.56,
+            12.18
+          ],
+          [
+            426.71,
+            -15.77
+          ],
+          [
+            321.05,
+            -46.87
+          ],
+          [
+            270.29,
+            -60.98
+          ],
+          [
+            243.44,
+            -68.44
+          ],
+          [
+            156.15,
+            -93.32
+          ],
+          [
+            -49.8,
+            -151.72
+          ],
+          [
+            -204.2,
+            -195.55
+          ],
+          [
+            -252.3,
+            -208.67
+          ],
+          [
+            -284.56,
+            -215.65
+          ],
+          [
+            -328.66,
+            -220.85
+          ],
+          [
+            -462.45,
+            -230.78
+          ],
+          [
+            -502.63,
+            -236.1
+          ],
+          [
+            -564.32,
+            -250.75
+          ],
+          [
+            -855.23,
+            -337.81
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0645195,
+            37.6565903
+          ],
+          [
+            127.0634092,
+            37.6563392
+          ],
+          [
+            127.0622103,
+            37.6560599
+          ],
+          [
+            127.0616343,
+            37.6559331
+          ],
+          [
+            127.0613297,
+            37.6558661
+          ],
+          [
+            127.0603392,
+            37.6556426
+          ],
+          [
+            127.0580023,
+            37.655118
+          ],
+          [
+            127.0562504,
+            37.6547242
+          ],
+          [
+            127.0557046,
+            37.6546064
+          ],
+          [
+            127.0553385,
+            37.6545437
+          ],
+          [
+            127.0548382,
+            37.654497
+          ],
+          [
+            127.0533201,
+            37.6544078
+          ],
+          [
+            127.0528641,
+            37.65436
+          ],
+          [
+            127.0521641,
+            37.6542284
+          ],
+          [
+            127.0488633,
+            37.6534463
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1102290944",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1102290944,
+        "source_url": "https://www.openstreetmap.org/way/1102290944",
+        "tags": {
+          "cables": "6",
+          "circuits": "2",
+          "frequency": "60",
+          "power": "line",
+          "voltage": "154000"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -94.88,
+          -1737.01
+        ],
+        "local_east_north_m": [
+          [
+            14.61,
+            -3181.21
+          ],
+          [
+            27.71,
+            -3216.54
+          ],
+          [
+            77.28,
+            -3177.55
+          ],
+          [
+            114.68,
+            -3076.67
+          ],
+          [
+            69.67,
+            -2960.8
+          ],
+          [
+            44.81,
+            -2805.41
+          ],
+          [
+            42.51,
+            -2637.77
+          ],
+          [
+            51.21,
+            -2410.21
+          ],
+          [
+            13.68,
+            -1985.69
+          ],
+          [
+            -180.32,
+            -1682.48
+          ],
+          [
+            -132.79,
+            -1321.66
+          ],
+          [
+            -187.12,
+            -1058.92
+          ],
+          [
+            -258.17,
+            -815.42
+          ],
+          [
+            -304.44,
+            -582.1
+          ],
+          [
+            -281.58,
+            -257.48
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0587332,
+            37.6279036
+          ],
+          [
+            127.0588818,
+            37.6275862
+          ],
+          [
+            127.0594443,
+            37.6279365
+          ],
+          [
+            127.0598686,
+            37.6288427
+          ],
+          [
+            127.0593579,
+            37.6298836
+          ],
+          [
+            127.0590759,
+            37.6312795
+          ],
+          [
+            127.0590498,
+            37.6327854
+          ],
+          [
+            127.0591485,
+            37.6348296
+          ],
+          [
+            127.0587226,
+            37.6386431
+          ],
+          [
+            127.0565213,
+            37.6413669
+          ],
+          [
+            127.0570607,
+            37.6446082
+          ],
+          [
+            127.0564442,
+            37.6469685
+          ],
+          [
+            127.055638,
+            37.6491559
+          ],
+          [
+            127.055113,
+            37.6512518
+          ],
+          [
+            127.0553724,
+            37.6541679
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1102290945",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1102290945,
+        "source_url": "https://www.openstreetmap.org/way/1102290945",
+        "tags": {
+          "cables": "6",
+          "circuits": "2",
+          "frequency": "60",
+          "power": "line",
+          "voltage": "154000"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -274.43,
+          -255.74
+        ],
+        "local_east_north_m": [
+          [
+            -281.58,
+            -257.48
+          ],
+          [
+            -267.28,
+            -254
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0553724,
+            37.6541679
+          ],
+          [
+            127.0555346,
+            37.6541992
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1102290946",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1102290946,
+        "source_url": "https://www.openstreetmap.org/way/1102290946",
+        "tags": {
+          "cables": "6",
+          "circuits": "2",
+          "frequency": "60",
+          "power": "line",
+          "voltage": "154000"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -513.41,
+          629.61
+        ],
+        "local_east_north_m": [
+          [
+            -281.58,
+            -257.48
+          ],
+          [
+            -287.38,
+            -149.9
+          ],
+          [
+            -375.37,
+            121.09
+          ],
+          [
+            -500.4,
+            465.58
+          ],
+          [
+            -578.02,
+            830.09
+          ],
+          [
+            -624.84,
+            1006.52
+          ],
+          [
+            -737.3,
+            1334.32
+          ],
+          [
+            -745.25,
+            1516.71
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0553724,
+            37.6541679
+          ],
+          [
+            127.0553066,
+            37.6551343
+          ],
+          [
+            127.0543081,
+            37.6575687
+          ],
+          [
+            127.0528894,
+            37.6606633
+          ],
+          [
+            127.0520087,
+            37.6639377
+          ],
+          [
+            127.0514774,
+            37.6655226
+          ],
+          [
+            127.0502014,
+            37.6684673
+          ],
+          [
+            127.0501112,
+            37.6701057
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1221943827",
+      "properties": {
+        "osm_type": "way",
+        "osm_id": 1221943827,
+        "source_url": "https://www.openstreetmap.org/way/1221943827",
+        "tags": {
+          "bridge": "yes",
+          "colour": "#32A1C8",
+          "electrified": "contact_line",
+          "frequency": "0",
+          "gauge": "1435",
+          "layer": "3",
+          "name": "4호선",
+          "name:en": "Line 4",
+          "name:ja": "4号線",
+          "name:ko": "4호선",
+          "name:zh": "4號線",
+          "name:zh-Hans": "4号线",
+          "name:zh-Hant": "4號線",
+          "network": "수도권 전철",
+          "operator": "서울교통공사",
+          "operator:en": "Seoul Metro",
+          "operator:ko": "서울교통공사",
+          "operator:type": "public",
+          "operator:wikidata": "Q28699048",
+          "railway": "subway",
+          "railway:atc": "yes",
+          "railway:radio": "lte-r",
+          "tracks": "1",
+          "tunnel": "no",
+          "usage": "main",
+          "voltage": "1500",
+          "workrules": "KR:URA"
+        },
+        "observation_grade": "OSM contributor geometry; not survey",
+        "centroid_local_east_north_m": [
+          -260.93,
+          -186.87
+        ],
+        "local_east_north_m": [
+          [
+            334.52,
+            -39.69
+          ],
+          [
+            319.87,
+            -43.69
+          ],
+          [
+            269.68,
+            -57.65
+          ],
+          [
+            242.44,
+            -65.22
+          ],
+          [
+            -205.3,
+            -192.03
+          ],
+          [
+            -253.48,
+            -204.27
+          ],
+          [
+            -284.62,
+            -211.27
+          ],
+          [
+            -328.51,
+            -217.02
+          ],
+          [
+            -462.02,
+            -227.06
+          ],
+          [
+            -502.83,
+            -231.72
+          ],
+          [
+            -565.42,
+            -246.81
+          ],
+          [
+            -775.16,
+            -309.76
+          ],
+          [
+            -856.38,
+            -334.06
+          ]
+        ],
+        "temporal_warning": null,
+        "height_warning": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            127.0623632,
+            37.6561244
+          ],
+          [
+            127.0621969,
+            37.6560884
+          ],
+          [
+            127.0616274,
+            37.655963
+          ],
+          [
+            127.0613183,
+            37.655895
+          ],
+          [
+            127.0562379,
+            37.6547559
+          ],
+          [
+            127.0556912,
+            37.6546459
+          ],
+          [
+            127.0553379,
+            37.654583
+          ],
+          [
+            127.0548398,
+            37.6545314
+          ],
+          [
+            127.0533249,
+            37.6544412
+          ],
+          [
+            127.0528619,
+            37.6543993
+          ],
+          [
+            127.0521517,
+            37.6542638
+          ],
+          [
+            127.0497718,
+            37.6536983
+          ],
+          [
+            127.0488502,
+            37.65348
+          ]
+        ]
+      }
+    }
+  ]
+}

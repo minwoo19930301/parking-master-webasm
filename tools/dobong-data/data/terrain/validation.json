@@ -1,0 +1,77 @@
+{
+  "rgb_fixed_point_roundtrip": "PASS all 589824 native samples",
+  "alpha_opaque_no_missing_data": "PASS all tiles",
+  "native_range_m": [
+    -2.0,
+    815.0
+  ],
+  "base_course_center": {
+    "longitude": 127.05797736444174,
+    "latitude": 37.655941910829526,
+    "east_m": -52,
+    "north_m": -60,
+    "dem_elevation_m": 27.953465495653163,
+    "warning": "DEM estimate, not a surveyed benchmark; no ramp inference"
+  },
+  "campus_origin_dem_elevation_m": 23.103445254731923,
+  "peak_checks": [
+    {
+      "name": "수락산",
+      "osm_node": 3803846068,
+      "lon": 127.0813401,
+      "lat": 37.6992644,
+      "osm_reference_ele_m": 638.0,
+      "dem_bilinear_at_peak_m": 603.2986207897123,
+      "difference_dem_minus_osm_m": -34.701379210287655,
+      "dem_max_in_5x5_pixel_neighborhood_m": 607.0,
+      "not_survey_control": true
+    },
+    {
+      "name": "귀임봉",
+      "osm_node": 4693090968,
+      "lon": 127.0714567,
+      "lat": 37.6748244,
+      "osm_reference_ele_m": 288.0,
+      "dem_bilinear_at_peak_m": 279.31680585082694,
+      "difference_dem_minus_osm_m": -8.683194149173062,
+      "dem_max_in_5x5_pixel_neighborhood_m": 283.0,
+      "not_survey_control": true
+    },
+    {
+      "name": "도솔봉",
+      "osm_node": 5150649711,
+      "lon": 127.0847067,
+      "lat": 37.6905939,
+      "osm_reference_ele_m": 540.0,
+      "dem_bilinear_at_peak_m": 508.3591673963832,
+      "difference_dem_minus_osm_m": -31.640832603616786,
+      "dem_max_in_5x5_pixel_neighborhood_m": 510.0,
+      "not_survey_control": true
+    },
+    {
+      "name": "도봉산자운봉",
+      "osm_node": 5515194666,
+      "lon": 127.0154594,
+      "lat": 37.6988424,
+      "osm_reference_ele_m": 740.2,
+      "dem_bilinear_at_peak_m": 706.5615267726693,
+      "difference_dem_minus_osm_m": -33.63847322733079,
+      "dem_max_in_5x5_pixel_neighborhood_m": 711.0,
+      "not_survey_control": true
+    },
+    {
+      "name": "불암산",
+      "osm_node": 7972716239,
+      "lon": 127.0952449,
+      "lat": 37.6636484,
+      "osm_reference_ele_m": 508.0,
+      "dem_bilinear_at_peak_m": 466.04602499029136,
+      "difference_dem_minus_osm_m": -41.95397500970864,
+      "dem_max_in_5x5_pixel_neighborhood_m": 468.0,
+      "not_survey_control": true
+    }
+  ],
+  "adjacent_tile_boundary_max_jump_m": 33.0,
+  "all_peak_checks_within_90m_of_osm_reference": true,
+  "note": "Peak checks detect gross unit/channel/axis errors, not local survey accuracy. Sharp summits are smoothed in ~30m DEM."
+}

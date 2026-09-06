@@ -1,0 +1,193 @@
+{
+  "dataset": "Mapzen / Tilezen Terrain Tiles on AWS, Terrarium",
+  "registry": "https://registry.opendata.aws/terrain-tiles/",
+  "source_docs": "https://github.com/tilezen/joerd/tree/master/docs",
+  "attribution": "Mapzen; SRTM and GMTED2010 terrain data courtesy of the U.S. Geological Survey. Terrain Tiles accessed 2026-09-06 from AWS Open Data Registry.",
+  "license_note": "See mapzen-attribution.md. Global composition has multiple source licenses; no blanket CC0 claim.",
+  "origin_wgs84": {
+    "longitude": 127.0585674,
+    "latitude": 37.6564809
+  },
+  "native_grid": {
+    "width": 768,
+    "height": 768,
+    "dtype": "float32 little-endian",
+    "file": "native-dem-768x768.f32",
+    "zoom": 12,
+    "tile_x0": 3492,
+    "tile_y0": 1583,
+    "tiles_wide": 3,
+    "tiles_high": 3,
+    "tile_size": 256,
+    "row_order": "north_to_south",
+    "column_order": "west_to_east",
+    "height_units": "source elevation meters (not relative)",
+    "pixel_center_convention": "global x=X0*256+col+0.5, y=Y0*256+row+0.5"
+  },
+  "ground_pixel_spacing_at_origin_m": 30.257131037542198,
+  "game_grid_coverage": "16km x 16km local EN square, contains every point in radius 8km",
+  "game_grids": [
+    {
+      "json": "game-dem-257x257.json",
+      "binary": "game-dem-257x257.f32",
+      "width": 257,
+      "height": 257,
+      "step_m": 62.5,
+      "relative_range_m": [
+        -26.81198197701518,
+        776.984440670633
+      ]
+    },
+    {
+      "json": "game-dem-129x129.json",
+      "binary": "game-dem-129x129.f32",
+      "width": 129,
+      "height": 129,
+      "step_m": 125.0,
+      "relative_range_m": [
+        -26.81198197701518,
+        769.8157274736102
+      ]
+    }
+  ],
+  "height_reference": {
+    "longitude": 127.05797736444174,
+    "latitude": 37.655941910829526,
+    "east_m": -52,
+    "north_m": -60,
+    "dem_elevation_m": 27.953465495653163,
+    "warning": "DEM estimate, not a surveyed benchmark; no ramp inference"
+  },
+  "vertical_datum_note": "SRTM/Skadi documented WGS84/EGM96 geoid. Terrarium is a composite; no tile-specific vertical-datum metadata supplied. Treat regional relief as source heights, not surveyed game-site elevation.",
+  "resampling": "Bilinear AFTER RGB-to-height decode; no RGB resampling, height boost, procedural noise, or synthetic peak replacement",
+  "source_capture_date": "Not encoded per PNG; header source names and original SRTM mission provenance retained. Fetch date is not survey date.",
+  "source_horizontal_vertical_accuracy": "No per-tile measured accuracy estimate available. ~30m source resolution is not vertical accuracy.",
+  "tiles": [
+    {
+      "x": 3492,
+      "y": 1583,
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/12/3492/1583.png",
+      "retrieved_utc": "2026-09-06T00:48:55.186767+00:00",
+      "headers": {
+        "Last-Modified": "Mon, 20 Nov 2017 13:28:37 GMT",
+        "ETag": "\"5cc2d49c2d5cff282c855b683a8a08fb\"",
+        "x-amz-meta-x-imagery-sources": "srtm/N37E126.tif, srtm/N37E127.tif, gmted/30N120E_20101117_gmted_mea075.tif",
+        "Content-Type": "image/png",
+        "Content-Length": "47794"
+      },
+      "sha256": "d449c7c8be4603bfb5d4a48f81fe52fb8ada81269fd11f64159e757b7b332b45"
+    },
+    {
+      "x": 3493,
+      "y": 1583,
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/12/3493/1583.png",
+      "retrieved_utc": "2026-09-06T00:48:55.339864+00:00",
+      "headers": {
+        "Last-Modified": "Mon, 20 Nov 2017 13:28:36 GMT",
+        "ETag": "\"e3656cddd333e7b9ec4a33bfb17469f5\"",
+        "x-amz-meta-x-imagery-sources": "srtm/N37E127.tif",
+        "Content-Type": "image/png",
+        "Content-Length": "39649"
+      },
+      "sha256": "a6229d5474a17ecd0eb88ed2c6ae06e2c2e64017ef04382c941921c264950550"
+    },
+    {
+      "x": 3494,
+      "y": 1583,
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/12/3494/1583.png",
+      "retrieved_utc": "2026-09-06T00:48:55.187917+00:00",
+      "headers": {
+        "Last-Modified": "Mon, 20 Nov 2017 13:28:32 GMT",
+        "ETag": "\"f60f9656bd7931adba3da3776d55a240\"",
+        "x-amz-meta-x-imagery-sources": "srtm/N37E127.tif",
+        "Content-Type": "image/png",
+        "Content-Length": "42465"
+      },
+      "sha256": "ca61a6c99201f044a4bcf8d7fd61632b2af3d27621c250853441261b0b84c976"
+    },
+    {
+      "x": 3492,
+      "y": 1584,
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/12/3492/1584.png",
+      "retrieved_utc": "2026-09-06T00:48:55.187938+00:00",
+      "headers": {
+        "Last-Modified": "Mon, 20 Nov 2017 13:42:41 GMT",
+        "ETag": "\"6744c8747166c741d1cb0e8c0ae98f57\"",
+        "x-amz-meta-x-imagery-sources": "srtm/N37E126.tif, srtm/N37E127.tif",
+        "Content-Type": "image/png",
+        "Content-Length": "46210"
+      },
+      "sha256": "fb31c5993b112460ba8b8d8dd67b1fe271e5295928b8be93c70e2b2a03a938b5"
+    },
+    {
+      "x": 3493,
+      "y": 1584,
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/12/3493/1584.png",
+      "retrieved_utc": "2026-09-06T00:48:56.239918+00:00",
+      "headers": {
+        "Last-Modified": "Mon, 20 Nov 2017 13:42:42 GMT",
+        "ETag": "\"a67a9b4762b24dc92c58f26e82a00b28\"",
+        "x-amz-meta-x-imagery-sources": "srtm/N37E127.tif",
+        "Content-Type": "image/png",
+        "Content-Length": "43371"
+      },
+      "sha256": "a067eea45cf42eb4e4a20273b20490b0439b55128f60b23ef18754597ceb6ee9"
+    },
+    {
+      "x": 3494,
+      "y": 1584,
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/12/3494/1584.png",
+      "retrieved_utc": "2026-09-06T00:48:56.240422+00:00",
+      "headers": {
+        "Last-Modified": "Mon, 20 Nov 2017 13:42:47 GMT",
+        "ETag": "\"070374ee911fb86e74ec5b4602a81495\"",
+        "x-amz-meta-x-imagery-sources": "srtm/N37E127.tif",
+        "Content-Type": "image/png",
+        "Content-Length": "40928"
+      },
+      "sha256": "29eccf02a5a7da1f0787b8bdcca5197501f54e9c6e11644cfb6ce72b827a5e6f"
+    },
+    {
+      "x": 3492,
+      "y": 1585,
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/12/3492/1585.png",
+      "retrieved_utc": "2026-09-06T00:48:56.236837+00:00",
+      "headers": {
+        "Last-Modified": "Mon, 20 Nov 2017 13:42:45 GMT",
+        "ETag": "\"fe105cf41eb2dc7636b4fde0332ad23b\"",
+        "x-amz-meta-x-imagery-sources": "srtm/N37E126.tif, srtm/N37E127.tif",
+        "Content-Type": "image/png",
+        "Content-Length": "45512"
+      },
+      "sha256": "3518bdf53748959bd66a783e6a4f8b72d12dd0b3e160f7eecc4860f1df8b5072"
+    },
+    {
+      "x": 3493,
+      "y": 1585,
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/12/3493/1585.png",
+      "retrieved_utc": "2026-09-06T00:48:56.237659+00:00",
+      "headers": {
+        "Last-Modified": "Mon, 20 Nov 2017 13:42:44 GMT",
+        "ETag": "\"6226ccbd8c1b7f6968b708c4c225440d\"",
+        "x-amz-meta-x-imagery-sources": "srtm/N37E127.tif, gmted/30N120E_20101117_gmted_mea075.tif",
+        "Content-Type": "image/png",
+        "Content-Length": "36677"
+      },
+      "sha256": "a7041a5c76d3f2d8220110cb4fec8ebffa50f4f9d3be9d1403fbc640ddfdf2f5"
+    },
+    {
+      "x": 3494,
+      "y": 1585,
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/12/3494/1585.png",
+      "retrieved_utc": "2026-09-06T00:48:57.113089+00:00",
+      "headers": {
+        "Last-Modified": "Mon, 20 Nov 2017 13:42:51 GMT",
+        "ETag": "\"d434eca7511ef4ad70183c4a4eee34aa\"",
+        "x-amz-meta-x-imagery-sources": "srtm/N37E127.tif, gmted/30N120E_20101117_gmted_mea075.tif",
+        "Content-Type": "image/png",
+        "Content-Length": "37408"
+      },
+      "sha256": "8102e8a1f553966c41ebe470fbe70b83cdfe6a511dcf9f1bada617bf9ff2682a"
+    }
+  ]
+}

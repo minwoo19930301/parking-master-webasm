@@ -1,0 +1,24 @@
+{
+  "generator": "generate_cpp_headers.py",
+  "coordinate_contract": "Point{x,z}; x=E+52; z=-N-60; terrain y=sourceHeight-baseElevation",
+  "course_features": 24,
+  "course_vertices": 168,
+  "course_capture_date": "2025-03-22",
+  "course_source_image": "esri-west-course-capture-2025-03-22-north-up.png",
+  "context_features": 54,
+  "context_vertices": 413,
+  "terrain_samples": 16641,
+  "source_sha256": {
+    "course-observed.geojson": "42f368b978be2f71d39f4ea4e9bdf5061a18e9abea74d29f453577409efafece",
+    "surroundings-source.geojson": "722357ef989e3b2298a86c7ce22229d4d8db9dd8ca9c82ee11504f11b4cfbeed",
+    "terrain/game-dem-129x129.json": "068401a782575a00690665228bd887b7088524ff9439765dae228b8adaa7c945",
+    "terrain/manifest.json": "2a39417e071167f83662cadc28d69a04991d9988c3ff9561807d6d24239c7e69",
+    "terrain/validation.json": "c026587b532db6f3715f998e5457b511ae3a7029b59cad6b94b45dbedbb5da80"
+  },
+  "generated": {
+    "dobong_observed_data.h": "e9234518ed97bea1bd2b17859ff5cb9c24fdd27a35c49be3f4679954c24718bf",
+    "dobong_context_data.h": "9b42380799f5cd113f0987a1f41b0101db77917940b6c1faa68f8adc7badab2a",
+    "dobong_dem_data.h": "3078dc00c22c26521c43cd0174e54fba26b60d16abd206ab78897e478c06dcbd"
+  },
+  "warning": "Source-grounded preview data, not a surveyed/scoring-certified course. Null U features remain without geometry."
+}

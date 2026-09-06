@@ -36,6 +36,13 @@ add_executable(dobong_driving_test_simulator
 target_link_libraries(dobong_driving_test_simulator PRIVATE raylib)
 
 if(EMSCRIPTEN)
+  # An incremental shell edit must relink the generated HTML too.
+  set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${WEB_SHELL_FILE}")
+  string(TIMESTAMP WEB_BUILD_VERSION "%Y%m%d%H%M%S")
+  file(READ "${WEB_SHELL_FILE}" CONFIGURED_WEB_SHELL)
+  string(REPLACE "__BUILD_VERSION__" "${WEB_BUILD_VERSION}" CONFIGURED_WEB_SHELL "${CONFIGURED_WEB_SHELL}")
+  file(WRITE "${CMAKE_BINARY_DIR}/configured-shell.html" "${CONFIGURED_WEB_SHELL}")
+  set_property(TARGET dobong_driving_test_simulator APPEND PROPERTY LINK_DEPENDS "${CMAKE_BINARY_DIR}/configured-shell.html")
   set_target_properties(dobong_driving_test_simulator PROPERTIES
     OUTPUT_NAME "index"
     SUFFIX ".html"
@@ -51,7 +58,7 @@ if(EMSCRIPTEN)
     "-sASSERTIONS=1"
     "-sGL_PREINITIALIZED_CONTEXT=1"
     "-sINCOMING_MODULE_JS_API=canvas,preinitializedWebGLContext,locateFile,onAbort,setStatus,monitorRunDependencies"
-    "--shell-file" "${WEB_SHELL_FILE}"
+    "--shell-file" "${CMAKE_BINARY_DIR}/configured-shell.html"
   )
 else()
   message(STATUS "Native build supported for local debugging. Use emcmake for the web build.")

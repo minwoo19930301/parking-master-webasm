@@ -1,9 +1,14 @@
 #include "exam_rules.h"
 #include "course_data.h"
+#include "vehicle_physics.h"
+#include "cockpit_layout.h"
+#include "driving_camera.h"
 
 #include "raylib.h"
 #include "raymath.h"
 #include "rlgl.h"
+#include "dobong/source_renderer.h"
+#include "dobong/road_renderer.h"
 
 #if defined(PLATFORM_WEB)
 #include <emscripten/emscripten.h>
@@ -14,12 +19,30 @@ EM_JS(float, WebSteerInput, (), {
     return typeof input.steerValue === "number" ? input.steerValue : 0;
 });
 
+EM_JS(int, WebIsPaused, (), {
+    return window.__examIsPaused?.() ? 1 : 0;
+});
+
+EM_JS(int, WebConsumeClockReset, (), {
+    const reset = window.__examResetClock;
+    window.__examResetClock = false;
+    return reset ? 1 : 0;
+});
+
 EM_JS(float, WebThrottleInput, (), {
-    return window.__examInput?.throttle ? 1 : 0;
+    return window.__examPedalInput?.("throttle") ? 1 : 0;
 });
 
 EM_JS(float, WebBrakeInput, (), {
-    return window.__examInput?.brake ? 1 : 0;
+    return window.__examPedalInput?.("brake") ? 1 : 0;
+});
+
+EM_JS(void, WebSetWheelBounds, (float x, float y, float r, float w, float h), {
+    window.__examWheelBounds?.(x, y, r, w, h);
+});
+
+EM_JS(void, WebSetCameraMode, (int thirdPerson), {
+    window.__examCameraState?.(Boolean(thirdPerson));
 });
 
 EM_JS(int, WebConsumePressed, (const char* key), {
@@ -88,6 +111,10 @@ EM_JS(void, WebSpeak, (const char* message), {
 });
 #else
 inline float WebSteerInput() { return 0.0f; }
+inline void WebSetWheelBounds(float, float, float, float, float) {}
+inline void WebSetCameraMode(int) {}
+inline int WebIsPaused() { return 0; }
+inline int WebConsumeClockReset() { return 0; }
 inline float WebThrottleInput() { return 0.0f; }
 inline float WebBrakeInput() { return 0.0f; }
 inline int WebConsumePressed(const char*) { return 0; }
@@ -201,6 +228,8 @@ struct InputFrame {
     bool rightSignalPressed = false;
     bool hazardPressed = false;
     bool parkingBrakePressed = false;
+    bool cameraPressed = false;
+    int roadRoute = -1;
 };
 
 Vector2 VAdd(Vector2 a, Vector2 b) {
@@ -316,7 +345,7 @@ Color Shade(Color color, float factor) {
 void DrawOrientedCube(Vector2 center, float centerY, Vector3 size, float angle, Color color) {
     rlPushMatrix();
     rlTranslatef(center.x, centerY, center.y);
-    rlRotatef(angle * RAD2DEG, 0.0f, 1.0f, 0.0f);
+    rlRotatef(driving_camera::RenderYawDegrees(angle), 0.0f, 1.0f, 0.0f);
     DrawCube({0.0f, 0.0f, 0.0f}, size.x, size.y, size.z, color);
     rlPopMatrix();
 }
@@ -325,7 +354,7 @@ void DrawOrientedCubeWires(Vector2 center, float centerY, Vector3 size, float an
                            Color color) {
     rlPushMatrix();
     rlTranslatef(center.x, centerY, center.y);
-    rlRotatef(angle * RAD2DEG, 0.0f, 1.0f, 0.0f);
+    rlRotatef(driving_camera::RenderYawDegrees(angle), 0.0f, 1.0f, 0.0f);
     DrawCubeWires({0.0f, 0.0f, 0.0f}, size.x, size.y, size.z, color);
     rlPopMatrix();
 }
@@ -339,7 +368,8 @@ class DobongExamSimulator {
         SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
 #endif
         SetTraceLogLevel(LOG_WARNING);
-        InitWindow(1280, 720, "Dobong Driving Skills Test Simulator");
+        InitWindow(1280, 720, "Driving Practice · Dobong");
+        rlSetClipPlanes(0.1,14000.0);
         SetTargetFPS(60);
         SetExitKey(KEY_NULL);
 
@@ -352,10 +382,14 @@ class DobongExamSimulator {
         BuildCourse();
         InitRenderTargets();
         InitGround();
+        sourceWorld_.Init();
+        roadWorld_.Init();
         BeginFreeDrive();
     }
 
     ~DobongExamSimulator() {
+        sourceWorld_.Unload();
+        roadWorld_.Unload();
         UnloadRenderTargets();
         if (groundReady_) {
             UnloadModel(groundModel_);
@@ -368,10 +402,15 @@ class DobongExamSimulator {
         SyncCanvasSize();
         const double now = GetTime();
         const float clockDt =
-            lastWallClock_ < 0.0
+            WebConsumeClockReset() || lastWallClock_ < 0.0
                 ? 0.0f
                 : std::max(0.0f, static_cast<float>(now - lastWallClock_));
         lastWallClock_ = now;
+        if (WebIsPaused()) {
+            PushWebState();
+            Draw();
+            return;
+        }
         const float physicsDt = std::min(clockDt, 1.0f / 20.0f);
         sceneTime_ += physicsDt;
         eventTimer_ = std::max(0.0f, eventTimer_ - clockDt);
@@ -399,8 +438,8 @@ class DobongExamSimulator {
         obstacles_.clear();
         route_.clear();
 
-        // The first Dobong pack follows the public 1/2-class course dimensions and
-        // the recognizable compact east-side loop seen in the center's site layout.
+        // Legacy illustrative rules-training layout. This is NOT surveyed Dobong
+        // geometry; the default source-world mode below is a separate reconstruction.
         for (const auto& road : driving_test_data::dobong_v1::kRoads) {
             AddRoad({road.centerX, road.centerY},
                     {road.halfLength, road.halfWidth},
@@ -509,6 +548,8 @@ class DobongExamSimulator {
     }
 
     void ResetExam() {
+        roadMode_ = false;
+        snapCamera_ = true;
         phase_ = ExamPhase::Briefing;
         car_.position = {-44.0f, 30.0f};
         car_.heading = 0.0f;
@@ -565,26 +606,36 @@ class DobongExamSimulator {
     // Free driving: no scoring, no exam gating. Car is ready to move at once.
     void BeginFreeDrive() {
         ResetExam();
+        sourceMode_ = true;
+        snapCamera_ = true;
         phase_ = ExamPhase::FreeDrive;
-        car_.position = {-44.0f, 30.0f};
-        car_.heading = 0.0f;
+        // Preview spawn on the observed eastern lane, not an official start line.
+        car_.position = {39.0f, 30.0f};
+        car_.heading = -1.842f;
+        camera_.position = {car_.position.x,1.28f,car_.position.y};
+        const auto forward=ForwardFromAngle(car_.heading);
+        camera_.target = {car_.position.x+forward.x*15,.82f,car_.position.y+forward.y*15};
         seatbelt_ = true;
         ignition_ = true;
         parkingBrake_ = false;
         gear_ = TransmissionGear::Drive;
-        eventText_ = "자유 주행 · 채점 없음 · 가속 페달을 밟아 출발하세요.";
+        eventText_ = "도봉 공개자료 참고 지도 · W 가속 · S/Space 브레이크 · 채점 없음";
         eventTimer_ = 5.0f;
         Speak("자유 주행을 시작합니다. 가속 페달을 밟아 출발하세요.");
     }
 
     void UpdateFreeDrive(float dt, const InputFrame& input) {
-        if (input.startPressed) {
-            ResetExam();
-            BeginPrecheck();
+        if (input.retryPressed) {
+            if(roadMode_)BeginRoadDrive(roadRoute_);else BeginFreeDrive();
             return;
         }
-        if (input.retryPressed) {
-            BeginFreeDrive();
+        // Preserve the completed run's time and vehicle pose until explicit retry.
+        // Traffic can keep moving, but new pedal/gear input cannot restart this run.
+        if (roadMode_ && roadProgress_.complete) {
+            car_.speed = 0.0f;
+            gear_ = TransmissionGear::Park;
+            parkingBrake_ = true;
+            traffic_.Update(dt, {car_.position.x, car_.position.y}, car_.heading);
             return;
         }
         const CarState previous = car_;
@@ -594,6 +645,27 @@ class DobongExamSimulator {
             car_.speed = 0.0f;
             collisionFlash_ = 0.3f;
         }
+        if(roadMode_){
+            examTimer_+=dt;
+            traffic_.Update(dt,{car_.position.x,car_.position.y},car_.heading);
+            roadProgress_.Update(roadPath_,{car_.position.x,car_.position.y},
+                Vector2Length(VSub(car_.position,previous.position)),car_.speed);
+            if(roadProgress_.complete){car_.speed=0;gear_=TransmissionGear::Park;parkingBrake_=true;}
+            const auto& route=dobong_road_source::kRoutes[roadRoute_];
+            while(roadManeuver_+1<route.maneuverCount&&roadProgress_.distance>route.maneuvers[roadManeuver_].distance+9)++roadManeuver_;
+            if(roadProgress_.complete)Speak("도로주행 경로를 마쳤습니다. 다른 코스를 선택하거나 R 키로 다시 연습하세요.");
+            else if(route.maneuvers[roadManeuver_].distance-roadProgress_.distance<100)Speak(route.maneuvers[roadManeuver_].instruction);
+        }
+    }
+
+    void BeginRoadDrive(int index){
+        BeginFreeDrive();roadMode_=true;roadRoute_=std::clamp(index,0,3);roadManeuver_=0;roadProgress_={};
+        const auto& route=dobong_road_source::kRoutes[roadRoute_];
+        roadPath_=road_driving::Path(route.points,route.count);
+        const auto start=roadPath_.Sample(0);car_.position={start.position.x,start.position.z};car_.heading=start.heading;
+        traffic_.Reset(static_cast<unsigned int>(GetRandomValue(1,2147483646)),start.position);
+        eventText_="공식 안내 경로 · 도로 폭·유턴·평탄 지형은 연습용 추정 · 채점 없음";
+        Speak(std::string("도봉 도로주행 ")+route.id+" 코스를 시작합니다.");
     }
 
     void BeginPrecheck() {
@@ -682,16 +754,21 @@ class DobongExamSimulator {
         InputFrame input{};
         if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) input.steer -= 1.0f;
         if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) input.steer += 1.0f;
+#if !defined(PLATFORM_WEB)
         if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) input.throttle = 1.0f;
         if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_SPACE)) {
             input.brake = 1.0f;
         }
 
         input.startPressed = IsKeyPressed(KEY_ENTER);
+        input.cameraPressed = IsKeyPressed(KEY_T);
+        for(int i=0;i<4;++i)if(IsKeyPressed(KEY_SIX+i))input.roadRoute=i;
+#endif
         input.freeDrivePressed = IsKeyPressed(KEY_F);
         input.retryPressed = IsKeyPressed(KEY_R);
         input.gearDrivePressed = IsKeyPressed(KEY_ONE);
         input.gearReversePressed = IsKeyPressed(KEY_TWO);
+        input.gearParkPressed = IsKeyPressed(KEY_ZERO);
         input.seatbeltPressed = IsKeyPressed(KEY_K);
         input.ignitionPressed = IsKeyPressed(KEY_I);
         input.headlightPressed = IsKeyPressed(KEY_L);
@@ -706,6 +783,9 @@ class DobongExamSimulator {
         input.throttle = std::max(input.throttle, WebThrottleInput());
         input.brake = std::max(input.brake, WebBrakeInput());
         input.startPressed = input.startPressed || WebConsumePressed("startPressed");
+        input.cameraPressed = WebConsumePressed("cameraPressed");
+        const char* roadKeys[]={"roadAPressed","roadBPressed","roadCPressed","roadDPressed"};
+        for(int i=0;i<4;++i)if(WebConsumePressed(roadKeys[i]))input.roadRoute=i;
         input.freeDrivePressed =
             input.freeDrivePressed || WebConsumePressed("freeDrivePressed");
         input.retryPressed = input.retryPressed || WebConsumePressed("retryPressed");
@@ -735,6 +815,7 @@ class DobongExamSimulator {
     }
 
     void HandleToggleInputs(const InputFrame& input) {
+        if(input.cameraPressed) { thirdPerson_=!thirdPerson_; snapCamera_=true; }
         if (input.seatbeltPressed) seatbelt_ = !seatbelt_;
         if (input.ignitionPressed) ignition_ = !ignition_;
         if (input.headlightPressed) headlights_ = (headlights_ + 1) % 3;
@@ -765,8 +846,18 @@ class DobongExamSimulator {
     }
 
     void Update(float physicsDt, float clockDt, const InputFrame& input) {
+        if(input.roadRoute>=0){BeginRoadDrive(input.roadRoute);return;}
         if (input.freeDrivePressed) {
             BeginFreeDrive();
+            return;
+        }
+
+        // Starting a scored exam is distinct from closing the menu to resume.
+        // It must work during a previous exam as well as in free drive.
+        if (input.startPressed) {
+            sourceMode_ = false;
+            ResetExam();
+            BeginPrecheck();
             return;
         }
 
@@ -777,7 +868,6 @@ class DobongExamSimulator {
         }
 
         if (phase_ == ExamPhase::Briefing) {
-            if (input.startPressed) BeginPrecheck();
             return;
         }
 
@@ -943,37 +1033,20 @@ class DobongExamSimulator {
             return;
         }
 
-        float desiredSpeed = car_.speed;
-        const float direction = gear_ == TransmissionGear::Drive ? 1.0f : -1.0f;
-        const float creep = gear_ == TransmissionGear::Drive ? 1.05f : -0.85f;
+        float desiredSpeed = driving_physics::UpdateSpeed(
+            car_.speed, dt, gear_ == TransmissionGear::Reverse, input.throttle, input.brake,roadMode_?16.7f:7.2f);
 
-        if (input.brake > 0.0f) {
-            const float brakeDelta = 8.8f * dt;
-            if (desiredSpeed > brakeDelta) {
-                desiredSpeed -= brakeDelta;
-            } else if (desiredSpeed < -brakeDelta) {
-                desiredSpeed += brakeDelta;
-            } else {
-                desiredSpeed = 0.0f;
-            }
-        } else {
-            desiredSpeed = LerpFloat(desiredSpeed, creep, dt * 1.25f);
-            if (input.throttle > 0.0f) {
-                desiredSpeed += direction * 4.1f * dt;
-            }
-        }
-
-        if (car_.position.y > 25.5f && car_.position.y < 34.5f &&
+        if (!sourceMode_ && car_.position.y > 25.5f && car_.position.y < 34.5f &&
             car_.position.x > kHillUpStartX &&
             car_.position.x < kHillTopStartX && input.brake <= 0.0f) {
             desiredSpeed -= 1.55f * dt;
-        } else if (car_.position.y > 25.5f && car_.position.y < 34.5f &&
+        } else if (!sourceMode_ && car_.position.y > 25.5f && car_.position.y < 34.5f &&
                    car_.position.x > kHillTopEndX &&
                    car_.position.x < kHillDownEndX && input.brake <= 0.0f) {
             desiredSpeed += 0.78f * dt;
         }
 
-        car_.speed = std::clamp(desiredSpeed, -3.2f, 7.2f);
+        car_.speed = std::clamp(desiredSpeed, -3.2f, roadMode_?16.7f:7.2f);
         const float turnRate = std::tan(car_.steering) * car_.speed / 2.72f;
         car_.heading = NormalizeAngle(car_.heading + turnRate * dt);
         car_.position =
@@ -1334,6 +1407,21 @@ class DobongExamSimulator {
 
     CollisionKind DetectCollision() const {
         const OrientedRect carRect = CarRect();
+        if(roadMode_){
+            for(const auto& v:traffic_.vehicles)if(v.active&&Intersects(carRect,{{v.pose.position.x,v.pose.position.z},{2.4f,1.f},v.pose.heading}))return CollisionKind::SolidObstacle;
+            for(const auto corner:GetCorners(carRect))if(!road_driving::OnRoad({corner.x,corner.y}))return CollisionKind::CourseBoundary;
+            return CollisionKind::None;
+        }
+        if(sourceMode_) {
+            // Sample the full footprint, not only the centre. Candidate parking
+            // gaps are preview areas and explicitly not certified test boundaries.
+            for(float x:{-kCarLength*.5f,0.f,kCarLength*.5f})
+                for(float z:{-kCarWidth*.5f,0.f,kCarWidth*.5f}) {
+                    const auto p=VAdd(car_.position,RotateVector({x,z},car_.heading));
+                    if(!dobong_source::IsObservedRoadSurface({p.x,p.y},true,false))return CollisionKind::SolidObstacle;
+                }
+            return CollisionKind::None;
+        }
         if (phase_ == ExamPhase::FreeDrive) {
             for (const Obstacle& obstacle : obstacles_) {
                 if (obstacle.type == ObstacleType::Cone) continue;
@@ -1374,6 +1462,7 @@ class DobongExamSimulator {
     }
 
     float GroundHeightAt(Vector2 position) const {
+        if(sourceMode_) return 0.f; // Coarse background DEM does not certify a test ramp.
         if (std::fabs(position.y - 30.0f) > 4.2f) return 0.0f;
         if (position.x >= kHillUpStartX && position.x < kHillTopStartX) {
             return (position.x - kHillUpStartX) /
@@ -1399,11 +1488,12 @@ class DobongExamSimulator {
     }
 
     std::string PhaseTitle() const {
+        if(roadMode_)return std::string("도봉 도로주행 ")+dobong_road_source::kRoutes[roadRoute_].id+(roadProgress_.complete?" · 완주":" · 연습");
         switch (phase_) {
             case ExamPhase::Briefing:
                 return "도봉 2종 보통 자동 기능시험";
             case ExamPhase::FreeDrive:
-                return "자유 주행";
+                return "도봉 · 자료 기반 자유 주행";
             case ExamPhase::Precheck:
                 return "출발 전 기본조작";
             case ExamPhase::Running:
@@ -1428,8 +1518,13 @@ class DobongExamSimulator {
     }
 
     std::string InstructionText() const {
+        if(roadMode_){
+            if(roadProgress_.complete)return "경로를 완주했습니다. R 다시 연습 · 메뉴에서 A/B/C/D 선택";
+            const auto& m=dobong_road_source::kRoutes[roadRoute_].maneuvers[roadManeuver_];
+            char text[240];std::snprintf(text,sizeof(text),"%.0fm · %s",std::max(0.f,m.distance-roadProgress_.distance),m.instruction);return text;
+        }
         if (phase_ == ExamPhase::FreeDrive) {
-            return "핸들을 돌리고 가속·브레이크로 자유롭게 주행하세요. R로 후진할 수 있습니다.";
+            return "W/↑ 가속 · S/↓/Space 브레이크 · 마우스 핸들 · 2 후진 / 1 전진";
         }
         if (phase_ == ExamPhase::Briefing) {
             return "도봉운전면허시험장 재구성 코스에서 실전 순서로 연습합니다.";
@@ -1483,8 +1578,9 @@ class DobongExamSimulator {
     }
 
     std::string StatusText() const {
+        if(roadMode_){char text[240];std::snprintf(text,sizeof(text),"%.2f / %.2f km · %s · 실제 경로 / 폭·유턴·지형 추정, 채점 없음",roadProgress_.distance/1000,roadPath_.Length()/1000,roadProgress_.separation>12?"경로로 복귀하세요":"주변 차량과 안전거리 유지");return text;}
         if (phase_ == ExamPhase::FreeDrive) {
-            return "자유 주행 모드 · 감점·실격 없음 · 다시 시작으로 위치 초기화";
+            return "항공 관찰·OSM·실제 DEM · 현장 세부치수 미확인 · 경계는 참고용";
         }
         if (phase_ == ExamPhase::Briefing) {
             return "100점 시작 · 80점 이상 합격 · 공개 법정 규격 기반";
@@ -1529,6 +1625,7 @@ class DobongExamSimulator {
     }
 
     void PushWebState() const {
+        WebSetCameraMode(thirdPerson_?1:0);
         const std::string phaseTitle = PhaseTitle();
         const std::string instruction = InstructionText();
         const std::string status = StatusText();
@@ -1552,6 +1649,17 @@ class DobongExamSimulator {
     }
 
     void UpdateCamera(float dt) {
+        if(thirdPerson_) {
+            const auto pose=driving_camera::Chase(car_.position.x,car_.position.y,car_.heading,
+                GroundHeightAt(car_.position),DisplaySpeedKph(),
+                static_cast<float>(GetScreenWidth())/std::max(1,GetScreenHeight()));
+            const float blend=snapCamera_?1.f:driving_camera::FollowBlend(dt);
+            camera_.position=LerpVector3(camera_.position,{pose.position.x,pose.position.y,pose.position.z},blend);
+            camera_.target=LerpVector3(camera_.target,{pose.target.x,pose.target.y,pose.target.z},blend);
+            camera_.fovy=pose.fovy;
+            snapCamera_=false;
+            return;
+        }
         const Vector2 forward = ForwardFromAngle(car_.heading);
         const Vector2 side = {-forward.y, forward.x};
         const float groundY = GroundHeightAt(car_.position);
@@ -1575,7 +1683,8 @@ class DobongExamSimulator {
             groundY + 0.82f,
             car_.position.y + forward.y * 15.0f + side.y * (glance + kDriverLateralOffset),
         };
-        const float blend = 1.0f - std::exp(-dt * 8.0f);
+        const float blend = snapCamera_?1.f:driving_camera::FollowBlend(dt);
+        snapCamera_=false;
         camera_.position = LerpVector3(camera_.position, desiredPosition, blend);
         camera_.target = LerpVector3(camera_.target, desiredTarget, blend);
         camera_.fovy = 74.0f;
@@ -1611,6 +1720,8 @@ class DobongExamSimulator {
         DrawRectangleGradientV(0, 0, width, horizon, kSkyTop, kSkyHorizon);
         DrawRectangleGradientV(0, horizon, width, height - horizon,
                                Fade(kSkyHorizon, 0.9f), Fade(kGrass, 0.1f));
+
+        if(sourceMode_) return; // Source DEM is rendered in the same 3D world as the camera.
 
         const float headingShift = car_.heading / (2.0f * kPi) * width;
 
@@ -1915,7 +2026,51 @@ class DobongExamSimulator {
         }
     }
 
+    void DrawRoadWorld() const {
+        roadWorld_.Draw();sourceWorld_.Draw(false);
+        // Short-range guide follows source centreline; this is not a prescribed lane.
+        for(float s=roadProgress_.distance;s<std::min(roadProgress_.distance+180,roadPath_.Length());s+=12){
+            const auto a=roadPath_.Sample(s).position,b=roadPath_.Sample(std::min(s+5,roadPath_.Length())).position;
+            DrawLineBox({a.x,a.z},{b.x,b.z},.28f,{75,211,186,255},.14f);
+        }
+        constexpr Color colors[]={{228,231,224,255},{54,65,72,255},{180,189,195,255},{151,51,43,255},{46,82,119,255},{224,185,75,255}};
+        for(const auto& v:traffic_.vehicles){
+            if(!v.active||road_driving::Distance(v.pose.position,{car_.position.x,car_.position.y})>450)continue;
+            const Vector2 p{v.pose.position.x,v.pose.position.z};const float h=v.pose.heading;
+            const bool suv=v.style==1;
+            DrawOrientedCube(p,.54f,{v.style==2?4.9f:4.4f,1.f,1.85f},h,colors[v.color]);
+            DrawOrientedCube(p,suv?1.35f:1.15f,{2.45f,suv?.78f:.55f,1.6f},h,{57,78,88,255});
+            for(float fore:{-1.35f,1.35f})for(float side:{-.9f,.9f}){
+                const auto wheel=VAdd(p,RotateVector({fore,side},h));DrawOrientedCube(wheel,.34f,{.65f,.65f,.24f},h,{30,33,34,255});
+            }
+            const auto nose=VAdd(p,RotateVector({2.2f,0},h));
+            DrawOrientedCube(nose,.59f,{.08f,.2f,1.5f},h,{237,235,199,255});
+            const auto rear=VAdd(p,RotateVector({-2.2f,0},h));
+            DrawOrientedCube(rear,.62f,{.08f,.18f,1.4f},h,v.speed<1?Color{239,54,44,255}:Color{125,31,27,255});
+        }
+    }
+
+    void DrawRoadMiniMap() const {
+        const float width=static_cast<float>(GetScreenWidth()),height=static_cast<float>(GetScreenHeight());
+        const float size=std::clamp(width*.16f,140.f,225.f);
+        const Rectangle panel{width-size-18,height*.17f,size,size*1.15f};
+        DrawRectangleRounded(panel,.06f,6,Fade({19,27,27,255},.88f));
+        float minX=1e9f,minZ=1e9f,maxX=-1e9f,maxZ=-1e9f;
+        for(const auto p:roadPath_.points){minX=std::min(minX,p.x);maxX=std::max(maxX,p.x);minZ=std::min(minZ,p.z);maxZ=std::max(maxZ,p.z);}
+        const float scale=std::min((panel.width-24)/std::max(1.f,maxX-minX),(panel.height-36)/std::max(1.f,maxZ-minZ));
+        auto point=[&](road_driving::Point p){return Vector2{panel.x+panel.width*.5f+(p.x-(minX+maxX)*.5f)*scale,panel.y+20+(panel.height-28)*.5f+(p.z-(minZ+maxZ)*.5f)*scale};};
+        for(std::size_t i=1;i<roadPath_.points.size();++i)DrawLineEx(point(roadPath_.points[i-1]),point(roadPath_.points[i]),2,{100,184,168,255});
+        const auto target=roadPath_.Sample(std::min(roadProgress_.distance+100,roadPath_.Length()));
+        DrawCircleV(point(target.position),4,{237,221,130,255});
+        const auto p=point({car_.position.x,car_.position.y});
+        DrawCircleV(p,4,{250,170,72,255});DrawLineEx(p,VAdd(p,VScale(ForwardFromAngle(car_.heading),10)),2,WHITE);
+        const std::string title=std::string("N ^  DOBONG / ")+dobong_road_source::kRoutes[roadRoute_].id;
+        DrawText(title.c_str(),static_cast<int>(panel.x)+9,static_cast<int>(panel.y)+5,11,WHITE);
+    }
+
     void DrawWorld() const {
+        if(roadMode_){DrawRoadWorld();return;}
+        if(sourceMode_) { sourceWorld_.Draw(); return; }
         if (groundReady_) {
             DrawModel(groundModel_, {0.0f, -0.025f, 0.0f}, 1.0f, WHITE);
         } else {
@@ -2029,10 +2184,19 @@ class DobongExamSimulator {
         DrawTriangle({width * 0.36f, height}, {width * 0.5f, height * 0.80f},
                      {width * 0.64f, height}, Fade({86, 96, 106, 255}, 0.45f));
 
+        DrawSteeringWheel();
+    }
+
+    void DrawSteeringWheel() const {
+        const float width=static_cast<float>(GetScreenWidth());
+        const float height=static_cast<float>(GetScreenHeight());
+
         // Cockpit steering wheel: full rim, three spokes, airbag hub.
-        const Vector2 wheelCenter{width * 0.30f, height * 1.02f};
-        const float wheelOuter = std::min(width, height) * 0.36f;
-        const float rotation = car_.steering * 150.0f;
+        const auto wheel = cockpit_layout::FitWheel(width, height);
+        const Vector2 wheelCenter{wheel.x, wheel.y};
+        const float wheelOuter = wheel.radius;
+        const float rotation = cockpit_layout::WheelAngle(car_.steering);
+        WebSetWheelBounds(wheel.x, wheel.y, wheel.radius, width, height);
         DrawRing(wheelCenter, wheelOuter * 0.80f, wheelOuter, 0.0f, 360.0f, 96,
                  {20, 25, 30, 255});
         DrawRing(wheelCenter, wheelOuter * 0.80f, wheelOuter * 0.85f, 0.0f, 360.0f, 96,
@@ -2047,8 +2211,9 @@ class DobongExamSimulator {
         DrawCircleV(wheelCenter, wheelOuter * 0.30f, {33, 40, 48, 255});
         DrawCircleV(wheelCenter, wheelOuter * 0.30f - 3.0f, {19, 24, 30, 255});
 
-        const Rectangle cluster{width * 0.185f, height * 0.70f, width * 0.23f,
-                                height * 0.075f};
+        const float clusterWidth = std::clamp(wheelOuter * 1.30f, 140.0f, 230.0f);
+        const Rectangle cluster{wheel.x - clusterWidth * 0.5f,
+                                wheel.y - wheelOuter - 57.0f, clusterWidth, 48.0f};
         DrawRectangleRounded(cluster, 0.18f, 10, Fade({10, 14, 15, 255}, 0.92f));
         char speed[16];
         std::snprintf(speed, sizeof(speed), "%02d",
@@ -2084,10 +2249,11 @@ class DobongExamSimulator {
     }
 
     void DrawMiniMap() const {
+        if(roadMode_){DrawRoadMiniMap();return;}
         const float width = static_cast<float>(GetScreenWidth());
         const float height = static_cast<float>(GetScreenHeight());
         const float mapWidth = std::clamp(width * 0.17f, 150.0f, 230.0f);
-        const float mapHeight = mapWidth * 0.72f;
+        const float mapHeight = mapWidth * (sourceMode_ ? .92f : .72f);
         const Rectangle panel{width - mapWidth - 18.0f, height * 0.17f,
                               mapWidth, mapHeight};
         DrawRectangleRounded(panel, 0.08f, 8, Fade({19, 27, 27, 255}, 0.78f));
@@ -2096,16 +2262,26 @@ class DobongExamSimulator {
 
         const Rectangle area{panel.x + 8.0f, panel.y + 19.0f,
                              panel.width - 16.0f, panel.height - 27.0f};
-        for (const RoadSurface& road : roads_) {
+        if(sourceMode_) {
+            using namespace dobong_source;
+            for(const auto& f:kCourseFeatures) {
+                if(f.geometry!=GeometryType::Polygon)continue;
+                std::vector<Triangle> triangles;
+                if(!TriangulateSimplePolygon(kCourseVertices.data()+f.first,f.count,triangles))continue;
+                const bool grass=std::strcmp(f.kind,"non_drivable_island")==0||std::strcmp(f.kind,"parking_complex_envelope")==0;
+                const Color color=grass?Color{100,125,75,255}:Color{179,185,173,255};
+                for(const auto& tri:triangles) DrawTriangle(ToMap({tri.a.x,tri.a.z},area),ToMap({tri.b.x,tri.b.z},area),ToMap({tri.c.x,tri.c.z},area),color);
+            }
+        } else for (const RoadSurface& road : roads_) {
             DrawMiniRect(area, road.footprint, Fade({165, 175, 172, 255}, 0.76f));
         }
 
-        for (size_t i = 1; i < route_.size(); ++i) {
+        if(!sourceMode_) for (size_t i = 1; i < route_.size(); ++i) {
             DrawLineEx(ToMap(route_[i - 1], area), ToMap(route_[i], area), 1.5f,
                        Fade(kCourseBlue, 0.78f));
         }
         DrawMiniRect(area, CarRect(), kSafetyYellow);
-        DrawText("DOBONG", static_cast<int>(panel.x) + 9,
+        DrawText(sourceMode_?"N ^  DOBONG / SOURCE MAP":"ILLUSTRATIVE RULES COURSE", static_cast<int>(panel.x) + 9,
                  static_cast<int>(panel.y) + 5, 10, Fade(WHITE, 0.72f));
     }
 
@@ -2123,16 +2299,18 @@ class DobongExamSimulator {
     }
 
     void Draw() {
-        UpdateMirrorTextures();
+        if(!thirdPerson_)UpdateMirrorTextures();
         BeginDrawing();
         ClearBackground(kSkyHorizon);
         DrawBackdrop();
 
         BeginMode3D(camera_);
         DrawWorld();
+        if(thirdPerson_)DrawPlayerCar();
         EndMode3D();
 
-        DrawCockpit();
+        if(thirdPerson_)DrawSteeringWheel();
+        else DrawCockpit();
         DrawMiniMap();
         DrawCenterAlert();
 
@@ -2147,6 +2325,17 @@ class DobongExamSimulator {
     CarState car_{};
     TransmissionGear gear_ = TransmissionGear::Park;
     ExamPhase phase_ = ExamPhase::Briefing;
+    bool sourceMode_ = true;
+    bool roadMode_ = false;
+    int roadRoute_=0;
+    std::size_t roadManeuver_=0;
+    road_driving::Path roadPath_{};
+    road_driving::Progress roadProgress_{};
+    road_driving::Traffic traffic_{};
+    dobong_visual::RoadWorld roadWorld_{};
+    bool thirdPerson_ = false;
+    bool snapCamera_ = true;
+    dobong_visual::SourceWorld sourceWorld_{};
 
     std::vector<RoadSurface> roads_{};
     std::vector<Obstacle> obstacles_{};

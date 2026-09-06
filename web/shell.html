@@ -8,11 +8,11 @@
     />
     <meta
       name="description"
-      content="도봉운전면허시험장 기능시험 코스를 재구성한 비공식 운전 연습 시뮬레이터"
+      content="Driving Practice · 도봉 공개자료 기반 주행과 별도 가상 기능시험 연습"
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ko_KR" />
-    <meta property="og:title" content="도봉 기능시험 시뮬레이터" />
+    <meta property="og:title" content="Driving Practice · 도봉 운전 연습" />
     <meta
       property="og:description"
       content="제2종 보통 자동 장내기능시험을 운전석·좌우 사이드미러·실전 전자채점으로 연습하세요."
@@ -21,13 +21,13 @@
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="도봉 기능시험 시뮬레이터" />
+    <meta name="twitter:title" content="Driving Practice · 도봉 운전 연습" />
     <meta
       name="twitter:description"
-      content="도봉운전면허시험장 제2종 보통 자동 장내기능시험 실전 연습"
+      content="도봉 공개자료 기반 주행과 별도 가상 기능시험 규칙 연습"
     />
     <meta name="twitter:image" content="/og.png" />
-    <title>기능시험 연습 시뮬레이터 · 도봉운전면허시험장</title>
+    <title>Driving Practice · 도봉 운전 연습</title>
     <style>
       :root {
         color-scheme: light;
@@ -58,7 +58,11 @@
         --safe-bottom: max(10px, env(safe-area-inset-bottom));
         --safe-left: max(10px, env(safe-area-inset-left));
       }
-
+            <ul class="center-catalog" aria-label="재구성된 지도 범위">
+              <li><div class="center-option active"><strong>도봉 서남 코스</strong><span>항공 관찰 기반</span></div></li>
+              <li><div class="center-option"><strong>주변 건물·철도</strong><span>공개 지도 좌표</span></div></li>
+              <li><div class="center-option"><strong>산과 지형</strong><span>USGS 기반 고도</span></div></li>
+            </ul>
       * {
         box-sizing: border-box;
         -webkit-tap-highlight-color: transparent;
@@ -1575,7 +1579,11 @@
       }
       #steer-zone {
         position: absolute;
-        inset: 0;
+        left: 10%;
+        top: 60%;
+        width: 36%;
+        height: 36%;
+        border-radius: 50%;
         z-index: 0;
         pointer-events: auto;
         cursor: grab;
@@ -1584,6 +1592,13 @@
       #steer-zone.steering {
         cursor: grabbing;
       }
+      #steer-zone:focus-visible { outline: 3px solid #f1c84a; outline-offset: 5px; }
+      .drive-card .pedal { display: none !important; }
+      .keyboard-pedals { position: absolute; right: 24px; bottom: 24px; display: flex; gap: 12px; color: #fff; pointer-events: none; }
+      .keyboard-pedals span { display: grid; gap: 6px; min-width: 86px; padding: 12px 16px; background: #112530dc; border: 1px solid #6b7d84; border-radius: 8px; font-size: 14px; }
+      .keyboard-pedals kbd { font: 800 20px/1.1 system-ui; color: #f5df8b; }
+      .keyboard-pedals [data-held="true"] { background: #285d44; border-color: #b2f3b9; }
+      @media (max-width: 600px) { .keyboard-pedals { right: 12px; bottom: 16px; gap: 6px; } .keyboard-pedals span { min-width: 62px; padding: 8px; font-size: 12px; } .keyboard-pedals kbd { font-size: 16px; } }
       .drive-card .steer-mode-toggle {
         position: static;
         align-self: center;
@@ -1698,18 +1713,20 @@
       <div class="scene-shade" aria-hidden="true"></div>
 
       <div id="sim-ui">
-        <div id="steer-zone" aria-hidden="true"></div>
+        <div id="steer-zone" role="slider" tabindex="0" aria-label="스티어링 휠. 원형으로 드래그하거나 좌우 방향키로 조향" aria-valuemin="-100" aria-valuemax="100" aria-valuenow="0"></div>
+        <div class="keyboard-pedals" id="keyboard-pedals" aria-label="키보드 페달"><span id="keyboard-brake"><kbd>S / SPACE</kbd>브레이크</span><span id="keyboard-throttle"><kbd>W / ↑</kbd>가속</span></div>
         <div class="hud-chips">
           <button type="button" class="hud-chip" id="exam-toggle" data-latch="start" aria-label="기능시험 채점 모드로 전환">시험 모드</button>
           <button type="button" class="hud-chip" id="free-toggle" data-latch="freeDrive" aria-label="자유 주행으로 전환">자유 주행</button>
           <button type="button" class="hud-chip" id="reset-chip" data-latch="retry" aria-label="위치 처음으로 되돌리기">처음으로</button>
+          <button type="button" class="hud-chip" id="camera-toggle" data-latch="camera" aria-pressed="false" aria-label="3인칭 시점 전환 · T">시점: 운전석 · T</button>
         </div>
         <div class="top-stack">
           <header class="top-status" aria-label="시험 진행 정보">
             <div class="center-ident">
               <span class="center-mark" aria-hidden="true">연습</span>
               <span class="center-copy">
-                <span class="eyebrow">기능시험 연습 · 제2종 보통(자동)</span>
+                <span class="eyebrow">Driving Practice · 제2종 보통(자동)</span>
                 <strong id="center-name">도봉운전면허시험장</strong>
               </span>
             </div>
@@ -1827,7 +1844,7 @@
               <span class="lever-label">주차브레이크</span>
             </div>
 
-            <button type="button" class="control-button" id="open-menu" aria-label="시험 모드와 시험장 선택 열기">
+            <button type="button" class="control-button" id="open-menu" aria-label="주행 모드와 자료 범위 열기">
               <span class="control-icon" aria-hidden="true">☰</span><span class="control-label">시험 모드</span>
             </button>
             <button type="button" class="control-button" id="control-retry" data-latch="retry" aria-label="시험 다시 시작">
@@ -1874,11 +1891,11 @@
         <div class="modal-card">
           <header class="intro-head">
             <div>
-              <span class="eyebrow">전국 운전면허시험장 기능시험 연습</span>
-              <h1 id="intro-title">실제 절차대로,<br />도봉에서 먼저 연습하세요.</h1>
+              <span class="eyebrow">도봉 · 공개 공간자료 재구성</span>
+              <h1 id="intro-title">Driving Practice<br />도봉 운전 연습</h1>
               <p>
-                출발 전 장치 조작부터 경사로, 교차로, 직각주차, 돌발 상황과 종료 절차까지
-                시험 흐름에 맞춰 진행합니다.
+                항공사진의 실제 위치, 주변 건물·철도 좌표와 산 고도 데이터를 연결했습니다.
+                과거 자료와 현행 공사구간은 구분하며, 정밀 현장 복제는 아직 검증 중입니다.
               </p>
             </div>
             <div class="mode-badge" aria-hidden="true">
@@ -1886,9 +1903,21 @@
             </div>
           </header>
           <div class="intro-body">
+            <section aria-label="도봉 도로주행 코스">
+              <h2>도로주행 A · B · C · D</h2>
+              <p>공식 안내 경로와 실제 도로 좌표를 따릅니다. 도로 폭·유턴 공간·평탄 지형은 연습용 추정이며 채점하지 않습니다.</p>
+              <div class="intro-cta">
+                <button type="button" class="primary-button" id="road-a" data-latch="roadA">A · 5.63km</button>
+                <button type="button" class="primary-button" id="road-b" data-latch="roadB">B · 5.84km</button>
+                <button type="button" class="primary-button" id="road-c" data-latch="roadC">C · 5.60km</button>
+                <button type="button" class="primary-button" id="road-d" data-latch="roadD">D · 5.81km</button>
+              </div>
+              <p>주변 차량은 시작할 때 무작위로 배치됩니다. T로 운전석/3인칭 전환 · R로 선택 코스 다시 시작.</p>
+              <p><a href="https://www.koroad.or.kr/main/board/9/87988/board_view.do" target="_blank" rel="noopener noreferrer">공식 코스 안내</a> · <a href="docs/road-driving/routes.json" target="_blank" rel="noopener noreferrer">경로와 추정 범위</a> · © OpenStreetMap contributors, ODbL</p>
+            </section>
             <div class="intro-section-head">
-              <h2>연습할 공식 운전면허시험장</h2>
-              <p>현재 도봉 코스만 이용할 수 있으며 나머지 시험장은 순차 제공됩니다.</p>
+              <h2>재구성 범위</h2>
+              <p>도봉 서남쪽 보통면허 코스와 주변 지형. 아래 주행은 참고 지도이며 공식 시험이 아닙니다.</p>
             </div>
             <ul class="center-catalog" aria-label="전국 운전면허시험장 목록">
               <li><button type="button" class="center-option" disabled><strong>강남</strong><span>준비 중</span></button></li>
@@ -1921,13 +1950,16 @@
             </ul>
             <div class="intro-notes">
               <div>
-                <strong>도봉 · 제2종 보통(자동) 기능시험 연습</strong>
+                <strong>발은 키보드, 핸들은 마우스</strong>
                 <p>
-                  소리 안내를 들을 수 있도록 기기 음량을 확인하세요. 데스크톱은 마우스,
-                  모바일은 터치로 핸들과 페달을 조작할 수 있습니다.
+                  W/↑ 가속, S/↓/Space 브레이크. 화면 안의 핸들을 원형으로 드래그합니다.
+                  1 전진, 2 후진, R 위치 초기화. 모바일도 페달 입력에는 키보드가 필요합니다.
                 </p>
               </div>
               <div class="intro-cta">
+                <button type="button" class="primary-button" id="resume-drive-button" hidden>
+                  이어서 운전
+                </button>
                 <button
                   type="button"
                   class="primary-button"
@@ -1935,16 +1967,16 @@
                   data-latch="freeDrive"
                   aria-label="채점 없이 바로 자유 주행 시작"
                 >
-                  바로 운전 시작
+                  공개지도에서 운전
                 </button>
                 <button
                   type="button"
                   class="secondary-button"
                   id="start-button"
                   data-latch="start"
-                  aria-label="도봉 기능시험 채점 모드 시작"
+                  aria-label="가상 배치에서 기능시험 규칙 연습 시작"
                 >
-                  기능시험 모드
+                  규칙 연습 · 가상 배치
                 </button>
                 <button
                   type="button"
@@ -1957,10 +1989,13 @@
               </div>
             </div>
             <p class="disclaimer">
-              본 서비스는 공개된 법령·시험 기준과 공개 자료를 바탕으로 도봉운전면허시험장
-              배치를 재구성한 독립 연습용 소프트웨어입니다. 한국도로교통공단(KOROAD)이
-              제작·승인·운영하는 공식 서비스가 아니며, 실제 시험장의 현장 상태·채점·코스와
-              차이가 있을 수 있습니다.
+              현재 지도는 2022·2023 확장공사 이후인 2025년 3월 항공 관찰을 기준으로 합니다.
+              2026 항공의 노출 구간과 대조했지만 그림자 속 경계·현행 정지선·경사 높이는 추가 확인이 필요합니다.
+              건물 외장·미공개 높이·송전선 처짐은 추정 표현이며 정밀 복제품이 아닙니다.
+              기존 채점 연습은 별도의 가상 배치입니다. 한국도로교통공단의 공식·승인 서비스가 아닙니다.
+              <a href="docs/dobong/PROVENANCE.md" target="_blank" rel="noreferrer">자료 출처·정확도 한계</a> ·
+              <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap contributors · ODbL</a> ·
+              <a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noreferrer">Mapzen / USGS terrain</a>
             </p>
           </div>
         </div>
@@ -2066,6 +2101,11 @@
           startPressed: false,
           freeDrivePressed: false,
           retryPressed: false,
+          cameraPressed: false,
+          roadAPressed: false,
+          roadBPressed: false,
+          roadCPressed: false,
+          roadDPressed: false,
           gearDrivePressed: false,
           gearReversePressed: false,
           gearParkPressed: false,
@@ -2078,6 +2118,27 @@
           hazardPressed: false,
           parkingBrakePressed: false
         });
+
+        const pedalKeys = new Set();
+        const gasCodes = ["KeyW", "ArrowUp"];
+        const brakeCodes = ["KeyS", "ArrowDown", "Space"];
+        window.__examPedalInput = function(kind) {
+          return (kind === "throttle" ? gasCodes : brakeCodes).some(code => pedalKeys.has(code));
+        };
+        const refreshPedalIndicators = function() {
+          byId("keyboard-throttle").dataset.held = String(window.__examPedalInput("throttle"));
+          byId("keyboard-brake").dataset.held = String(window.__examPedalInput("brake"));
+        };
+        window.__examWheelBounds = function(x, y, radius, width, height) {
+          const bounds = {left:(x-radius)/width*100, top:(y-radius)/height*100, width:radius*2/width*100, height:radius*2/height*100};
+          for (const key of Object.keys(bounds)) steerZone.style[key] = bounds[key] + "%";
+        };
+        window.__examCameraState = function(thirdPerson) {
+          const button=byId("camera-toggle");
+          button.textContent=thirdPerson?"시점: 3인칭 · T":"시점: 운전석 · T";
+          button.setAttribute("aria-pressed",String(thirdPerson));
+          button.setAttribute("aria-label",thirdPerson?"운전석 시점 전환 · T":"3인칭 시점 전환 · T");
+        };
 
         // Track C++ signal state for correct neutral toggle-off
         var currentSignalState = "off"; // "left", "right", or "off"
@@ -2099,9 +2160,12 @@
         let tutorialActive = false;
         let tutorialStep = 0;
         let inputLocked = false;
+        window.__examIsPaused = function() {
+          return inputLocked || !introModal.hidden || document.hidden;
+        };
         const tutorialSteps = [
-          { title: "조향 모드 선택", desc: "터치 휠(원형 드래그)과 기울기(틸트) 두 가지 모드로 조향할 수 있습니다. 상단 버튼으로 전환합니다. 720도(좌우 ±360°) lock-to-lock으로 실차와 동일합니다.", target: "steer-pad" },
-          { title: "브레이크 / 가속 페달", desc: "화면 오른쪽 아래의 BRAKE와 GAS 버튼을 누르는 동안 제동/가속됩니다. 기울기 모드에서도 페달은 화면 터치로 조작합니다.", target: "control-brake" },
+          { title: "조향 모드 선택", desc: "터치 휠(원형 드래그)과 기울기(틸트) 두 가지 모드로 조향할 수 있습니다. 상단 버튼으로 전환합니다. 표시되는 휠은 좌우 360° 회전합니다. 실제 시험차의 조향비로 보정된 값은 아닙니다.", target: "steer-zone" },
+          { title: "키보드 페달", desc: "W 또는 위 방향키로 가속합니다. S, 아래 방향키 또는 Space로 브레이크를 밟습니다. 오른쪽 아래 표시로 입력을 확인하세요.", target: "keyboard-pedals" },
           { title: "기어 게이트 레버", desc: "P(주차)/D(전진)/R(후진)를 터치해 전환합니다. 정지+브레이크 상태에서만 변속됩니다.", target: "gear-gate" },
           { title: "방향지시등 3단 레버", desc: "레버를 위로 밀면 좌회전, 아래로 밀면 우회전, 가운데는 중립입니다. 터치 또는 드래그로 조작합니다.", target: "signal-lever" },
           { title: "비상점멸등 스위치", desc: "빨간색 원형 스위치를 눌러 비상등을 켜고 끕니다. 돌발상황에서 정지 후 3초 이내에 켜야 합니다.", target: "control-hazard" },
@@ -2192,6 +2256,7 @@
           // Display full 720° rotation on wheel visual
           steeringWheel.style.transform = "rotate(" + (clamped * 360) + "deg)";
           steeringPad.setAttribute("aria-valuenow", String(Math.round(clamped * 100)));
+          steerZone.setAttribute("aria-valuenow", String(Math.round(clamped * 100)));
         }
 
         function resizeCanvas() {
@@ -2251,9 +2316,7 @@
 
           const pivotOf = function(element) {
             const rect = element.getBoundingClientRect();
-            return element === steerZone
-              ? { x: rect.left + rect.width * 0.30, y: rect.top + rect.height * 1.02 }
-              : { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+            return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
           };
 
           const grab = function(element) {
@@ -2557,9 +2620,11 @@
           if (inputLocked) return;
           var key = button.dataset.latch + "Pressed";
           if (!(key in inputState)) return;
+          const roadStart=["roadA","roadB","roadC","roadD"].includes(button.dataset.latch);
+          if (["start", "freeDrive", "retry"].includes(button.dataset.latch)||roadStart) releaseAllHolds();
           inputState[key] = true;
           pulseButton(button);
-          if (button.dataset.latch === "start" || button.dataset.latch === "freeDrive") {
+          if (button.dataset.latch === "start" || button.dataset.latch === "freeDrive" || roadStart) {
             introModal.hidden = true;
             canvas.focus({ preventScroll: true });
           }
@@ -2584,8 +2649,18 @@
         }
 
         function releaseAllHolds() {
+          window.__examResetClock = true;
+          pedalKeys.clear();
+          refreshPedalIndicators();
+          for (const key of Object.keys(inputState)) {
+            if (key.endsWith("Pressed")) inputState[key] = false;
+          }
           inputState.throttle = false;
           inputState.brake = false;
+          steerPointerId = null;
+          lastPointerAngle = null;
+          if (steerReturnRaf !== null) cancelAnimationFrame(steerReturnRaf);
+          steerReturnRaf = null;
           setSteerValue(0);
           cumulativeAngleDeg = 0;
           steeringPad.classList.remove("active");
@@ -2629,6 +2704,7 @@
         }
 
         function endTutorial() {
+          releaseAllHolds();
           tutorialActive = false;
           inputLocked = false;
           tutorialOverlay.hidden = true;
@@ -2650,6 +2726,7 @@
         });
         byId("tutorial-skip").addEventListener("click", endTutorial);
         byId("tutorial-open").addEventListener("click", function() {
+          releaseAllHolds();
           tutorialActive = true;
           inputLocked = true;
           tutorialStep = 0;
@@ -2723,6 +2800,7 @@
 
           if (payload.phaseCode !== undefined && payload.phaseCode !== null) {
             app.dataset.phaseCode = String(payload.phaseCode);
+            setText(byId("center-name"), Number(payload.phaseCode) === 5 ? "도봉 · 공개자료 지도" : "가상 배치 · 규칙 연습");
           }
 
           // Update individual state indicators
@@ -2809,8 +2887,15 @@
           window.__examSpeak(lastInstruction || (ui.instruction && ui.instruction.textContent));
         });
         byId("open-menu").addEventListener("click", function() {
+          releaseAllHolds();
           introModal.hidden = false;
-          byId("free-drive-button").focus({ preventScroll: true });
+          byId("resume-drive-button").hidden = false;
+          byId("resume-drive-button").focus({ preventScroll: true });
+        });
+        byId("resume-drive-button").addEventListener("click", function() {
+          releaseAllHolds();
+          introModal.hidden = true;
+          canvas.focus({ preventScroll: true });
         });
         byId("result-close").addEventListener("click", function() {
           resultModal.hidden = true;
@@ -2818,6 +2903,36 @@
         });
         window.addEventListener("resize", function() { resizeCanvas(); updateTutorial(); });
         window.addEventListener("blur", releaseAllHolds);
+        window.addEventListener("focus", releaseAllHolds);
+        document.addEventListener("visibilitychange", releaseAllHolds);
+        window.addEventListener("keydown", function(event) {
+          if (event.defaultPrevented || ![...gasCodes, ...brakeCodes].includes(event.code) || window.__examIsPaused()) return;
+          const target = event.target;
+          // Space/arrow input owned by gear radios and other accessible controls
+          // must not bubble into a second, unintended pedal operation.
+          if (target && target !== canvas && target !== document.body && target !== steerZone && target !== byId("steer-pad")) return;
+          if (target && target.isContentEditable) return;
+          event.preventDefault();
+          pedalKeys.add(event.code);
+          refreshPedalIndicators();
+        });
+        window.addEventListener("keyup", function(event) {
+          pedalKeys.delete(event.code);
+          refreshPedalIndicators();
+        });
+        // GLFW sees Enter even when it activates a DOM button. Route the web
+        // exam shortcut here so Resume/gear/pedal buttons cannot restart it.
+        window.addEventListener("keydown", function(event) {
+          if(event.code==="KeyT" && !event.repeat && !event.defaultPrevented && !window.__examIsPaused() &&
+             (event.target===canvas || event.target===document.body)) {
+            event.preventDefault();
+            inputState.cameraPressed=true;
+          }
+          if (event.key === "Enter" && !event.repeat && !window.__examIsPaused() &&
+              (event.target === canvas || event.target === document.body)) {
+            inputState.startPressed = true;
+          }
+        });
         window.addEventListener("contextmenu", function(event) { event.preventDefault(); });
         resizeCanvas();
 

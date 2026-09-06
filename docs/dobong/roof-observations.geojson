@@ -1,0 +1,236 @@
+{
+  "type": "FeatureCollection",
+  "name": "Dobong exterior observation candidates; no height measurement",
+  "origin_wgs84": [
+    127.0585674,
+    37.6564809
+  ],
+  "game_transform": "x=E+52,z=-N-60",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "aerial-2025-ordinary-se-teal-roof",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.05831170082092,
+              37.655772168667134
+            ],
+            [
+              127.05844849348068,
+              37.655801897554774
+            ],
+            [
+              127.05849945545197,
+              37.655727575313364
+            ],
+            [
+              127.0583438873291,
+              37.655691475912114
+            ],
+            [
+              127.05831170082092,
+              37.655772168667134
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "role": "observed_roof_plan_not_confirmed_ground_footprint",
+        "existing_osm_id": null,
+        "description": "Distinct dark teal roof south-west of way/1226934249, immediately beside ordinary-course SE apron. It is absent from the saved 54-feature OSM subset. Do not conflate with entrance road-driving barrel canopies.",
+        "roof_color_observed": "dark teal/green; qualitative, uncalibrated satellite color",
+        "source_capture_date": "2025-03-22",
+        "source_url": "https://www.arcgis.com/home/item.html?id=929ed51e5c11448c8ff82ef637bf42d6",
+        "source_metadata_url": "https://www.arcgis.com/home/item.html?id=664b3448e36641628dc43c67b943e8c6",
+        "source_pixels": [
+          [
+            532,
+            667
+          ],
+          [
+            583,
+            653
+          ],
+          [
+            602,
+            688
+          ],
+          [
+            544,
+            705
+          ],
+          [
+            532,
+            667
+          ]
+        ],
+        "source_resolution_m": 0.34,
+        "source_horizontal_accuracy_m": 8.47,
+        "manual_pick_error_m_estimate": 2,
+        "position_warning": "Roof plan, not surveyed ground footprint. Oblique-imagery roof parallax is not corrected because height is unknown. Do not claim precision from decimal coordinates.",
+        "observation_grade": "B2: directly visible in 2025; full 2026 cross-check limited by shadow",
+        "game_ring_xz": [
+          [
+            29.465,
+            18.896
+          ],
+          [
+            41.521,
+            15.586
+          ],
+          [
+            46.012,
+            23.86
+          ],
+          [
+            32.302,
+            27.878
+          ],
+          [
+            29.465,
+            18.896
+          ]
+        ],
+        "roof_plan_edges": [
+          {
+            "length_m": 12.5,
+            "bearing_degrees_true": 74.6
+          },
+          {
+            "length_m": 9.41,
+            "bearing_degrees_true": 151.5
+          },
+          {
+            "length_m": 14.29,
+            "bearing_degrees_true": 253.7
+          },
+          {
+            "length_m": 9.42,
+            "bearing_degrees_true": 342.5
+          }
+        ],
+        "height_m": null,
+        "roof_curvature": null,
+        "roof_thickness_m": null,
+        "pillar_count": null,
+        "walls_or_open_sides": null,
+        "canopy_function": "canopy/shelter candidate; underside and use not resolved by this aerial",
+        "implementation_advice": "Source-only representation can locate/color this roof plan; any elevated plane (including 4m), curvature, supports, or solid walls is an explicitly labelled visualization assumption, not measured reconstruction. Do not change drive collision from roof plan.",
+        "source_image_basename": "esri-west-course-capture-2025-03-22-north-up.png"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "way/1226934249",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.0585199,
+              37.6558938
+            ],
+            [
+              127.0585607,
+              37.6558071
+            ],
+            [
+              127.0586637,
+              37.6558224
+            ],
+            [
+              127.0586294,
+              37.6559125
+            ],
+            [
+              127.0585199,
+              37.6558938
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "roof": "green rectangular roof with darker central rectangular patch",
+        "walls": "pale border/southern edge visible; all sides and window layout unknown",
+        "shape": "OSM quadrilateral footprint; roof section unconfirmed, no demonstrated barrel vault",
+        "confidence": "B: good footprint/roof proximity; roof-to-footprint parallax unresolved",
+        "id": "way/1226934249",
+        "osm_source": "https://www.openstreetmap.org/way/1226934249",
+        "tags": {
+          "building": "yes"
+        },
+        "height_m": null,
+        "roof_curvature": null,
+        "pillar_count": null,
+        "game_ring_xz": [
+          [
+            47.814,
+            5.356
+          ],
+          [
+            51.41,
+            15.007
+          ],
+          [
+            60.487,
+            13.304
+          ],
+          [
+            57.464,
+            3.274
+          ],
+          [
+            47.814,
+            5.356
+          ]
+        ],
+        "source_pixels_z19": [
+          [
+            609.6,
+            609.7
+          ],
+          [
+            624.8,
+            650.6
+          ],
+          [
+            663.2,
+            643.3
+          ],
+          [
+            650.4,
+            600.9
+          ],
+          [
+            609.6,
+            609.7
+          ]
+        ],
+        "footprint_edges": [
+          {
+            "length_m": 10.3,
+            "bearing_degrees_true": 159.6
+          },
+          {
+            "length_m": 9.24,
+            "bearing_degrees_true": 79.4
+          },
+          {
+            "length_m": 10.48,
+            "bearing_degrees_true": 343.2
+          },
+          {
+            "length_m": 9.87,
+            "bearing_degrees_true": 257.8
+          }
+        ],
+        "role": "existing_OSM_footprint_roof_color_observation",
+        "geometry_warning": "Existing footprint retained, NOT a new roof outline. Height not supplied.",
+        "source_image_basename": "esri-west-course-capture-2025-03-22-north-up.png"
+      }
+    }
+  ]
+}
