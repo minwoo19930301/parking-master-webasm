@@ -629,6 +629,15 @@ class DobongExamSimulator {
             if(roadMode_)BeginRoadDrive(roadRoute_);else BeginFreeDrive();
             return;
         }
+        // Preserve the completed run's time and vehicle pose until explicit retry.
+        // Traffic can keep moving, but new pedal/gear input cannot restart this run.
+        if (roadMode_ && roadProgress_.complete) {
+            car_.speed = 0.0f;
+            gear_ = TransmissionGear::Park;
+            parkingBrake_ = true;
+            traffic_.Update(dt, {car_.position.x, car_.position.y}, car_.heading);
+            return;
+        }
         const CarState previous = car_;
         UpdateVehicle(dt, input);
         if (DetectCollision() != CollisionKind::None) {

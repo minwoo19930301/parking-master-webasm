@@ -5,9 +5,10 @@
   "scripts": {
     "pretest": "mkdir -p build-test && c++ -std=c++17 -Wall -Wextra -Werror -I. tests/driving_camera_test.cpp -o build-test/driving_camera_test && ./build-test/driving_camera_test && c++ -std=c++17 -Wall -Wextra -Werror -I. tests/road_driving_test.cpp -o build-test/road_driving_test && ./build-test/road_driving_test",
     "test:sources": "bash scripts/check-source-data.sh",
+    "test:road-physical": "mkdir -p build-test && c++ -O2 -std=c++17 -Wall -Wextra -Werror -I. tests/road_physical_feasibility_test.cpp -o build-test/road_physical_feasibility_test && ./build-test/road_physical_feasibility_test",
     "build:web": "./scripts/build-web.sh",
     "build:sites": "./scripts/build-sites.sh",
-    "test": "mkdir -p build-test && c++ -std=c++17 -I. tests/exam_rules_test.cpp -o build-test/exam_rules_test && ./build-test/exam_rules_test && c++ -std=c++17 -I. tests/vehicle_physics_test.cpp -o build-test/vehicle_physics_test && ./build-test/vehicle_physics_test && c++ -std=c++17 -I. tests/cockpit_layout_test.cpp -o build-test/cockpit_layout_test && ./build-test/cockpit_layout_test && c++ -std=c++17 -Wall -Wextra -Werror -I. tests/source_world_test.cpp -o build-test/source_world_test && ./build-test/source_world_test && node --test tests/shell_input_test.mjs",
+    "test": "mkdir -p build-test && c++ -std=c++17 -I. tests/exam_rules_test.cpp -o build-test/exam_rules_test && ./build-test/exam_rules_test && c++ -std=c++17 -I. tests/vehicle_physics_test.cpp -o build-test/vehicle_physics_test && ./build-test/vehicle_physics_test && c++ -std=c++17 -I. tests/cockpit_layout_test.cpp -o build-test/cockpit_layout_test && ./build-test/cockpit_layout_test && c++ -std=c++17 -Wall -Wextra -Werror -I. tests/source_world_test.cpp -o build-test/source_world_test && ./build-test/source_world_test && node --test tests/shell_input_test.mjs tests/road_completion_test.mjs",
     "preview": "python3 -m http.server 4173 --bind 127.0.0.1 --directory ."
   }
 }

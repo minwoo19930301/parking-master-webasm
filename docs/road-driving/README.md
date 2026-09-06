@@ -23,4 +23,8 @@
 
 `node tools/build-road-ribbons.mjs`는 GeoJSON에서 폭 추정값을 명시한 C++ 도로 헤더를 생성합니다. 원본 좌표/회전 배열은 `src/dobong/road_routes.h`에 있습니다. `npm test`는 모든 네 경로를1m 간격으로 끝까지 따라 진행 순서·포장면 포함·완주를 검사하고, 지름길 방지·차량 seed·정지·구간 연결·교차 차체 충돌을 검사합니다. 실제 사람의 수동 주행이나 브라우저/GPU/현장 검증을 뜻하지 않습니다.
 
+`npm run test:road-physical`은 별도의 전진 조작 probe입니다. 실제 Path/Progress/OnRoad/UpdateSpeed를 사용하고, 앱의 조향 응답·2.72m 휠베이스·0.66rad 한계·4.45×1.82m 차체 경계·충돌 되돌림 공식을 재현합니다. 60Hz/목표4m/s의 제한된 자동 조작으로 A/B/C/D를 각각 약1408/1461/1402/1455초에 완주했고 되돌림0회였습니다. 초기화 이후 위치·방향 순간 변경은 없었습니다. NPC 회피, 실제 앱 클래스/메뉴 실행, 고속 코너링과 다른 주사율의 통합 주행은 이 검사의 범위가 아닙니다. 테스트용 자동 조작을 게임 기능으로 추가하지 않았습니다.
+
+완주하면 차와 기록 시간이 고정되고 R/메뉴의 명시적 재시작까지 유지됩니다. `road_completion_test.mjs`는 실제 `UpdateFreeDrive` 함수 본문을 비렌더링 의존성과 함께 컴파일해 완료 전후·반복 프레임·재시작을 검사합니다. 그래픽 앱 실행을 대신하지 않습니다.
+
 © OpenStreetMap contributors, [ODbL1.0](https://www.openstreetmap.org/copyright). 공식 영상/지도는 링크로만 제공하며 원본 이미지·영상을 게임 텍스처로 재배포하지 않습니다.
