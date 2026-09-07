@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" role="img" aria-labelledby="title desc">
+  <title id="title">FLAMINGO ARCADE 02</title>
+  <desc id="desc">아홉 개의 플라밍고 패러디 게임. 코드만 공개하며 배포하지 않았습니다.</desc>
+  <rect width="720" height="300" rx="20" fill="#101923"/>
+  <rect x="1" y="1" width="718" height="298" rx="19" fill="none" stroke="#344355" stroke-width="2"/>
+  <path d="M32 36H82" stroke="#f485a6" stroke-width="6"/>
+  <g font-family="Arial, 'Noto Sans KR', sans-serif">
+    <text x="32" y="83" fill="#f485a6" font-size="18" font-weight="700" letter-spacing="2">9 ORIGINAL PARODIES / CODE ONLY</text>
+    <text x="32" y="144" fill="#f6f8fc" font-size="39" font-weight="800">FLAMINGO ARCADE 02</text>
+    <text x="32" y="185" fill="#c4cedb" font-size="22">새로운 홍학, 아홉 가지 오락실</text>
+    <path d="M32 217H688" stroke="#344355"/>
+    <text x="32" y="261" fill="#f485a6" font-size="18" font-weight="700" letter-spacing="2">OPEN THE CARTRIDGE DRAWER →</text>
+    <text x="654" y="261" fill="#a6b5c7" font-size="20">07</text>
+  </g>
+</svg>
