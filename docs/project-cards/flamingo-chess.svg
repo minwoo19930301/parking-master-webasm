@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" role="img" aria-labelledby="title desc">
+  <title id="title">FLAMINGO CHESS</title>
+  <desc id="desc">플라밍고와 흑조의 체스 대국 · BOARD GAME / BABYLON.JS</desc>
+  <rect width="720" height="300" rx="20" fill="#101923"/>
+  <rect x="1" y="1" width="718" height="298" rx="19" fill="none" stroke="#344355" stroke-width="2"/>
+  <path d="M32 36H82" stroke="#ff8bc5" stroke-width="6"/>
+  <g font-family="Arial, 'Noto Sans KR', sans-serif">
+    <text x="32" y="83" fill="#ff8bc5" font-size="18" font-weight="700" letter-spacing="2">BOARD GAME / BABYLON.JS</text>
+    <text x="32" y="144" fill="#f6f8fc" font-size="39" font-weight="800">FLAMINGO CHESS</text>
+    <text x="32" y="185" fill="#c4cedb" font-size="22">플라밍고와 흑조의 체스 대국</text>
+    <path d="M32 217H688" stroke="#344355"/>
+    <text x="32" y="261" fill="#ff8bc5" font-size="18" font-weight="700" letter-spacing="2">EXPLORE PROJECT →</text>
+    <text x="654" y="261" fill="#a6b5c7" font-size="20">05</text>
+  </g>
+</svg>
