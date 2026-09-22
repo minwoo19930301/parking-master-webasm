@@ -1,11 +1,5 @@
 # Driving Practice · 도봉 운전 연습
 
-<!-- PROJECT-PRESENTATION:START -->
-<a href="https://parking-master-webasm.vercel.app"><img src=".github/project-cover.svg" alt="Driving Practice · 도봉 운전 연습" width="960"></a>
-
-[![OPEN APP](https://img.shields.io/badge/OPEN%20APP-2C6049?style=for-the-badge)](https://parking-master-webasm.vercel.app) [![SOURCE](https://img.shields.io/badge/SOURCE-444444?style=for-the-badge)](https://github.com/minwoo19930301/parking-master-webasm)
-<!-- PROJECT-PRESENTATION:END -->
-
 도봉운전면허시험장 서남쪽 보통면허 코스의 항공 관찰, 주변 건물·도로·철도 좌표, 실제 지형 고도를 연결한 WebAssembly 주행 프로젝트입니다. **현행 시험장과 동일하다고 검증된 복제품은 아닙니다.** 기존의 가상 기능시험 배치와 채점 연습은 별도 모드로 유지합니다.
 
 기존 개선 PR #2는 병합됐지만, 공개 데모에서 최신 도로주행 확장이 배포됐는지는 확인되지 않았습니다. 기존 공개 서비스와 아래 개발 결과를 혼동하지 마세요. 한국도로교통공단의 공식·승인 서비스가 아닙니다.
